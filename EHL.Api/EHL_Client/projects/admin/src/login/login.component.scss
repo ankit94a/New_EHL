@@ -45,13 +45,16 @@ form {
   border-radius: 0.75rem;
   overflow: visible;
 }
-
+.sm-text{
+  font-size: 12px;
+  color:#fff;
+}
 // ------------------------------------
 // Top Box Banner
 // ------------------------------------
 .top-box {
   margin: -24px 16px 8px;
-  height: 90px;
+  height: 12vh;
   padding: 16px;
   text-align: center;
   opacity: 1;

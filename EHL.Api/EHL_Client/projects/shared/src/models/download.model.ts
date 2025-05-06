@@ -1,8 +1,9 @@
 import { BaseModel } from "./base.model";
+import { DownloadFileType } from "./enum.model";
 
 export class DownloadModel extends BaseModel{
   name:string;
   filePath:string;
-  fileType:string;
+  fileType:DownloadFileType;
   type:any;
 }

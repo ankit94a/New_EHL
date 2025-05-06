@@ -2,8 +2,9 @@
 <!-- <h3 class="header">EHL (Equipment Helpline Login Portal)</h3> -->
 <mat-dialog-content class="content-box">
   <div class="top-box">
-    <h5 class="header-text">EHL</h5>
-    <p class="text">Equipment Helpline Login Portal</p>
+    <h5 class="header-text">EHL </h5>
+    <div class="text">Equipment Helpline Login Portal</div>
+    <strong class="sm-text"> (only for Officers & Admin )</strong>
   </div>
   <form [formGroup]="loginform" (ngSubmit)="doLogin()">
     <!-- <div class="row">
@@ -69,6 +70,11 @@
     </div>
 
     <!-- <br> -->
-    <button type="button" class="btn custom-btn" type="submit">Login</button>
+    <button class="btn custom-btn" type="submit">Login</button>
+    <br>
+    <div class="actions">
+      <button class="btn btn-link">New User Registration</button>
+      <button class="btn btn-link">Forgot Password?</button>
+    </div>
   </form>
 </mat-dialog-content>

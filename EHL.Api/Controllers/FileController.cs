@@ -1,7 +1,7 @@
 ﻿using EHL.Business.Interfaces;
 using EHL.Common.Models;
 using Microsoft.AspNetCore.Mvc;
-
+using EHL.Common.Enum;
 namespace EHL.Api.Controllers
 {
 	[Route("api/[controller]")]
@@ -13,19 +13,27 @@ namespace EHL.Api.Controllers
 			_fileManager = fileManager;
 		}
 
-		[HttpPost,Route("download")]
+		[HttpPost, Route("download")]
 		public async Task<IActionResult> DownloadFile([FromBody] AttachedFile file)
 		{
-			//var file = await _fileManager.GetDoucmentById(fileId, downloadType); // Retrieve file details from DB
 			var dabs = Path.GetFileName(file.FilePath);
-			var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "policy");
+			var rootPath = String.Empty;
+			if (file.FileType == Common.Enum.Enum.DownloadFileType.Emer)
+			{
+				rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "emer");
+			}
+			else if (file.FileType == Common.Enum.Enum.DownloadFileType.Policy)
+			{
+				rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "policy");
+			}
+
 			var fullFilePath = Path.Combine(rootPath, dabs);
 			file.FilePath = fullFilePath;
 			if (file.FilePath == null || string.IsNullOrEmpty(file.FilePath))
 			{
 				return NotFound("File not found.");
 			}
-			
+
 			// Stored file path
 			if (!System.IO.File.Exists(file.FilePath))
 			{

@@ -16,6 +16,7 @@ export class WingListComponent {
   wingList:Wing[]=[];
   roleType;
   constructor(private apiService:ApiService,private authService:AuthService,private router: Router){
+    debugger
     this.getWingList();
     this.roleType = this.authService.getRoleType();
   }

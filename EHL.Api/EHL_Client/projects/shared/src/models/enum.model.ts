@@ -38,3 +38,8 @@ export enum PermissionAction {
   Delete = "Delete",
   DeleteAll= "Delete All"
 }
+
+export enum DownloadFileType {
+  Emer = 'emer',
+  Policy = 'policy'
+}

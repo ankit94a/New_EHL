@@ -11,6 +11,8 @@ import { DownloadService } from 'projects/shared/src/service/download.service';
 import { PolicyFilterModel } from 'projects/shared/src/models/policy&misc.model';
 import { AuthService } from 'projects/shared/src/service/auth.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { DownloadModel } from 'projects/shared/src/models/download.model';
+import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 
 @Component({
   selector: 'app-emer-list',
@@ -82,32 +84,13 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
     });
   }
 
-  getFileId(row: any) {
-
-    // var result = this.downloadService.download(row.filePath,'file/download')
-    // this.apiService.getWithHeaders(`file/download/${row.fileId}`).subscribe(response => {
-
-    //   if (response) {
-    //     const blob = new Blob([response], { type: response.type });
-    //     const url = window.URL.createObjectURL(blob);
-    //     const a = document.createElement('a');
-    //     a.href = url;
-    //     a.download = this.getFileNameFromResponse(response);
-    //     document.body.appendChild(a);
-    //     a.click();
-    //     document.body.removeChild(a);
-    //     window.URL.revokeObjectURL(url);
-    //   }
-    // });
-  }
-  private getFileNameFromResponse(response: any): string {
-    const contentDisposition = response.headers.get('content-disposition');
-    if (contentDisposition) {
-      const matches = contentDisposition.match(/filename="(.+)"/);
-      return matches ? matches[1] : 'downloaded_file';
+  getFileId($event) {
+      var download = new DownloadModel();
+      download.filePath = $event.filePath;
+      download.name = $event.fileName;
+      download.fileType = DownloadFileType.Emer;
+      this.downloadService.download(download)
     }
-    return 'downloaded_file';
-  }
 
   getReadableFileSize(size: number): string {
     if (size < 1024) return `${size} bytes`;

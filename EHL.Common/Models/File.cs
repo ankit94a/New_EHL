@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static EHL.Common.Enum.Enum;
 
 namespace EHL.Common.Models
 {
@@ -14,7 +15,7 @@ namespace EHL.Common.Models
 		public byte[] Document { get; set; }
 		public string Name { get; set; }
 		public long Size { get; set; }
-		public string FileType { get; set; }
+		public DownloadFileType FileType { get; set; }
 		public string FilePath { get; set; }
 	}
 

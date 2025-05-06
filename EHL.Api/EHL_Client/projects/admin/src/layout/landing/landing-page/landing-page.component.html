@@ -4,9 +4,12 @@
     <div class="col-md-11 no-space">
       <div class="header">EQUIPMENT HELPLINE</div>
     </div>
+    <a href='/wing' class="btn-link">Go To Wings</a>
     <div class="col-md-1 no-space">
+
       <button class="btn" (click)="openDialog()" mat-button>
         <!-- <img src="/login.svg" alt="svg"> -->
+
         <i class="fa fa-sign-out btn-white px-2" aria-hidden="true"></i>
          <span class="btn-white"> Sign in</span>
       </button>
@@ -120,7 +123,7 @@
         </div>
         <div class="news-content-vertical">
           <ul class="news-list scroll-vertical">
-            <li *ngFor="let item of latestEmer">
+            <li *ngFor="let item of latestEmer" (click)="getFileId(item)">
               {{ item.emerNumber }}  -  {{ item.subject }} <span *ngIf="item.status" class="badge">New</span>
             </li>
           </ul>

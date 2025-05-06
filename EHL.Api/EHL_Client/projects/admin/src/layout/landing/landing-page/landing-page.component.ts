@@ -10,6 +10,9 @@ import { LandingProfile, News } from 'projects/shared/src/models/news.model';
 import { Policy } from 'projects/shared/src/models/policy&misc.model';
 import { IpService } from 'projects/shared/src/service/ip.service';
 import { AuthService } from 'projects/shared/src/service/auth.service';
+import { DownloadModel } from 'projects/shared/src/models/download.model';
+import { DownloadFileType } from 'projects/shared/src/models/enum.model';
+import { DownloadService } from 'projects/shared/src/service/download.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -27,7 +30,7 @@ export class LandingPageComponent {
   latestTechnicalReference:Policy[]=[];
   ipAddress:string='';
 
-  constructor(private authService:AuthService, private apiService:ApiService,private http:HttpClient,private dialogService: BISMatDialogService,private route:ActivatedRoute,private ipService:IpService){
+  constructor(private downloadService:DownloadService,private authService:AuthService, private apiService:ApiService,private http:HttpClient,private dialogService: BISMatDialogService,private route:ActivatedRoute,private ipService:IpService){
     this.news = new News();
     this.newsList = [];
 
@@ -70,7 +73,14 @@ export class LandingPageComponent {
     })
   }
   openDialog(){
-    this.dialogService.open(LoginComponent,null,'30vw','35vh');
+    this.dialogService.open(LoginComponent,null,'30vw','42vh');
   }
-
+getFileId($event) {
+  debugger
+      var download = new DownloadModel();
+      download.filePath = $event.filePath;
+      download.name = $event.fileName;
+      download.fileType = DownloadFileType.Emer;
+      this.downloadService.download(download)
+    }
 }

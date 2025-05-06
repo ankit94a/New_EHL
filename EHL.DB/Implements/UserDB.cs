@@ -26,7 +26,7 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ex)
 			{
-				//BISLogger.Error(ex, "User Loggin error in method GetUserByEmailPassword");
+				// .Error(ex, "User Loggin error in method GetUserByEmailPassword");
 				throw;
 			}
 		}

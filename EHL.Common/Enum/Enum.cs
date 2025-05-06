@@ -47,5 +47,11 @@ namespace EHL.Common.Enum
 			Admin = 1,
 			User = 2
 		}
+		[JsonConverter(typeof(StringEnumConverter))]
+		public enum DownloadFileType
+		{
+			Emer = 1,
+			Policy
+		}
 	}
 }
