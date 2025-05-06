@@ -1,0 +1,16 @@
+.drawer-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.mat-drawer {
+  z-index: 1000; /* Ensure it's above other content */
+}
+
+.mat-drawer-content {
+  flex: 1;
+  overflow: auto;
+  position: relative;
+  z-index: 1; /* Ensure content is above everything else */
+}

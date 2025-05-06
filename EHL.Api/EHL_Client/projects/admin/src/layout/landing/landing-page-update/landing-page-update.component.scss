@@ -1,0 +1,182 @@
+.content{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+// news table
+table {
+  // width: 100%;
+  border-collapse: collapse;
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  // margin: 20px;
+}
+
+th {
+  background: linear-gradient(60deg, rgb(139, 0, 0),rgb(255, 99, 71));
+  color: white;
+  padding: 12px;
+  text-align: left;
+}
+
+td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:hover {
+  background-color: #f1f1f1;
+}
+
+caption {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.btn-color{
+  background: linear-gradient(60deg, rgb(139, 0, 0),rgb(255, 99, 71));
+  color: #fff;
+  width: 170px;
+}
+
+
+//
+.image-container {
+  position: relative;
+  display: inline-block;
+}
+
+.preview-img {
+  width: 100px;  /* Set width for the preview */
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 10px;
+}
+
+.remove-img-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.remove-img-btn:hover {
+  background: red;
+}
+
+
+.user-profile {
+  display: flex;
+  flex-direction: column; /* Aligns the children vertically */
+  justify-content: center; /* Centers content vertically */
+  align-items: center; /* Centers content horizontally */
+  height: 100%; /* Make sure the parent has height */
+  text-align: center; /* Optional: Ensures text is centered */
+}
+
+.preview-img {
+  width: 150px; /* Set the image size */
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%; /* Optional: Makes the image round */
+  margin: 10px 0; /* Optional: Adds some spacing around the image */
+}
+.row {
+  display: flex;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 400px; /* Fixed height */
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow to the card */
+  padding: 20px;
+}
+
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-grow: 1; /* Allows the profile section to grow */
+}
+
+.preview-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 10px 0;
+}
+
+.update-btn {
+  position: absolute;
+  top: 10px;
+  left: 440px;
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  color: #0056b3;
+}
+
+.carousel-inner {
+  height: 100%;
+}
+
+.carousel-item {
+  height: 100%;
+}
+
+
+.carousel-control-prev,
+.carousel-control-next {
+  height: 100%; /* Ensures the control buttons take full height */
+  top: 0;
+}
+#autoCarousel {
+  position: relative; /* Make the carousel container a positioned element */
+  height: 400px;
+}
+
+.update-banner-btn {
+  position: absolute;
+  top: 10px; /* Adjust distance from the top */
+  right: 10px; /* Adjust distance from the right */
+  background-color: transparent;
+  border: none;
+  color: #007bff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.update-banner-btn:hover {
+  color: #0056b3;
+  cursor: pointer;
+}

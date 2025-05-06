@@ -1,0 +1,38 @@
+
+.zipper-checkbox{
+    max-width: fit-content;
+}
+
+
+.column-header-content{
+    text-align: justify !important;
+    width: 100%;
+}
+.example-container {
+    // height:  100vh;
+    // max-height: 80vh;
+    overflow: auto;
+  }
+
+//   .mat-mdc-header-cell, .mat-mdc-footer-cell, .mat-mdc-cell {
+//      width: 100px!important;
+//     box-sizing: border-box;
+//   }
+
+//   .mat-mdc-header-row, .mat-mdc-footer-row, .mat-mdc-row {
+//     min-width: 1920px; /* 24 columns, 80px each */
+//   }
+
+.green{
+  background-color: #cde9ce;;
+}
+.blue{
+  background-color:#b8ecf3;
+}
+.red{
+  background-color: #fccac7;
+}
+.orange{
+  background-color: #fff9c8;
+}
+

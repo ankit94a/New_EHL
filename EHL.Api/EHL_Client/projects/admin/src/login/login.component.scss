@@ -1,0 +1,191 @@
+@use '../../button' as button;
+
+// ------------------------------------
+// Header Styles
+// ------------------------------------
+.header {
+  padding: 10px;
+  background: linear-gradient(60deg, rgb(139, 0, 0), rgb(255, 99, 71));
+  color: #fff;
+}
+
+// ------------------------------------
+// Button
+// ------------------------------------
+.custom-btn {
+  background: button.$box-header;
+  width: 95%;
+  color: #fff;
+  margin: 0px 0px;
+}
+
+// ------------------------------------
+// Form Layout
+// ------------------------------------
+form {
+  text-align: center;
+}
+
+// ------------------------------------
+// Content Box Card
+// ------------------------------------
+.content-box {
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 0;
+  overflow-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  box-shadow: 0 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.1),
+              0 0.125rem 0.25rem -0.0625rem rgba(0, 0, 0, 0.06);
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.75rem;
+  overflow: visible;
+}
+
+// ------------------------------------
+// Top Box Banner
+// ------------------------------------
+.top-box {
+  margin: -24px 16px 8px;
+  height: 90px;
+  padding: 16px;
+  text-align: center;
+  opacity: 1;
+  background: linear-gradient(60deg, rgb(139, 0, 0), rgb(255, 99, 71));
+  color: rgb(52, 71, 103);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.14),
+              0 0.4375rem 0.625rem -0.3125rem rgba(0, 187, 212, 0.4);
+}
+
+// ------------------------------------
+// Top Text
+// ------------------------------------
+.header-text {
+  margin: 8px 0 0;
+  font-size: 2rem;
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+}
+
+.text {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  color: #fff;
+  font-weight: 600;
+}
+
+// ------------------------------------
+// Form Fields (Global)
+// ------------------------------------
+mat-form-field {
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 2px 8px;
+
+  input {
+    font-size: 13px;
+    padding: 8px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+  }
+
+  &.mat-focused .mat-form-field-outline,
+  &:hover .mat-form-field-outline {
+    border-color: #3f51b5;
+  }
+}
+
+// ------------------------------------
+// Shared Icon Button Style (used in password & username)
+// ------------------------------------
+%icon-button {
+  width: 36px;
+  height: 36px;
+  margin: 4px 4px 4px 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+
+%input-icon {
+  font-size: 15px;
+  color: #666;
+  pointer-events: none;
+}
+
+// ------------------------------------
+// Password Field
+// ------------------------------------
+.password-field {
+  width: 100%;
+
+  button[mat-icon-button] {
+    @extend %icon-button;
+    color: #666;
+    transition: color 0.3s ease;
+
+    &:hover i {
+      color: #3f51b5;
+    }
+  }
+
+  i {
+    @extend %input-icon;
+  }
+}
+
+// ------------------------------------
+// Username Field
+// ------------------------------------
+.username-field {
+  width: 100%;
+
+  button[mat-icon-button] {
+    @extend %icon-button;
+    cursor: default;
+  }
+
+  i {
+    @extend %input-icon;
+  }
+}
+
+// ------------------------------------
+// Responsive
+// ------------------------------------
+@media (max-width: 768px) {
+  .text {
+    font-weight: 500;
+  }
+
+  .header-text {
+    font-size: 1rem;
+  }
+
+  .top-box {
+    height: 125px;
+  }
+
+  mat-form-field {
+    font-size: 12px;
+  }
+
+  .password-field i,
+  .username-field i {
+    font-size: 15px;
+  }
+}

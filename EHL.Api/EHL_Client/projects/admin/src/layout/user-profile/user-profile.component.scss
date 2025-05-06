@@ -1,0 +1,60 @@
+h5{
+  text-align: center;
+  font-size: 40px;
+  font-weight: bold;
+  color: #F2E205;
+}
+mat-card {
+  margin: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  // background-color: #ffffff;
+  background-color: #fff;
+}
+
+mat-card-content {
+  padding: 20px;
+}
+
+/* Row and Column Layout */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.col-md-6 {
+  flex: 1 1 calc(50% - 20px); /* Ensures two columns fit in one row */
+  box-sizing: border-box;
+}
+
+/* Label Styling */
+label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Input and Textarea Styling */
+input[type="text"], textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+/* Focus effect */
+input[type="text"]:focus, textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+textarea {
+  height: 150px;
+  resize: vertical;
+  font-family: Arial, sans-serif;
+}

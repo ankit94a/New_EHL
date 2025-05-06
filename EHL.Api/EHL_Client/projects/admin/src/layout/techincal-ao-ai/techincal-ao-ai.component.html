@@ -1,0 +1,15 @@
+<mat-card>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-md-8">Technical AO AI</div>
+      <div class="col-md-4">
+        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType != '2'">+ Add TechnicalAoAi</button>
+      </div>
+    </div>
+    <app-table *ngIf="TechnicalAoAi.length > 0" [rowData]="TechnicalAoAi" [tablePaginationSettings]="tablePaginationSettings"
+      [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
+       [sqColumnDefinition]="columns" (edit)="edit($event)" (delete)="delete($event)"  [tableMaxHeight]="'80vh'"
+      >
+    </app-table>
+  </mat-card-content>
+</mat-card>

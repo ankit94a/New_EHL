@@ -1,0 +1,4 @@
+<select class="selectpicker"  #selectedLang (change)="switchLang(selectedLang.value)" [(ngModel)]="defaultLang">
+  <option *ngFor="let language of Language|enumList" [value]="language.key"
+    [selected]="language.key === translate.currentLang">{{ language.value }}</option>
+</select>

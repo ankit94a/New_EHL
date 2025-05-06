@@ -1,0 +1,142 @@
+import { Category, Eqpt, SubCategory, Wing } from 'projects/shared/src/models/attribute.model';
+import { TechManualsAddComponent } from '../tech-manuals-add/tech-manuals-add.component';
+import { Component } from '@angular/core';
+import { FilterModel, Policy, PolicyFilterModel, } from 'projects/shared/src/models/policy&misc.model';
+import { ApiService } from 'projects/shared/src/service/api.service';
+import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
+import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
+import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
+import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
+import { DownloadModel } from 'projects/shared/src/models/download.model';
+import { DownloadService } from 'projects/shared/src/service/download.service';
+import { AuthService } from 'projects/shared/src/service/auth.service';
+import { ToastrService } from 'ngx-toastr';
+import { DeleteModel } from 'projects/shared/src/models/attribute.model';
+
+@Component({
+  selector: 'app-tech-manuals',
+  standalone: true,
+  imports: [SharedLibraryModule,ZipperTableComponent],
+  templateUrl: './tech-manuals.component.html',
+  styleUrl: './tech-manuals.component.scss'
+})
+export class TechManualsComponent extends TablePaginationSettingsConfig{
+  // techmanuals/ publications/ advisiories /mics
+  policyList:Policy[]=[];
+  categoryList:Category[]=[];
+  wingList:Wing[]=[];
+  filterModel:PolicyFilterModel = new PolicyFilterModel();
+  isRefresh:boolean=false;
+  clonedPolicy:Policy[]=[];
+  userType;
+  constructor(private dialogService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService,private toastr: ToastrService){
+    super();
+    this.userType = this.authService.getRoleType()
+    this.tablePaginationSettings.enableAction = true;
+    if(this.userType != '2'){
+      this.tablePaginationSettings.enableEdit = true;
+      this.tablePaginationSettings.enableDelete = true;
+    }
+
+    // this.tablePaginationSettings.enableView = true;
+
+    this.tablePaginationSettings.enableColumn = true;
+    this.tablePaginationSettings.pageSizeOptions = [50, 100];
+    this.tablePaginationSettings.showFirstLastButtons = false;
+    this.filterModel.wingId = parseInt(this.authService.getWingId())
+    this.getPolicyByWing();
+
+  }
+  getFileId($event) {
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    this.downloadService.download(download)
+  }
+
+  view(row){
+    row.isEdit = false;
+    this.dialogService.open(TechManualsAddComponent,row)
+  }
+ edit(row){
+    row.isEdit = true;
+    this.dialogService.open(TechManualsAddComponent,row)
+  }
+  delete(row) {
+    let deleteTechManual: DeleteModel = new DeleteModel();
+    deleteTechManual.Id = row.item.id;
+    deleteTechManual.TableName = "Policy";
+
+    this.dialogService.confirmDialog("Would you like to delete This Policy?").subscribe(res => {
+      if (res) {
+        this.apiService.postWithHeader(`attribute/delete`, deleteTechManual).subscribe({
+          next: (res) => {
+           this.policyList.splice(row.index, 1);
+            this.toastr.success('Deleted Successfully', 'Success');
+            // return this.policyList
+            this.policyList = [...this.policyList]
+            // this.dialogRef?.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Failed to Delete', 'Error');
+            console.error(err);
+          }
+        });
+      }
+    });
+  }
+  openDailog(){
+    this.dialogService.open(TechManualsAddComponent,null,'50vw').then(res =>{
+      if(res){
+        // this.getAll
+      }
+    })
+  }
+  filterPolicy(type){
+    if(type == null)
+      return this.policyList = [...this.clonedPolicy]
+      this.policyList = this.clonedPolicy.filter(item => item.type == type);
+
+  }
+  getPolicyByWing(){
+    this.apiService.getWithHeaders('policy/wing/'+this.filterModel.wingId).subscribe(res =>{
+      if(res){
+        this.policyList=res;
+        this.clonedPolicy = [...this.policyList]
+      }
+    })
+  }
+
+  getCategory(wingId){
+    this.apiService.getWithHeaders('attribute/category'+wingId).subscribe(res =>{
+      if(res){
+        this.categoryList=res;
+      }
+    })
+  }
+  getReadableFileSize(size: number): string {
+    if (size < 1024) return `${size} bytes`;
+    else if (size < 1048576) return `${(size / 1024).toFixed(2)} KB`;
+    else return `${(size / 1048576).toFixed(2)} MB`;
+  }
+  columns = [
+    {
+      name: 'fileName', displayName: 'File Name', isSearchable: true,hide: false,valueType:'link',valuePrepareFunction:(row) =>{
+        return row.fileName
+      }
+    },
+    {
+      name: 'category', displayName: 'Category', isSearchable: true,hide: false,type:'text'
+    },
+
+    {
+      name: 'subCategory', displayName: 'Sub Category', isSearchable: true,hide: false,type:'text'
+    },
+    {
+      name: 'eqpt', displayName: 'Eqpt', isSearchable: true,hide: false,type:'text'
+    },
+    {
+      name: 'remarks', displayName: 'Remarks', isSearchable: true,hide: false,type:'text'
+    }
+  ]
+}

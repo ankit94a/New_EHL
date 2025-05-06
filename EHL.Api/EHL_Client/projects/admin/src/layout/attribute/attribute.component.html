@@ -1,0 +1,349 @@
+<mat-card>
+  <mat-card-content>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <mat-tab label="Wing">
+        <div class="row">
+          <div class="col-md-10"></div>
+          <div class="col-md-2">
+            <button class="btn btn-link" (click)="addWing()">+ Add Wing</button>
+          </div>
+        </div>
+
+        <mat-card>
+          <mat-card-content>
+            <mat-table [dataSource]="data" class="mat-elevation-z8">
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Wing Name </mat-header-cell>
+                <mat-cell *matCellDef="let wing"> {{ wing.name }} </mat-cell>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let wing">
+                  <button mat-button (click)="edit(wing)">
+                    <i
+                      class="fa-solid fa-pen-to-square"
+                      style="font-size: 20px; color: red"
+                    ></i>
+                  </button>
+                  <button mat-button (click)="delete(wing)">
+                    <i
+                      class="fa-solid fa-trash"
+                      style="font-size: 20px; color: red"
+                    ></i>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Table Header and Footer -->
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              ></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumns"
+              ></mat-row>
+            </mat-table>
+
+            <!-- Pagination -->
+            <mat-paginator
+              [length]="categoryList.length"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Category">
+        <div class="row">
+          <div class="col-md-10"></div>
+          <div class="col-md-2">
+            <button class="btn btn-link" (click)="addCategory()">
+              + Add Category
+            </button>
+          </div>
+        </div>
+
+        <mat-card>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Wing</mat-label>
+                  <mat-select
+                    [multiple]="false"
+                    [(ngModel)]="wingId"
+                    panelClass="custom-dropdown"
+                    placeholder="Category"
+                    (selectionChange)="getCategory($event.value)"
+                  >
+                    <mat-option *ngFor="let wing of wing" [value]="wing.id">
+                      {{ wing.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div style="max-height: 400px; overflow-y: auto">
+              <mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef>
+                    Category Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let category">
+                    {{ category.name }}
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let category">
+                    <button mat-button (click)="edit(category)">
+                      <i
+                        class="fa-solid fa-pen-to-square"
+                        style="font-size: 20px; color: red"
+                      ></i>
+                    </button>
+                    <button mat-button (click)="delete(category)">
+                      <i
+                        class="fa-solid fa-trash"
+                        style="font-size: 20px; color: red"
+                      ></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <!-- Table Header and Footer -->
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></mat-row>
+              </mat-table>
+            </div>
+            <!-- Pagination -->
+            <mat-paginator
+              [length]="categoryList.length"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="Sub-Category">
+        <div class="row d-flex">
+          <div class="col-md-10"></div>
+          <div class="col-md-2">
+            <button class="btn btn-link" (click)="addSubCategory()">
+              + Add Sub-Category
+            </button>
+          </div>
+        </div>
+        <mat-card>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Wing</mat-label>
+                  <mat-select
+                    [multiple]="false"
+                    [(ngModel)]="wingId"
+                    panelClass="custom-dropdown"
+                    placeholder="Category"
+                    (selectionChange)="getCategory($event.value)"
+                  >
+                    <mat-option *ngFor="let wing of wing" [value]="wing.id">
+                      {{ wing.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Category</mat-label>
+                  <mat-select
+                    [multiple]="false"
+                    [(ngModel)]="categoryId"
+                    panelClass="custom-dropdown"
+                    placeholder="Category"
+                    (selectionChange)="getSubCategory($event.value)"
+                  >
+                    <mat-option
+                      *ngFor="let category of categoryList"
+                      [value]="category.id"
+                    >
+                      {{ category.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div style="max-height: 300px; overflow-y: auto">
+              <mat-table [dataSource]="dataSource1" class="mat-elevation-z8">
+                <ng-container matColumnDef="name">
+                  <mat-header-cell *matHeaderCellDef
+                    >Sub Category Name
+                  </mat-header-cell>
+                  <mat-cell *matCellDef="let subCategory">
+                    {{ subCategory.name }}
+                  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                  <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                  <mat-cell *matCellDef="let subCategory">
+                    <button mat-button (click)="edit(subCategory)">
+                      <i
+                        class="fa-solid fa-pen-to-square"
+                        style="font-size: 20px; color: red"
+                      ></i>
+                    </button>
+                    <button mat-button (click)="delete(subCategory)">
+                      <i
+                        class="fa-solid fa-trash"
+                        style="font-size: 20px; color: red"
+                      ></i>
+                    </button>
+                  </mat-cell>
+                </ng-container>
+
+                <mat-header-row
+                  *matHeaderRowDef="displayedColumns"
+                ></mat-header-row>
+                <mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></mat-row>
+              </mat-table>
+            </div>
+
+            <mat-paginator
+              [length]="categoryList.length"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+      <mat-tab label="EQPT">
+        <div class="row">
+          <div class="col-md-10"></div>
+          <div class="col-md-2">
+            <button class="btn btn-link" (click)="addEqpt()">+ Add Eqpt</button>
+          </div>
+        </div>
+        <mat-card>
+          <mat-card-content>
+            <div class="row">
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Wing</mat-label>
+                  <mat-select
+                    [multiple]="false"
+                    [(ngModel)]="wingId"
+                    panelClass="custom-dropdown"
+                    placeholder="Category"
+                  >
+                    <mat-option *ngFor="let wing of wing" [value]="wing.id">
+                      {{ wing.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Category</mat-label>
+                  <mat-select
+                    [multiple]="false"
+                    [(ngModel)]="categoryId"
+                    panelClass="custom-dropdown"
+                    placeholder="Category"
+                  >
+                    <mat-option
+                      *ngFor="let category of categoryList"
+                      [value]="category.id"
+                    >
+                      {{ category.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div class="col-md-4">
+                <mat-form-field appearance="fill">
+                  <mat-label>Sub Category</mat-label>
+                  <mat-select
+                    [multiple]="false"
+                    [(ngModel)]="subCategoryId"
+                    (ngModelChange)="getEqpt()"
+                    panelClass="custom-dropdown"
+                    placeholder="Category"
+                  >
+                    <mat-option
+                      *ngFor="let subCategory of subCategoryList"
+                      [value]="subCategory.id"
+                    >
+                      {{ subCategory.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <mat-table [dataSource]="dataSource2" class="mat-elevation-z8">
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef
+                  >Sub Category Name
+                </mat-header-cell>
+                <mat-cell *matCellDef="let subCategory">
+                  {{ subCategory.name }}
+                </mat-cell>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+                <mat-cell *matCellDef="let subCategory">
+                  <button mat-button (click)="edit(subCategory)">
+                    <i
+                      class="fa-solid fa-pen-to-square"
+                      style="font-size: 20px; color: red"
+                    ></i>
+                  </button>
+                  <button mat-button (click)="delete(subCategory)">
+                    <i
+                      class="fa-solid fa-trash"
+                      style="font-size: 20px; color: red"
+                    ></i>
+                  </button>
+                </mat-cell>
+              </ng-container>
+
+              <!-- Table Header and Footer -->
+              <mat-header-row
+                *matHeaderRowDef="displayedColumns"
+              ></mat-header-row>
+              <mat-row
+                *matRowDef="let row; columns: displayedColumns"
+              ></mat-row>
+            </mat-table>
+
+            <!-- Pagination -->
+            <mat-paginator
+              [length]="categoryList.length"
+              [pageSize]="10"
+              [pageSizeOptions]="[5, 10, 25]"
+              showFirstLastButtons
+            ></mat-paginator>
+          </mat-card-content>
+        </mat-card>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

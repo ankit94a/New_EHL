@@ -1,0 +1,462 @@
+
+@use '../../../../button' as button;
+
+$red:#f44336;
+$background-color:rgb(139, 0, 0);
+// $box-header: linear-gradient(60deg, rgb(139, 0, 0),rgb(255, 99, 71));
+.header{
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  // position: sticky;
+  z-index: 1100;
+  left: auto;
+  right: 0px;
+  box-shadow: none;
+  backdrop-filter: none;
+  color:white;
+  top: 0.75rem;
+  min-height: 4.6875rem;
+  display: grid;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-right: 0px;
+  padding-left: 0px;
+  // background-color: transparent !important;
+  background: $background-color;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  // border-radius: 0.75rem;
+  font-size: 52px;
+  font-weight: 400;
+}
+nav {
+  background: $background-color;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: 20px;
+}
+
+nav ul li {
+  color: white;
+  font-size: 18px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, color 0.3s;
+  border-radius: 5px;
+}
+
+nav ul li:hover {
+  // background-color: #555;
+  color: #ffcc00;
+}
+nav button{
+  color: white;
+  font-size: 18px;
+  padding: 10px 15px;
+  background-color: transparent;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, color 0.3s;
+  border-radius: 5px;
+  border: none;
+}
+nav button:hover {
+  // background-color: #555;
+  color: #ffcc00;
+}
+.box {
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-width: 0px;
+  overflow-wrap: break-word;
+  background-color: rgb(255, 255, 255);
+  background-clip: border-box;
+  box-shadow: rgba(0, 0, 0, 0.1) 0rem 0.25rem 0.375rem -0.0625rem, rgba(0, 0, 0, 0.06) 0rem 0.125rem 0.25rem -0.0625rem;
+  transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  border-width: 0px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.125);
+  border-image: initial;
+  border-radius: 0.75rem;
+  overflow: hidden; /* Prevent overflow */
+  width: 100%;
+  max-height: 350px; /* Allow height to adjust dynamically */
+}
+
+.carousel-inner {
+  width: 100%;
+  height: 350px;
+}
+
+.carousel-item img {
+  width: 100%; /* Ensures the image takes full width */
+  height: 100%; /* Forces the image to take full height */
+  object-fit: cover; /* Ensures images properly fit without stretching */
+  border-radius: 0.75rem; /* Optional: Match box border radius */
+}
+// banner
+.banner-img {
+  width: 100%;
+  max-height: 600px; /* Adjust height for large screens */
+  object-fit: cover;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+@media (max-width: 1024px) {
+  .banner-img {
+    max-height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .banner-img {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-img {
+    max-height: 200px;
+  }
+}
+
+//
+// Card Styling
+.card-content{
+  background-color:#f7e7ae;
+}
+
+.card-content img {
+  max-height: fit-content;
+  object-fit: cover; /* Crop image to fit */
+  min-height: 250px;
+  max-height: 300px;
+  padding: 10px;
+}
+.box-sm{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box-header{
+  text-align: center;
+  font-size: 20px;
+  font-weight: 200;
+}
+.box-footer{
+  text-align: center;
+}
+
+
+/* Latest News Box */
+.news-box {
+  background: #f8f9fa;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  padding: 15px;
+}
+
+/* Header Styling */
+.news-header {
+  background: button.$box-header;
+  color: white;
+  text-align: center;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 16px;
+  border-radius: 5px 5px 0 0;
+}
+
+/* News List */
+.news-content {
+  // max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.news-list li {
+  font-size: 14px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.news-list li:last-child {
+  border-bottom: none;
+}
+
+/* New Badge */
+.badge {
+  background: #dc3545;
+  color: white;
+  padding: 3px 8px;
+  font-size: 12px;
+  border-radius: 3px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+// emi-misson article section
+.emi-header-article {
+  background: $background-color;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  // border-radius: 5px;
+}
+.emi-content-article {
+  display: flex;
+  padding: 15px 10px;
+
+}
+////////////////// eme mission section /////////////////
+
+/* EME Mission Header */
+.emi-header {
+  background: $background-color;
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  // border-radius: 5px;
+}
+
+.emi-content {
+  display: flex;
+  padding: 15px 10px;
+
+}
+
+// /* Image Styling */
+.emi-content1 img {
+  // height: 300px;
+  width: 30%;
+  object-fit: cover;
+}
+
+// /* Width Configuration */
+// // .section-1, .section-2 {
+// //   width: 25%;
+
+// // }
+// // .section-3 {
+// //   width: 50%;
+// // }
+// .emi-content2 {
+//   background-color: #e3e7e0;
+//   padding: 20px;
+//   border-left: 2px solid #e0e0e0;
+//   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+//   text-align: center; /* centers everything inside */
+//   justify-content: center;
+//   align-items: center;
+// }
+.emi-content1{
+  display: flex;
+  flex-direction: row; /* Default: mobile */
+  object-fit: cover;
+
+}
+
+//  NEW CODE
+
+.box {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.emi-header {
+  font-weight: bold;
+}
+
+// .contact-title {
+//   font-size: 1rem;
+//   margin-bottom: 10px;
+// }
+
+.contact-list p{
+  margin-bottom: 0px;
+}
+
+.news-header {
+  font-weight: bold;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 3px 6px;
+}
+.contact-columns {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.contact-col {
+  flex: 1;
+  min-width: 150px;
+}
+
+
+
+
+////////////////// Eme Mission Section /////////////////
+/* Responsive Design */
+@media (max-width: 768px) {
+  .emi-content {
+    flex-direction: row;
+    display: flex;
+
+  }
+  .emi-content1 {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 10px; /* Adds space between sections */
+  }
+
+  .section-1{
+    width: 30%; /* Stacks images on smaller screens */
+    flex:1;
+    object-fit: cover;
+  }
+}
+
+
+.center{
+  text-align: center;
+}
+.title{
+  font-size: 25px;
+  font-weight: 200;
+}
+.background{
+  background-color: $background-color;
+  color: #fff;
+}
+
+/* Title Styling */
+.contact-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+/* Contact Numbers Styling */
+.contact-list h6 {
+  margin: 6px 0;
+  font-size: 17px;
+  line-height: 1.4;
+  color: #444;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .emi-content2 {
+    border-left: none;
+    border-top: 2px solid #e0e0e0;
+    width: 100%;
+    padding: 15px;
+  }
+}
+
+/* Footer Styling */
+.landing-footer{
+  padding: 20px;
+}
+
+
+// my scss
+.news-content-vertical {
+  height: 250px; /* Set your desired height */
+  overflow: hidden;
+  position: relative;
+}
+
+.scroll-vertical {
+  display: inline-block;
+  animation: scrollUp 15 s linear infinite;
+  animation-play-state: running;
+}
+
+.news-content-vertical:hover .scroll-vertical {
+  animation-play-state: paused;
+}
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+.news-content-vertical {
+  height: 250px; // Adjust height based on layout
+  overflow: hidden;
+  position: relative;
+}
+
+.scroll-vertical {
+  display: inline-block;
+  animation: scrollUp 15s linear infinite;
+  animation-play-state: running;
+}
+
+.news-content-vertical:hover .scroll-vertical {
+  animation-play-state: paused;
+}
+
+@keyframes scrollUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(-100%);
+  }
+}
+
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.badge {
+  background-color: #dc3545;
+  color: #fff;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  border-radius: 4px;
+  margin-left: 8px;
+}

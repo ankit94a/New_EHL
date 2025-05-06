@@ -1,0 +1,31 @@
+<mat-card>
+  <mat-card-content>
+    <div class="row">
+      <div class="col-md-10">EpContract List</div>
+      <div class="col-md-2">
+        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType != '2'">+ Add EpContract</button>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field appearance="fill">
+          <mat-label>Contract Type</mat-label>
+          <mat-select  panelClass="custom-dropdown" placeholder="Contract Type" (selectionChange)="filterPolicy($event.value)">
+            <mat-option [value]="null">All</mat-option>
+            <mat-option [value]="'Capital'">Capital</mat-option>
+            <mat-option [value]="'Revenue'">Revenue</mat-option>
+            <mat-option [value]="'EP Capital'">EP Capital</mat-option>
+            <mat-option [value]="'EP Revenue'">EP Revenue</mat-option>
+            <mat-option [value]="'OCPP'">OCPP</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <app-table *ngIf="epContractList.length > 0" [rowData]="epContractList" [tablePaginationSettings]="tablePaginationSettings"
+      [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
+      (edit)="edit($event)" (delete)="delete($event)" [sqColumnDefinition]="columns" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
+      >
+    </app-table>
+  </mat-card-content>
+</mat-card>

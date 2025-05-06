@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EHL.Common\EHL.Common.csproj" />
+    <ProjectReference Include="..\EHL.DB\EHL.DB.csproj" />
+  </ItemGroup>
+
+</Project>

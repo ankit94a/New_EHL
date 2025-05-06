@@ -1,0 +1,130 @@
+[
+  {
+    "text": "Dashboard",
+    "icon": "fa fa-dashboard",
+    "routerLink": "/dashboard",
+    "children": [],
+    "permissionName": "AdminDashboard",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "EMER",
+    "icon": "fa-solid fa-hammer",
+    "routerLink": "/emer",
+    "permissionName": "Emer",
+    "permissionAction": "ViewAll",
+    "children": [
+      {
+        "text": "Emer-list",
+        "icon": "fa-brands fa-creative-commons-nd",
+        "routerLink": "/emer",
+        "permissionName": "Emer",
+        "permissionAction": "ViewAll"
+      },
+      {
+        "text": "Confidential",
+        "icon": "fa-brands fa-creative-commons-nd",
+        "routerLink": "/confidential",
+        "permissionName": "ConfidentialEmer",
+        "permissionAction": "ViewAll"
+      },
+      {
+        "text": "Index",
+        "icon": "fa-brands fa-creative-commons-nd",
+        "routerLink": "/emer-index",
+        "permissionName": "IndexEmer",
+        "permissionAction": "ViewAll"
+      }
+
+    ]
+  },
+  {
+
+    "text": "Tech Manuals/Publications",
+    "icon": "fa-solid fa-bars-progress",
+    "routerLink": "/tech-manual",
+    "permissionName": "Technical Manuals",
+    "permissionAction": "ViewAll"
+
+  },
+  {
+    "text": "Technical AO/AI",
+    "icon": "fa-solid fa-newspaper",
+    "routerLink": "/technical-ao/ai",
+    "permissionName": "TechnicalAoAI",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "Contracts",
+    "icon": "fa-solid fa-truck-fast",
+    "routerLink": "/ep-contract",
+    "permissionName": "EpContract",
+    "permissionAction": "ViewAll"
+
+  },
+  {
+    "text": "MRLS Distr List",
+    "icon": "fa-solid fa-bookmark",
+    "routerLink": "/mrls-distr-list",
+    "permissionName": "MrlsDistrList",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "Policies",
+    "icon": "fa-solid fa-file-contract",
+    "routerLink": "/policy",
+    "permissionName": "Policy Compendium",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "ISPL",
+    "icon": "fa-solid fa-bookmark",
+    "routerLink": "/ispl",
+    "permissionName": "ISPL",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "Defect Report",
+    "icon": "fa-solid fa-file-excel",
+    "routerLink": "/defect-report",
+    "permissionName": "DefectReport",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "Eqpt Appreciation",
+    "icon": "fa-solid fa-file-excel",
+    "routerLink": "/eqpt-appreciation",
+    "permissionName": "DefectReport",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "SMTE/STE Distr List",
+    "icon": "fa-solid fa-file-excel",
+    "routerLink": "/smte/ste-distr",
+    "permissionName": "DefectReport",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "Eqpt Mgrs",
+    "icon": "fa-brands fa-creative-commons-nd",
+    "routerLink": "/eqpt-mgrs",
+    "permissionName": "EqptMgrs",
+    "permissionAction": "ViewAll"
+
+  },
+  {
+    "text": "Home Page",
+    "icon": "fa-solid fa-house",
+    "routerLink": "/landing-page-update",
+    "children": [],
+    "permissionName": "HomePage",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "Attribute",
+    "icon": "fa-brands fa-creative-commons-nd",
+    "routerLink": "/attribute",
+    "permissionName": "Attribute",
+    "permissionAction": "ViewAll"
+  }
+]

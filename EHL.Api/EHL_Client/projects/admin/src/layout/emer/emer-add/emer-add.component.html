@@ -1,0 +1,238 @@
+<h4 mat-dialog-title>Add EMER</h4>
+<form [formGroup]="emerForm" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>{{'EMERNumber' | translate}}</mat-label>
+          <input formControlName="emerNumber" appAlphanumericOnly type="text"  matInput placeholder="{{'EMERNumber' | translate}}"
+            required />
+          <mat-error *ngIf="emerForm.get('emerNumber')?.touched && emerForm.get('emerNumber')?.invalid">
+            EMER number is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field>
+          <mat-label>{{'Subject' | translate}}</mat-label>
+          <input formControlName="subject" appAlphanumericOnly type="text" matInput placeholder="{{'Subject' | translate}}" required />
+          <mat-error *ngIf="emerForm.get('subject')?.touched && emerForm.get('subject')?.invalid">
+            Subject is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field appearance="fill">
+          <mat-label>SubFunction</mat-label>
+          <mat-select formControlName="subFunction" panelClass="custom-dropdown" placeholder="SubFunction"
+            (selectionChange)="getSubFunctionField($event.value)">
+            <mat-option [value]="'DATA SUMMARY'">DATA SUMMARY</mat-option>
+            <mat-option [value]="'INSTRUCTIONS TO USER MAINTENANCE'">INSTRUCTIONS TO USER MAINTENANCE</mat-option>
+            <mat-option [value]="'TECHNICAL DESCRIPTION'">TECHNICAL DESCRIPTION</mat-option>
+            <mat-option [value]="'LIGHT REPAIRS'">LIGHT REPAIRS</mat-option>
+            <mat-option [value]="'FIELD AND BASE REPAIRS'">FIELD AND BASE REPAIRS</mat-option>
+            <mat-option [value]="'SCALES'">SCALES</mat-option>
+            <mat-option [value]="'PERMISSIBLE REPAIR SCHEDULE'">PERMISSIBLE REPAIR SCHEDULE</mat-option>
+            <mat-option [value]="'MODIFICATION INSTRUCTIONS'">MODIFICATION INSTRUCTIONS</mat-option>
+            <mat-option [value]="'INSPECTION STD AND CONDEMNATION LIMITS'">INSPECTION STD AND CONDEMNATION
+              LIMITS</mat-option>
+            <mat-option [value]="'MISCELLANEOUS INSTRUCTIONS'">MISCELLANEOUS INSTRUCTIONS</mat-option>
+
+          </mat-select>
+          <mat-error *ngIf="emerForm.get('subFunction')?.touched && emerForm.get('subFunction')?.hasError('required')">
+            Sub Function is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <!-- newly update -->
+
+    <!-- Row 1 -->
+<div class="row">
+  <!-- When SubFunctionType exists -->
+  <ng-container *ngIf="SubFunctionType.length > 0; else checkSubFunctionCategory">
+    <!-- SubFunctionCategory -->
+    <div class="col-md-4" *ngIf="subNarrowFunctionDropdown.length > 0">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Sub Function Category</mat-label>
+        <mat-select formControlName="subFunctionCategory" (selectionChange)="getSubFunctionType($event.value)">
+          <mat-option *ngFor="let sb of subNarrowFunctionDropdown" [value]="sb">{{ sb }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- SubFunctionType -->
+    <div class="col-md-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Sub Function Type</mat-label>
+        <mat-select formControlName="subFunctionType">
+          <mat-option *ngFor="let type of SubFunctionType" [value]="type">{{ type }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Wing -->
+    <div class="col-md-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Wing</mat-label>
+        <mat-select formControlName="wingId" (selectionChange)="getCategory($event.value)">
+          <mat-option *ngFor="let wingItem of wing" [value]="wingItem.id">{{ wingItem.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <!-- When only subFunctionCategory exists (but not subFunctionType) -->
+  <ng-template #checkSubFunctionCategory>
+    <ng-container *ngIf="subNarrowFunctionDropdown.length > 0; else defaultRow1">
+      <!-- SubFunctionCategory -->
+      <div class="col-md-4">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Sub Function Category</mat-label>
+          <mat-select formControlName="subFunctionCategory" (selectionChange)="getSubFunctionType($event.value)">
+            <mat-option *ngFor="let sb of subNarrowFunctionDropdown" [value]="sb">{{ sb }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Wing -->
+      <div class="col-md-4">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Wing</mat-label>
+          <mat-select formControlName="wingId" (selectionChange)="getCategory($event.value)">
+            <mat-option *ngFor="let wingItem of wing" [value]="wingItem.id">{{ wingItem.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Category -->
+      <div class="col-md-4">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categoryId" (selectionChange)="getSubCategory($event.value)">
+            <mat-option *ngFor="let cat of categoryList" [value]="cat.id">{{ cat.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </ng-container>
+
+    <!-- Default layout -->
+    <ng-template #defaultRow1>
+      <!-- Wing -->
+      <div class="col-md-6">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Wing</mat-label>
+          <mat-select formControlName="wingId" (selectionChange)="getCategory($event.value)">
+            <mat-option *ngFor="let wingItem of wing" [value]="wingItem.id">{{ wingItem.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Category -->
+      <div class="col-md-6">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="categoryId" (selectionChange)="getSubCategory($event.value)">
+            <mat-option *ngFor="let cat of categoryList" [value]="cat.id">{{ cat.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>
+
+<!-- Row 2 -->
+<div class="row">
+  <!-- When SubFunctionType is present -->
+  <ng-container *ngIf="SubFunctionType.length > 0; else checkSubOnly">
+    <!-- Category -->
+    <div class="col-md-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="categoryId" (selectionChange)="getSubCategory($event.value)">
+          <mat-option *ngFor="let cat of categoryList" [value]="cat.id">{{ cat.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- SubCategory -->
+    <div class="col-md-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>SubCategory</mat-label>
+        <mat-select formControlName="subCategoryId" (selectionChange)="getEqpt($event.value)">
+          <mat-option *ngFor="let subCat of subCategoryList" [value]="subCat.id">{{ subCat.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- EQPT -->
+    <div class="col-md-4">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>EQPT</mat-label>
+        <mat-select formControlName="eqpt">
+          <mat-option *ngFor="let eqpt of eqptList" [value]="eqpt.name">{{ eqpt.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </ng-container>
+
+  <!-- Else: only SubCategory + EQPT -->
+  <ng-template #checkSubOnly>
+    <div class="col-md-6">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>SubCategory</mat-label>
+        <mat-select formControlName="subCategoryId" (selectionChange)="getEqpt($event.value)">
+          <mat-option *ngFor="let subCat of subCategoryList" [value]="subCat.id">{{ subCat.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="col-md-6">
+      <mat-form-field appearance="fill" class="w-100">
+        <mat-label>EQPT</mat-label>
+        <mat-select formControlName="eqpt">
+          <mat-option *ngFor="let eqpt of eqptList" [value]="eqpt.name">{{ eqpt.name }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </ng-template>
+</div>
+
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field>
+          <mat-label>{{'Remarks'|translate}}</mat-label>
+          <textarea matInput formControlName="remarks" appAlphanumericOnly placeholder="{{'Remarks'|translate}}"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-4">
+        <button mat-raised-button type="button" (click)="fileInput.click()" class="input-btn">Select File</button>
+        <input #fileInput type="file" style="display:none" (change)="onFileSelected($event)"
+          accept=".pdf, .doc, .docx, .xls, .xlsx" />
+      </div>
+      <br>
+      <!-- Display file name, file size, and remove button -->
+      <div *ngIf="fileName && fileSizeFormatted" class="file-info">
+        <div class="file-details">
+          <p><strong>File Name:</strong> {{ fileName }}</p>
+          <p><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
+        </div>
+        <button mat-icon-button class="remove-btn" type="button" (click)="removeFile()">
+          <img src="cross.png" alt="">
+        </button>
+      </div>
+    </div>
+
+
+
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button type="button" class="btn btn-sm btn-danger" (click)="reset()">Reset</button>
+    <button type="button" class="btn btn-sm btn-warning" (click)="close()">Close</button>
+    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+  </mat-dialog-actions>
+</form>

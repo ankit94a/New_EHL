@@ -1,0 +1,16 @@
+<mat-card>
+  <!-- <mat-card-header>Policy List</mat-card-header> -->
+  <mat-card-content>
+    <div class="row">
+      <div class="col-md-10">Misc</div>
+      <div class="col-md-2">
+        <button class="btn btn-link" (click)="openDailog()">+ Add Misc</button>
+      </div>
+    </div>
+    <app-table *ngIf="defectReports.length > 0" [rowData]="defectReports" [tablePaginationSettings]="tablePaginationSettings"
+      [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
+       [sqColumnDefinition]="columns" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
+      >
+    </app-table>
+  </mat-card-content>
+</mat-card>

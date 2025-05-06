@@ -1,0 +1,55 @@
+<!-- <mat-nav-list class="sidebar-img">
+
+    <a class="navbar-brand" href="/dashboard">
+    </a>
+    <span *ngFor="let menu of sideBarMenus">
+
+      <a  mat-list-item (click)="addExpandClass(menu.text)"
+        routerLink="{{menu.routerLink}}" routerLinkActive="active">
+        <i class="{{menu.icon}}"></i>
+        <span class="nav-caption">
+          {{menu.text}}
+        </span>
+      </a>
+      <div >
+        <ul class="submenu " [ngClass]="{'expanded':showMenu === menu.text}">
+          <li *ngFor="let subMenu of menu.children" class="nav-item"
+            >
+            <a mat-list-item routerLink="{{subMenu.routerLink}}" [queryParams]="subMenu.queryParams"
+              routerLinkActive="active" x>
+              <i class="{{subMenu.icon}}"></i>
+              <span class="nav-caption">{{subMenu.text}}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </span>
+  </mat-nav-list>
+ -->
+
+ <mat-nav-list class="sidebar-img">
+  <a class="navbar-brand" href="/dashboard"></a>
+  <span *ngFor="let menu of sideBarMenus">
+    <a mat-list-item (click)="addExpandClass(menu.text)"
+       routerLink="{{menu.routerLink}}" routerLinkActive="active">
+      <i class="{{menu.icon}}"></i>
+      <span class="nav-caption mx-2">{{menu.text}}</span>
+      <i *ngIf="menu.children && menu.children.length > 0"
+         class="fa fa-chevron-down menu-button px-2"
+         [ngClass]="{'rotated': showMenu === menu.text}">
+      </i>
+    </a>
+
+    <!-- Submenu -->
+    <ul *ngIf="menu.children && menu.children.length > 0"
+        class="submenu" [ngClass]="{'expanded': showMenu === menu.text}">
+      <li *ngFor="let subMenu of menu.children" class="nav-item">
+        <a mat-list-item routerLink="{{subMenu.routerLink}}" routerLinkActive="active">
+          <i class="{{subMenu.icon}}"></i>
+          <span class="nav-caption mx-2">{{subMenu.text}}</span>
+        </a>
+      </li>
+    </ul>
+  </span>
+</mat-nav-list>
+

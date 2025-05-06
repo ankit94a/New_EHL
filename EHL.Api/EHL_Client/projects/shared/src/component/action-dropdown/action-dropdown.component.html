@@ -1,0 +1,10 @@
+<button class="btn btn-outline-primary" [matMenuTriggerFor]="dropdownMenuOne">{{'Action'}}
+  <!-- <mat-icon class="edu-mat-icon">arrow_drop_down</mat-icon> -->
+</button>
+<mat-menu #dropdownMenuOne="matMenu" xPosition="before">
+  <!-- <button mat-menu-item (click)="download(true)">{{'ExportSample' }}</button> -->
+  <button mat-menu-item (click)="download(false)">{{'Print' }}</button>
+  <button mat-menu-item (click)="download(false)">{{'Export Excel' }}</button>
+  <button mat-menu-item (click)="download(false)">{{'Export Pdf' }}</button>
+  <button mat-menu-item (click)="import()">{{'Import Data' }}</button>
+</mat-menu>
