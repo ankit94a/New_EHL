@@ -3,6 +3,7 @@ import {
   Chart,
   registerables
 } from 'chart.js';
+import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 
 Chart.register(...registerables);
 
@@ -10,7 +11,8 @@ Chart.register(...registerables);
   selector: 'app-dashboard',
   standalone: true,
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  styleUrls: ['./dashboard.component.css'],
+  imports:[SharedLibraryModule]
 })
 export class DashboardComponent implements AfterViewInit {
   totalInputs = 27;

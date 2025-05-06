@@ -70,7 +70,7 @@ export class LandingPageComponent {
     })
   }
   openDialog(){
-    this.dialogService.open(LoginComponent,null,'40vw','50vh');
+    this.dialogService.open(LoginComponent,null,'30vw','35vh');
   }
 
 }

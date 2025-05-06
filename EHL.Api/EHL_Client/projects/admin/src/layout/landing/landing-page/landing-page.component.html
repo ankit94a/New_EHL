@@ -1,19 +1,23 @@
 <div class="layout">
-  <div class="header">Equipment HelpLine</div>
+  <div class="row">
+    <div class="main">
+    <div class="col-md-11 no-space">
+      <div class="header">EQUIPMENT HELPLINE</div>
+    </div>
+    <div class="col-md-1 no-space">
+      <button class="btn" (click)="openDialog()" mat-button>
+        <!-- <img src="/login.svg" alt="svg"> -->
+        <i class="fa fa-sign-out btn-white px-2" aria-hidden="true"></i>
+         <span class="btn-white"> Sign in</span>
+      </button>
+    </div>
+  </div>
+</div>
   <div class="banner">
     <!-- <img src="/landing-page-banner.png" alt="banner" width="100%"> -->
-    <img src="/header-img.jpeg" alt="banner" width="100%" class="banner-img" />
+    <img src="/header-img.jpeg" alt="banner" width="110%" class="banner-img" />
   </div>
-  <nav>
-    <ul>
-      <li>Home</li>
-      <li>EHL Tutorial</li>
-      <li>Contact Us</li>
-      <li>Dummy</li>
-    </ul>
-    <!-- <div></div> -->
-    <button (click)="openDialog()">Sign In</button>
-  </nav>
+
   <br />
   <div class="row">
     <div class="col-md-3 py-2">
@@ -109,13 +113,13 @@
       </div>
     </div>
 
-    <!-- <div class="col-md-3 py-2">
-      <div class="box">
+    <div class="col-md-3 py-2">
+      <div class="box border">
         <div class="news-header">
           <h5>Latest EMERs</h5>
         </div>
-        <div class="news-content">
-          <ul class="news-list">
+        <div class="news-content-vertical">
+          <ul class="news-list scroll-vertical">
             <li *ngFor="let item of latestEmer">
               {{ item.emerNumber }}  -  {{ item.subject }} <span *ngIf="item.status" class="badge">New</span>
             </li>
@@ -124,85 +128,24 @@
       </div>
     </div>
   </div>
-  <br /> -->
-  <!-- hghfj -->
-  <div class="col-md-3 py-2">
-    <div class="box">
-      <div class="news-header">
-        <h5>Latest EMERs</h5>
-      </div>
-      <div class="news-content-vertical"> <!-- <== Add this class -->
-        <ul class="news-list scroll-vertical"> <!-- <== Add this class -->
-          <li *ngFor="let item of latestEmer">
-            {{ item.emerNumber }} - {{ item.subject }}
-            <span *ngIf="item.status" class="badge">New</span>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-   <!-- fhk -->
-  <!-- <div class="row">
-    <div class="col-md-9 emi-img">
-      <div class="box">
-        <div class="emi-header">EME Mission</div>
-        <div class="emi-content">
-          <div class="emi-content1 col-md-9">
-            <img src="/eme-logo3.png" alt="Section 1" class="section-1">
-            <div>The battle worthiness of Army is dependent on its equipment state. Hence, a need was felt to empower both the users & the maintenance agency to address equipment related issues effectively and instantaneously.
-              <div>Thus there was need for creation of a digital knowledge database and repository which facilitates knowledge mgt for the Indian Army via a web based application, hosted on Army intranet.</div>
-              </div>
-          </div>
-          <div class="emi-content2 col-md-3">
-            <div class="contact-title">Contact No of HQ TGEME Wings</div>
-            <div class="contact-list">
-              <h6>AE wing : 123456789</h6>
-              <h6>LE wing : 123456789</h6>
-              <h6>MA wing : 123456789</h6>
-              <h6>Avn Wing : 123456789</h6>
-              <h6>Tech Coord : 123456789</h6>
-              <h6>EHL Admin : 123456789</h6>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-
-    <div class="col-md-3">
-      <div class="box">
-        <div class="news-header">Technical Reference</div>
-        <div class="news-content">
-          <ul class="news-list">
-            <li>Issue Brief 2024-25 Vol-1 <span class="badge">New</span></li>
-            <li>Mandatory Registration Form <span class="badge">New</span></li>
-            <li>Upcoming Conference 2024 <span class="badge">New</span></li>
-            <li>Government Policy Update <span class="badge">New</span></li>
-            <li>Industry Trends Report <span class="badge">New</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div> -->
+  <br />
   <div class="row">
     <!-- EME Mission Section -->
     <div class="col-md-9 emi-img">
-      <div class="box shadow-sm p-4 bg-light rounded">
-        <div class="emi-header h4 mb-3">EME Mission</div>
+      <div class="box shadow-sm  border bg-light rounded">
+        <div class="news-header h4 mb-3">EME Mission</div>
         <div class="emi-content row">
           <!-- Image & Text -->
           <div class="emi-content1">
             <img src="/eme-logo3.png" alt="eme-logo" class="section-1" />
             <div>
-            <p class="">
+            <p class="pra">
               The battle worthiness of the Army is dependent on its equipment
               state. Hence, a need was felt to empower both the users and the
               maintenance agency to address equipment-related issues effectively
               and instantaneously.
             </p>
-            <p class="">
+            <p class="pra">
               Thus, there was a need for the creation of a digital knowledge
               database and repository which facilitates knowledge management for
               the Indian Army via a web-based application, hosted on Army
@@ -210,26 +153,13 @@
             </p>
           </div>
           </div>
-
-          <!-- Contact Info -->
-          <!-- <div class="emi-content2 col-md-4">
-            <div class="contact-title fw-bold text-secondary mb-2">Contact No of HQ TGEME Wings</div>
-            <div class="contact-list small">
-              <p><strong>AE Wing:</strong> 123456789</p>
-              <p><strong>LE Wing:</strong> 123456789</p>
-              <p><strong>MA Wing:</strong> 123456789</p>
-              <p><strong>Avn Wing:</strong> 123456789</p>
-              <p><strong>Tech Coord:</strong> 123456789</p>
-              <p><strong>EHL Admin:</strong> 123456789</p>
-            </div>
-          </div> -->
         </div>
       </div>
     </div>
 
     <!-- Technical Reference Section -->
     <div class="col-md-3">
-      <div class="box shadow-sm p-4 bg-white rounded border news-content">
+      <div class="box shadow-sm bg-white rounded border news-content">
         <div class="news-header">Technical Reference</div>
         <div class="news-content-vertical">
           <ul class="news-list list-unstyled small scroll-vertical">
@@ -248,11 +178,6 @@
   <br />
   <br />
   <div class="row background landing-footer">
-    <!-- <div class="col-md-3 center"> -->
-    <!-- <div class="title">Contact Us</div>
-      <i class="fa-solid fa-phone"></i> 91+ 012 345 6789 <br>
-      <i class="fa-solid fa-phone"></i> 91+ 012 345 6789
-    </div> -->
     <div class="col-md-5 center">
       <div class="title">Contact No of HQ TGEME Wings</div>
       <div class="row">
@@ -270,7 +195,7 @@
     </div>
 
     <div class="col-md-4 center">
-      <div class="title">VETTED BY ACG 01 FAB 2025</div>
+      <div class="title">VETTED BY ACG 01 FEB 2025</div>
       <div>
         Lorem Ipsum is simply dummy text of the printing and typesetting
         industry.
@@ -283,26 +208,3 @@
     </div>
   </div>
 </div>
-    <!-- <div class="news-content">
-          <ul class="news-list">
-            <li>Issue Brief 2024-25 Vol-1 <span class="badge">New</span></li>
-            <li>Mandatory Registration Form <span class="badge">New</span></li>
-            <li>Upcoming Conference 2024 <span class="badge">New</span></li>
-            <li>Government Policy Update <span class="badge">New</span></li>
-            <li>Industry Trends Report <span class="badge">New</span></li>
-          </ul>
-        </div> -->
-   <!-- <table>
-            <thead>
-              <tr>
-                <th>Text</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let item of newsList">
-                <td>{{item.text}}</td>
-                <td>{{item.status}}</td>
-              </tr>
-            </tbody>
-          </table> -->

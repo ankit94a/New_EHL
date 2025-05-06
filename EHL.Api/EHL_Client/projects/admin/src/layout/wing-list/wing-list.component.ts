@@ -14,8 +14,10 @@ import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 })
 export class WingListComponent {
   wingList:Wing[]=[];
+  roleType;
   constructor(private apiService:ApiService,private authService:AuthService,private router: Router){
     this.getWingList();
+    this.roleType = this.authService.getRoleType();
   }
 
   getWingList(){
@@ -30,14 +32,13 @@ export class WingListComponent {
       }
     })
   }
-  // splitWings(): { firstRow: any[], secondRow: any[] } {
-  //   return {
-  //     firstRow: this.wingList.slice(0, 3),
-  //     secondRow: this.wingList.slice(3, 5)
-  //   };
-  // }
   setWingData(wing){
     this.authService.setWingDetails(wing);
-    this.router.navigate(['/dashboard']);
+    if(this.roleType == '2' || this.roleType == '3'){
+      this.router.navigate(['/emer']);
+    }else{
+      this.router.navigate(['/dashboard']);
+    }
+
   }
 }

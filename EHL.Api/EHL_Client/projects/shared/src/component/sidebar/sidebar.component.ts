@@ -3,14 +3,15 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { SharedLibraryModule } from '../../shared-library.module';
 import { AuthService } from '../../service/auth.service';
+import { FilterSidebarPipe } from '../pipes/filter-sidebar.pipe';
 // import { SharedModule } from 'projects/shared/src/public-api';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [SharedLibraryModule, RouterModule],
+  imports: [SharedLibraryModule, RouterModule,FilterSidebarPipe],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  styleUrls: ['./sidebar.component.css'],
 })
 export class SidebarComponent implements OnInit {
   public showMenu!: string;
