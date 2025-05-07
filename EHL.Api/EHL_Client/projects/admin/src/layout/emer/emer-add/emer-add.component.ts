@@ -55,7 +55,15 @@ export class EmerAddComponent {
     });
   }
   bindDataToForm(form) {
-
+    debugger;
+    if(form.subFunction == 'SCALES')
+      this.getSubFunctionField(form.subFunction)
+    if(form.subFunctionCategory != null && form.subFunctionCategory != undefined){
+      this.getSubFunctionType(form.subFunctionCategory);
+    }
+    this.fileName = form.fileName;
+    this.fileSizeFormatted = '';
+    this.filePath = form.filePath;
     this.emerForm = this.fb.group({
       emerNumber: [form.emerNumber, [Validators.required]],
       subject: [form.subject, [Validators.required]],
@@ -69,13 +77,12 @@ export class EmerAddComponent {
       eqpt: [form.eqpt, [Validators.required]],
       emerFile: [form.emerFile, [Validators.required]],
       remarks: [form.remarks],
+      subFunctionCategory:[form.subFunctionCategory],
+      subFunctionType:[form.subFunctionType],
       id: [form.id],
     });
-    this.fileName = form.fileName;
-    this.fileSizeFormatted = 'Not Defined';
-    this.filePath = form.filePath;
     this.getCategory(form.wingId);
-    this.getSubCategory(form.categoryId);
+    this.getSubCategory(form.categoryId,false);
     this.getEqpt(form.subCategoryId);
   }
 
@@ -107,12 +114,14 @@ export class EmerAddComponent {
         }
       });
   }
-  getSubCategory(categoryId) {
+  getSubCategory(categoryId,isUserInput:boolean=true) {
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
         if (res) {
           this.subCategoryList = res;
+          if(isUserInput)
+            this.eqptList = [];
         }
       });
   }
@@ -205,10 +214,12 @@ export class EmerAddComponent {
     }
   }
   close() {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
   reset() {
     this.createForm();
+    this.fileName = '';
+    this.fileSizeFormatted = '';
   }
 
   save() {
@@ -220,7 +231,34 @@ export class EmerAddComponent {
       const fileInput = this.emerForm.get('emerFile')?.value;
       if (fileInput) {
         formData.append('emerFile', fileInput, fileInput.name);
+      }else{
+        formData.append('fileName', this.fileName);
+        formData.append('filePath', this.filePath);
       }
+      const category = this.categoryList.find((item) => item.id == this.emerForm.get('categoryId')?.value)?.name || '';
+      const subCategory = this.subCategoryList.find((item) => item.id == this.emerForm.get('subCategoryId')?.value)?.name || '';
+        formData.append('category', category);
+        formData.append('subCategory', subCategory);
+        formData.append('wingId', this.emerForm.get('wingId')?.value);
+        formData.append('categoryId', this.emerForm.get('categoryId')?.value);
+        formData.append('subCategoryId', this.emerForm.get('subCategoryId')?.value);
+        formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
+        formData.append('subject', this.emerForm.get('subject')?.value);
+        formData.append('subFunction', this.emerForm.get('subFunction')?.value);
+        formData.append('subFunctionCategory', this.emerForm.get('subFunctionCategory')?.value);
+        formData.append('subFunctionType', this.emerForm.get('subFunctionType')?.value);
+        formData.append('eqpt', this.emerForm.get('eqpt')?.value);
+        formData.append('remarks', this.emerForm.get('remarks')?.value);
+        formData.append('id', this.emerForm.get('id')?.value);
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success('Form submitted successfully', 'Success');
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting form', 'Error');
+          },
+        });
     }
     // add new emer
     else {

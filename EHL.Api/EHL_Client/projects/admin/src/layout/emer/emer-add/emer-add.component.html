@@ -247,10 +247,10 @@
       <br>
       <div class="alert" *ngIf="alertMessage.length > 0">{{alertMessage}}</div>
       <!-- Display file name, file size, and remove button -->
-      <div *ngIf="fileName && fileSizeFormatted" class="file-info">
+      <div *ngIf="fileName" class="file-info">
         <div class="file-details">
           <p><strong>File Name:</strong> {{ fileName }}</p>
-          <p *ngIf="fileSizeFormatted.length > 0"><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
+          <p *ngIf="fileSizeFormatted.length > 0 && fileSizeFormatted != null"><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
         </div>
         <button mat-icon-button class="remove-btn" type="button" (click)="removeFile()">
           <img src="cross.png" alt="">

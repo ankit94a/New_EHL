@@ -65,12 +65,11 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
   //   this.dialoagService.open(EmerAddComponent,row)
   // }
   del(row){
-    debugger
     this.dialoagService.confirmDialog(`Are you sure you want to delete EMER ${row.item.emerNumber}?`).subscribe(res =>{
       if(res){
         this.apiService.deleteWithHeaders(`emer/${row.item.id}`).subscribe(res =>{
           if(res){
-            this.emerList = this.emerList.splice(row.index,1)
+           this.getList()
           }
         })
       }
@@ -78,6 +77,7 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
   }
   openDialog(){
     this.dialoagService.open(EmerAddComponent,null).then(res =>{
+      debugger
       if(res){
         this.getList()
       }
