@@ -48,6 +48,13 @@
 
   },
   {
+    "text": "Oil & Lubs",
+    "icon": "fa-solid fa-newspaper",
+    "routerLink": "/Oil",
+    "permissionAction":"ViewAll",
+    "permissionName": "Oillubs"
+  },
+  {
     "text": "Technical AO/AI",
     "icon": "fa-solid fa-newspaper",
     "routerLink": "/technical-ao/ai",
@@ -65,7 +72,7 @@
   {
     "text": "MRLS Distr List",
     "icon": "fa-solid fa-bookmark",
-    "routerLink": "/mrls-distr-list",
+    "routerLink": "/mrls-distr",
     "permissionName": "MrlsDistrList",
     "permissionAction": "ViewAll"
   },
@@ -74,8 +81,25 @@
     "icon": "fa-solid fa-file-contract",
     "routerLink": "/policy",
     "permissionName": "Policy Compendium",
-    "permissionAction": "ViewAll"
+    "permissionAction": "ViewAll",
+    "children": [
+      {
+        "text": "In Servise",
+        "icon":"fa-solid fa-file-contract",
+        "routerLink":"/service",
+        "permissionAction":"ViewAll",
+        "permissionName": "Policy Compendium"
+      },
+      {
+        "text": "NGE",
+        "icon":"fa-solid fa-file-contract",
+        "routerLink": "/nge",
+        "permissionAction": "ViewAll",
+        "permissionName":"Policy Compendium"
+      }
+    ]
   },
+
   {
     "text": "ISPL",
     "icon": "fa-solid fa-bookmark",
@@ -125,6 +149,13 @@
     "icon": "fa-brands fa-creative-commons-nd",
     "routerLink": "/attribute",
     "permissionName": "Attribute",
+    "permissionAction": "ViewAll"
+  },
+  {
+    "text": "File Management",
+    "icon": "fa-brands fa-creative-commons-nd",
+    "routerLink": "/file-management",
+    "permissionName": "File",
     "permissionAction": "ViewAll"
   }
 ]

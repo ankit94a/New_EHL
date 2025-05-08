@@ -143,7 +143,6 @@ export class EmerAddComponent {
   }
 
   onFileSelected(event: Event): void {
-    debugger
     const input = event.target as HTMLInputElement;
     if (input?.files?.length) {
       const file = input.files[0];
@@ -185,9 +184,9 @@ export class EmerAddComponent {
   }
 
   getSubFunctionType(type) {
-    if (type == 'Initial stocking guides') {
+    if (type == 'INITIAL STOCKING GUIDES') {
       this.SubFunctionType = ['ISG1', 'ISG2'];
-    } else if (type == 'maintenance scales') {
+    } else if (type == 'MAINTENANCE SCALES') {
       this.SubFunctionType = ['MS1', 'MS2'];
     } else {
       this.SubFunctionType = [];
@@ -197,15 +196,16 @@ export class EmerAddComponent {
   getSubFunctionField(subFunction) {
     if (subFunction == 'SCALES') {
       this.subNarrowFunctionDropdown = [
-        'Initial stocking guides and maintenance scales',
-        'Initial stocking guides',
-        'maintenance scales',
-        'Special maintenance scales',
-        'War maintenance scales',
-        'Special maintenance tools',
+        'INITIAL STOCKING GUIDES AND MAINTENANCE SCALES',
+        'INITIAL STOCKING GUIDES' ,
+        'MAINTENANCE SCALES',
+        'SPECIAL MAINTENANCE SCALES',
+        'WAR MAINTENANCE SCALES',
+        'SPECIAL MAINTENANCE TOOLS'
+
       ];
     } else if (subFunction == 'INSPECTION STD AND CONDEMNATION LIMITS') {
-      this.subNarrowFunctionDropdown = ['Field Ins Stds', 'Base Insp Stds'];
+      this.subNarrowFunctionDropdown = ['FIELD INS STDS', 'BASE INSP STDS'];
     } else {
       this.subNarrowFunctionDropdown = [];
       this.SubFunctionType = [];

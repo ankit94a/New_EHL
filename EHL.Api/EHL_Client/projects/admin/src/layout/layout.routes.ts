@@ -31,6 +31,31 @@ export const routes: Routes = [
               canActivate: [AuthGuard],
             },
             {
+              path: 'Oil',
+              loadComponent: () => import('./oil/oil.component').then(m => m.OilComponent),
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'mrls-distr',
+              loadComponent: () => import('./mrls-dist-list/mrls-dist-list.component').then(m =>m.MrlsDistListComponent),
+              canActivate: [AuthGuard]
+            },
+             {
+              path: 'service',
+              loadComponent: () => import('./policy/in-service/in-service.component').then(m => m.InServiceComponent),
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'nge',
+              loadComponent:() => import('./policy/nge/nge.component').then(m =>m.NgeComponent),
+              canActivate: [AuthGuard],
+            },
+            {
+              path: 'file-management',
+              loadComponent:() => import('./file-upload/file-upload.component').then(m =>m.FileUploadComponent),
+              canActivate: [AuthGuard],
+            },
+            {
               path: 'attribute',
               loadComponent: () => import('./attribute/attribute.component').then(m => m.AttributeComponent),
               canActivate: [AuthGuard],
