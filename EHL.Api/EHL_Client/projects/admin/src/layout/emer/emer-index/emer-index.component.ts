@@ -13,89 +13,122 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-emer-index',
   standalone: true,
-  imports: [SharedLibraryModule,ZipperTableComponent],
+  imports: [SharedLibraryModule, ZipperTableComponent],
   templateUrl: './emer-index.component.html',
-  styleUrl: './emer-index.component.scss'
+  styleUrl: './emer-index.component.scss',
 })
-export class EmerIndexComponent extends TablePaginationSettingsConfig{
-  emerIndexList:EmerIndex[]=[];
-  wingId:number;
-  isRefresh:boolean=false;
+export class EmerIndexComponent extends TablePaginationSettingsConfig {
+  emerIndexList: EmerIndex[] = [];
+  wingId: number;
+  isRefresh: boolean = false;
   userType;
-  constructor(private apiService:ApiService,private authService:AuthService, private dialogService:BISMatDialogService,private toastr: ToastrService){
+  constructor(
+    private apiService: ApiService,
+    private authService: AuthService,
+    private dialogService: BISMatDialogService,
+    private toastr: ToastrService
+  ) {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
-    if(this.userType != '2'){
+    if (this.userType != '2') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
     }
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
-    this.tablePaginationSettings.showFirstLastButtons = false
-    this.wingId = parseInt(this.authService.getWingId())
+    this.tablePaginationSettings.showFirstLastButtons = false;
+    this.wingId = parseInt(this.authService.getWingId());
     this.getAllIndex();
   }
-  edit(row){
+  edit(row) {
     row.isEdit = true;
-    this.dialogService.open(EmerIndexAddComponent,{data:row})
+    this.dialogService
+      .open(EmerIndexAddComponent, { data: row })
+      .then((res) => {
+        if (res) {
+          this.getAllIndex();
+        }
+      });
   }
 
   delete(row) {
     let deleteEmerIndex: DeleteModel = new DeleteModel();
     deleteEmerIndex.Id = row.item.id;
-    deleteEmerIndex.TableName = "emerindex";
+    deleteEmerIndex.TableName = 'emerindex';
 
-    this.dialogService.confirmDialog("Would you like to delete This EMER?").subscribe(res => {
+    this.dialogService
+      .confirmDialog(
+        `Are you sure you want to delete EMER ${row.item.emerNumber}?`
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.apiService
+            .postWithHeader(`attribute/delete`, deleteEmerIndex)
+            .subscribe({
+              next: (res) => {
+                //  this.emerIndexList= this.emerIndexList.splice(row.index, 1);
+                this.toastr.success('Deleted Successfully', 'Success');
+                this.getAllIndex();
+              },
+              error: (err) => {
+                this.toastr.error('Failed to Delete', 'Error');
+                console.error(err);
+              },
+            });
+        }
+      });
+  }
+
+  openDialog() {
+    this.dialogService.open(EmerIndexAddComponent, null, '50vw').then((res) => {
       if (res) {
-        this.apiService.postWithHeader(`attribute/delete`, deleteEmerIndex).subscribe({
-          next: (res) => {
-           this.emerIndexList= this.emerIndexList.splice(row.index, 1);
-            this.toastr.success('Deleted Successfully', 'Success');
-            // this.dialogRef?.close(true);
-          },
-          error: (err) => {
-            this.toastr.error('Failed to Delete', 'Error');
-            console.error(err);
-          }
-        });
+        // this.isRefresh = true;
+        this.getAllIndex();
       }
     });
   }
-
-  openDialog(){
-    this.dialogService.open(EmerIndexAddComponent,null,'50vw').then((res) => {
-      if(res){
-        this.isRefresh = true;
-        this.getAllIndex();
-      }
-    })
-  }
-  getFileId(row){
-
-  }
-  getAllIndex(){
-    this.apiService.getWithHeaders("emer/index/"+this.wingId).subscribe(res =>{
-      if(res){
-        this.emerIndexList = res;
-      }
-    })
+  getFileId(row) {}
+  getAllIndex() {
+    this.apiService
+      .getWithHeaders('emer/index/' + this.wingId)
+      .subscribe((res) => {
+        if (res) {
+          this.emerIndexList = res;
+        }
+      });
   }
   columns = [
     {
-      name: 'fileName', displayName: 'File', isSearchable: true,hide: false,valueType:'link',valuePrepareFunction:(row) =>{
-        return row.fileName
-      }
+      name: 'fileName',
+      displayName: 'File',
+      isSearchable: true,
+      hide: false,
+      valueType: 'link',
+      valuePrepareFunction: (row) => {
+        return row.fileName;
+      },
     },
     {
-      name: 'emerNumber', displayName: 'EmerNumber', isSearchable: true,hide: false,type:'text'
+      name: 'emerNumber',
+      displayName: 'EmerNumber',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'category', displayName: 'Category', isSearchable: true,hide: false,type:'text'
+      name: 'category',
+      displayName: 'Category',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'subject', displayName: 'Subject', isSearchable: true,hide: false,type:'text'
+      name: 'subject',
+      displayName: 'Subject',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
-
-  ]
+  ];
 }

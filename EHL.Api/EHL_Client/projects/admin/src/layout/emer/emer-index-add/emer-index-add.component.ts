@@ -20,8 +20,11 @@ export class EmerIndexAddComponent {
   wingName: string;
   wing: Wing[] = [];
   fileName: string | null = null;
+  filePath: string = '';
   fileSizeFormatted: string | null = null;
   categoryList: Category[] = [];
+  alertMessage: string = '';
+  apiUrl: string = '';
   constructor(
     @Inject(MAT_DIALOG_DATA) data,
     private authService: AuthService,
@@ -50,8 +53,11 @@ export class EmerIndexAddComponent {
     });
   }
   bindDataToForm(form) {
-    // this.getCategory()
 
+    this.getCategory(form.wingId);
+    this.fileName = form.fileName;
+    this.fileSizeFormatted = '';
+    this.filePath = form.filePath;
     this.emerForm = this.fb.group({
       emerNumber: [form.emerNumber, [Validators.required]],
       subject: [form.subject, [Validators.required]],
@@ -59,17 +65,15 @@ export class EmerIndexAddComponent {
       categoryId: [form.categoryId, [Validators.required]],
       id: [form.id],
       wingId: [form.wingId, [Validators.required]],
-      Wing: [""],
+      Wing: [''],
       emerFile: [form.emerFile, [Validators.required]],
     });
-    this.getCategory(form.wingId);
   }
   createForm() {
-
     this.emerForm = this.fb.group({
       emerNumber: ['', [Validators.required]],
       subject: ['', [Validators.required]],
-      wing: [""],
+      wing: [''],
       wingId: [{ value: this.wingId, disabled: true }, [Validators.required]],
       categoryId: ['', [Validators.required]],
       emerFile: [null, [Validators.required]],
@@ -96,15 +100,13 @@ export class EmerIndexAddComponent {
       if (allowedTypes.includes(file.type)) {
         this.fileName = file.name;
         this.fileSizeFormatted = this.getReadableFileSize(file.size);
-        this.emerForm.patchValue({
-          emerFile: file,
-        });
+        this.emerForm.patchValue({ emerFile: file });
+        this.alertMessage = '';
       } else {
         this.fileName = null;
         this.fileSizeFormatted = null;
-        alert(
-          'Invalid file type! Only PDF, Word, and Excel files are allowed.'
-        );
+        this.alertMessage =
+          'Invalid file type! Only PDF, Word, and Excel files are allowed.';
       }
     }
   }
@@ -141,37 +143,35 @@ export class EmerIndexAddComponent {
   }
   reset() {
     this.createForm();
+    this.fileName = '';
+    this.fileSizeFormatted = '';
   }
   save() {
-
     const formData = new FormData();
-    const wingId = this.emerForm.get('wingId')?.value;
     const emerId = this.emerForm.get('id')?.value;
+    const wingId = this.emerForm.get('wingId')?.value;
     const categoryId = this.emerForm.get('categoryId')?.value;
-
     const category =
       this.categoryList.find((item) => item.id == categoryId)?.name || '';
-
     formData.append('category', category);
-    if (this.emerForm.valid) {
+    //index edit
+
+    if (emerId > 0) {
+      this.apiUrl = 'emer/index/update';
+      const fileInput = this.emerForm.get('emerFile')?.value;
+      if (fileInput) {
+        formData.append('emerFile', fileInput, fileInput.name);
+      } else {
+        formData.append('fileName', this.fileName);
+        formData.append('filePath', this.filePath);
+      }
+      formData.append('id', emerId);
       formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
       formData.append('wingId', wingId);
       formData.append('categoryId', categoryId);
       formData.append('subject', this.emerForm.get('subject')?.value);
       formData.append('wing', this.wingName);
-      const fileInput = this.emerForm.get('emerFile')?.value;
-      if (fileInput) {
-        formData.append('emerFile', fileInput, fileInput.name);
-      }
-
-      let apiUrl = '';
-      if (emerId) {
-        formData.append('id', emerId);
-        apiUrl = 'emer/index/update';
-      } else {
-        apiUrl = 'emer/index';
-      }
-      this.apiService.postWithHeader(apiUrl, formData).subscribe({
+      this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
         next: (res) => {
           this.toastr.success('Form submitted successfully', 'Success');
           this.dialogRef.close(true);
@@ -181,6 +181,39 @@ export class EmerIndexAddComponent {
           this.toastr.error('Error submitting form', 'Error');
         },
       });
+    }
+    //index add
+    else {
+      this.apiUrl = 'emer/index';
+      const fileInput = this.emerForm.get('emerFile')?.value;
+      if (fileInput) {
+        formData.append('emerFile', fileInput, fileInput.name);
+      } else {
+        formData.append('fileName', this.fileName);
+        formData.append('filePath', this.filePath);
+      }
+      if (this.emerForm.valid) {
+        formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
+        formData.append('wingId', wingId);
+        formData.append('categoryId', categoryId);
+        formData.append('subject', this.emerForm.get('subject')?.value);
+        formData.append('wing', this.wingName);
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success('Form submitted successfully', 'Success');
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            console.error('Error submitting form:', err);
+            this.toastr.error('Error submitting form', 'Error');
+          },
+        });
+      } else {
+        const fileInput = this.emerForm.get('emerFile')?.value;
+        if (!fileInput) this.alertMessage = 'File is required';
+        this.emerForm.markAllAsTouched();
+        return;
+      }
     }
   }
 }
