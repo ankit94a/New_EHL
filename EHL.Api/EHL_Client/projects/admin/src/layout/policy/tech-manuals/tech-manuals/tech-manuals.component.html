@@ -25,7 +25,7 @@
 
       <app-table *ngIf="policyList.length > 0" [rowData]="policyList" [tablePaginationSettings]="tablePaginationSettings"
         [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
-        (edit)="edit($event)"  (view)="view($event)" (delete)="delete($event)"  [sqColumnDefinition]="columns" (getFileId)="getFileId($event)" [tableMaxHeight]="'450px'"
+        (edit)="edit($event)"  (view)="view($event)" (delete)="delete($event)"  [sqColumnDefinition]="columns" (getFileId)="getFileId($event)" [tableMaxHeight]="'72vh'"
         >
     </app-table>
   </mat-card-content>

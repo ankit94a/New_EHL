@@ -30,7 +30,7 @@
     <div class="col-md-4">
       <mat-form-field appearance="fill">
         <mat-label>Category</mat-label>
-        <mat-select [multiple]="false" formControlName="categoryId" (selectionChange)="getSubCategory($event.value)"
+        <mat-select [multiple]="false" formControlName="categoryId" [(ngModel)]="categoryId" (selectionChange)="getSubCategory($event.value)"
           panelClass="custom-dropdown" placeholder="Category" required>
           <mat-option *ngFor="let category of categoryList" [value]="category.id">
             {{ category.name }}
@@ -49,6 +49,9 @@
         <mat-select formControlName="subCategoryId" (selectionChange)="getEqpt($event.value)">
           <mat-option *ngFor="let subCat of subCategoryList" [value]="subCat.id">{{ subCat.name }}</mat-option>
         </mat-select>
+        <mat-error *ngIf="policy.get('subCategoryId')?.touched && policy.get('subCategoryId')?.invalid">
+          SubCategory is required
+        </mat-error>
       </mat-form-field>
     </div>
     <div class="col-md-6">
@@ -57,28 +60,39 @@
         <mat-select formControlName="eqpt">
           <mat-option *ngFor="let eqpt of eqptList" [value]="eqpt.name">{{ eqpt.name }}</mat-option>
         </mat-select>
+        <mat-error *ngIf="policy.get('eqpt')?.touched && policy.get('eqpt')?.invalid">
+          Eqpt is required
+        </mat-error>
       </mat-form-field>
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <button mat-raised-button type="button" (click)="fileInput.click()" class="input-btn">Select File</button>
-      <input #fileInput type="file" style="display:none" (change)="onFileSelected($event)" accept=".pdf, .doc, .docx, .xls, .xlsx" />
-       <!-- Display file name and file size -->
-    <div *ngIf="fileName && fileSizeFormatted">
-      <p><strong>File Name:</strong> {{ fileName }}</p>
-      <p><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
-    </div>
-    </div>
-    <br>
 
-  </div>
   <br>
   <div class="row">
     <mat-form-field>
       <mat-label>Remarks</mat-label>
       <textarea matInput appAlphanumericOnly formControlName="remarks" placeholder="Add remarks" ></textarea>
     </mat-form-field>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col">
+      <button mat-raised-button type="button" (click)="fileInput.click()" class="input-btn">Select File</button>
+      <input #fileInput type="file" style="display:none" (change)="onFileSelected($event)" accept=".pdf, .doc, .docx, .xls, .xlsx" />
+       <!-- Display file name and file size -->
+
+    </div>
+    <br>
+    <div class="alert" *ngIf="alertMessage.length > 0">{{alertMessage}}</div>
+       <div *ngIf="fileName" class="file-info">
+         <div class="file-details">
+           <p><strong>File Name:</strong> {{ fileName }}</p>
+           <p *ngIf="fileSizeFormatted.length > 0 && fileSizeFormatted != null"><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
+         </div>
+         <button mat-icon-button class="remove-btn" type="button" (click)="removeFile()">
+           <img src="cross.png" alt="">
+         </button>
+       </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

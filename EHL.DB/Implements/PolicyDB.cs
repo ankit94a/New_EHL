@@ -31,29 +31,13 @@ namespace EHL.DB.Implements
 		}
         public bool UpdatePolicy(Policy policy)
         {
-            //policy.FileName = policy.PolicyFile.FileName;
-            //string query = string.Format(@"update policy (type,wingid,categoryid,wing,category,filename,remarks,filepath) values (@type,@wingid,@categoryid,@wing,@category,@fileName,@remarks,@filepath)");
-            //return connection.Execute(query, policy) > 0;
-            // Set FileName from PolicyFile
             if (policy.PolicyFile != null)
             {
                 policy.FileName = policy.PolicyFile.FileName;
             }
-
-            // Correct Update Query
-            string query = @"UPDATE policy 
-                 SET 
-                    type = @Type,
-                    wingid = @WingId,
-                    categoryid = @CategoryId,
-                    wing = @Wing,
-                    category = @Category,
-                    filename = @FileName,
-                    remarks = @Remarks,
-                    filepath = @FilePath
-                 WHERE id = @Id"; // <-- make sure Id is available
-            // Execute
-            return connection.Execute(query, policy) > 0;
+			string query = @"UPDATE policy SET type = @Type,wingid = @WingId,categoryid = @CategoryId,wing = @Wing,subcategory = @subcategory,subcategoryid = @subcategoryid,updatedby=@updatedby,updatedon=@updatedon,
+						eqpt = @eqpt,category = @Category,filename = @FileName,remarks = @Remarks,filepath = @FilePath WHERE id = @Id"; 
+			return connection.Execute(query, policy) > 0;
 
         }
         public List<Policy> GetAdvisioriesByWing(long wingId, string Type)

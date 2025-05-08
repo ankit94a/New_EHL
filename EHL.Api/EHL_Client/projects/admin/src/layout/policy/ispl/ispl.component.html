@@ -2,12 +2,12 @@
   <!-- <mat-card-header>Policy List</mat-card-header> -->
   <mat-card-content>
     <div class="row">
-      <div class="col-md-10">ISPL Policy List</div>
+      <div class="col-md-10">ISPL List</div>
       <div class="col-md-2">
         <button class="btn btn-link" (click)="openDailog()" *ngIf="userType != '2'">+ Add ISPL</button>
       </div>
     </div>
-    <app-table *ngIf="defectReports.length > 0" [rowData]="defectReports" [tablePaginationSettings]="tablePaginationSettings"
+    <app-table *ngIf="ispl.length > 0" [rowData]="ispl" [tablePaginationSettings]="tablePaginationSettings"
       [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
        [sqColumnDefinition]="columns" (edit)="edit($event)" (delete)="delete($event)" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
       >

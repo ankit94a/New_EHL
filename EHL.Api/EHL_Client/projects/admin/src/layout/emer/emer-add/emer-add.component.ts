@@ -223,7 +223,6 @@ export class EmerAddComponent {
   }
 
   save() {
-    debugger
     const emerId = this.emerForm.get('id')?.value;
     const formData = new FormData();
     // edit emer

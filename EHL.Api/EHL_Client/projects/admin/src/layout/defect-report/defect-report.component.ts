@@ -42,7 +42,7 @@ export class DefectReportComponent extends TablePaginationSettingsConfig{
     openDailog(){
       this.dialogService.open(DefectReportAddComponent,null,'50vw').then(res =>{
         if(res){
-          // this.getAll
+          this.getPolicyByWing();
         }
       })
     }
@@ -58,20 +58,23 @@ export class DefectReportComponent extends TablePaginationSettingsConfig{
   }
  edit(row){
     row.isEdit = true;
-    this.dialogService.open(DefectReportAddComponent,row)
+    this.dialogService.open(DefectReportAddComponent,row).then(res =>{
+      if(res){
+        this.getPolicyByWing();
+      }
+    })
   }
    delete(row) {
       let deleteDefectReport: DeleteModel = new DeleteModel();
       deleteDefectReport.Id = row.item.id;
       deleteDefectReport.TableName = "Policy";
 
-      this.dialogService.confirmDialog("Would you like to delete This Policy?").subscribe(res => {
+      this.dialogService.confirmDialog("Are you sure you want to delete this Defect Report?").subscribe(res => {
         if (res) {
           this.apiService.postWithHeader(`attribute/delete`, deleteDefectReport).subscribe({
             next: (res) => {
-
-             this.defectReports= this.defectReports.splice(row.index, 1);
               this.toastr.success('Deleted Successfully', 'Success');
+              this.getPolicyByWing
               // this.dialogRef?.close(true);
             },
             error: (err) => {

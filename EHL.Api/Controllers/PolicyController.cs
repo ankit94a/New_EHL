@@ -34,8 +34,8 @@ namespace EHL.Api.Controllers
         [HttpPost, Route("update")]
         public async Task<IActionResult> UpdatePolicy([FromForm] Policy policy)
         {
-            policy.CreatedBy = HttpContext.GetUserId();
-            policy.CreatedOn = DateTime.Now;
+            policy.UpdatedBy = HttpContext.GetUserId();
+            policy.UpdatedOn = DateTime.Now;
             policy.IsActive = true;
             policy.IsDeleted = false;
             if (policy.PolicyFile != null && policy.PolicyFile.Length > 0)

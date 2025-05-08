@@ -37,9 +37,6 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
     }
-
-    // this.tablePaginationSettings.enableView = true;
-
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
@@ -60,22 +57,25 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
   }
  edit(row){
     row.isEdit = true;
-    this.dialogService.open(TechManualsAddComponent,row)
+    this.dialogService.open(TechManualsAddComponent,row).then(res =>{
+      if(res){
+        this.getPolicyByWing();
+      }
+    })
   }
   delete(row) {
+
     let deleteTechManual: DeleteModel = new DeleteModel();
     deleteTechManual.Id = row.item.id;
     deleteTechManual.TableName = "Policy";
 
-    this.dialogService.confirmDialog("Would you like to delete This Policy?").subscribe(res => {
+    this.dialogService.confirmDialog(`Are you sure you want to delete this ${row.item.type}?`).subscribe(res => {
       if (res) {
         this.apiService.postWithHeader(`attribute/delete`, deleteTechManual).subscribe({
           next: (res) => {
-           this.policyList.splice(row.index, 1);
+            this.getPolicyByWing();
             this.toastr.success('Deleted Successfully', 'Success');
-            // return this.policyList
-            this.policyList = [...this.policyList]
-            // this.dialogRef?.close(true);
+
           },
           error: (err) => {
             this.toastr.error('Failed to Delete', 'Error');
@@ -88,7 +88,7 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
   openDailog(){
     this.dialogService.open(TechManualsAddComponent,null,'50vw').then(res =>{
       if(res){
-        // this.getAll
+        this.getPolicyByWing();
       }
     })
   }
