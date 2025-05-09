@@ -51,7 +51,7 @@ export class IsplAddComponent {
     }
   }
   bindDataToForm(policyData) {
-debugger
+
     this.categoryId = policyData.categoryId;
     this.getSubCategory(policyData.categoryId,false);
     this.getEqpt(policyData.subCategoryId);
@@ -127,7 +127,7 @@ debugger
     }
     //edit
     if (policyId > 0) {
-      debugger;
+
 
         formData.append('id',policyId);
         formData.append('wing', wing);

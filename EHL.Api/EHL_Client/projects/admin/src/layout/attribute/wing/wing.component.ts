@@ -56,7 +56,7 @@ export class WingComponent {
   }
 
   async save() {
-    debugger
+
     const encryptedName = await this.EncryptionService.encrypt(this.wing.name);
 
   // Replace wing name with encrypted string before saving

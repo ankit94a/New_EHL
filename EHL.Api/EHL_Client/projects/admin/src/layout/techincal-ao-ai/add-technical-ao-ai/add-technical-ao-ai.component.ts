@@ -36,7 +36,6 @@ export class AddTechnicalAoAiComponent {
     }
   }
   bindDataToForm(TechnicalAoAiData) {
-    // debugger
     this.TechnicalAoAi = this.fb.group({
       id: [TechnicalAoAiData.id],
       type: [TechnicalAoAiData.type, [Validators.required]],
@@ -55,7 +54,6 @@ export class AddTechnicalAoAiComponent {
   }
 
   save() {
-    // debugger
     const formData = new FormData();
     if (this.TechnicalAoAi.valid) {
       formData.append(

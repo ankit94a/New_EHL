@@ -7,14 +7,12 @@ import { NgControl } from '@angular/forms';
 })
 export class AlphanumericOnlyDirective {
 
-  private regex: RegExp = /^[a-zA-Z0-9]*$/g;
-
   constructor(private control: NgControl) {}
 
   @HostListener('input', ['$event'])
   onInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    const cleaned = input.value.replace(/[^a-zA-Z0-9]/g, '');
+    const cleaned = input.value.replace(/[^a-zA-Z0-9\s]/g, '');
 
     if (this.control?.control) {
       this.control.control.setValue(cleaned, { emitEvent: false });

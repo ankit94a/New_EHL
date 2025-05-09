@@ -76,7 +76,7 @@ export class LandingPageComponent {
     this.dialogService.open(LoginComponent,null,'30vw','42vh');
   }
 getFileId($event) {
-  debugger
+
       var download = new DownloadModel();
       download.filePath = $event.filePath;
       download.name = $event.fileName;

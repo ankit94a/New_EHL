@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, EMPTY, map, Observable, of } from 'rxjs';
 import { environment } from '../enviroments/environments.development';
+import { AbstractControl } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -96,5 +97,19 @@ export class ApiService {
     // }
 
     return EMPTY;
+  }
+
+  checkRequiredFieldsExceptEmerFile(form,fileType): boolean {
+    const controls = form.controls;
+    for (const key in controls) {
+      if (key === fileType) continue;
+      const control = controls[key];
+      const validator = control.validator ? control.validator({} as AbstractControl) : null;
+      const hasRequired = validator && validator['required'];
+      if (hasRequired && (control.invalid || control.value === '' || control.value === null)) {
+        return false;
+      }
+    }
+    return true;
   }
 }

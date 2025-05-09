@@ -52,7 +52,6 @@ export class TechManualsAddComponent {
     }
   }
   bindDataToForm(policyData) {
-debugger
     this.categoryId = policyData.categoryId;
     this.getSubCategory(policyData.categoryId);
     this.getEqpt(policyData.subCategoryId);

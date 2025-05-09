@@ -77,7 +77,7 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
   }
   openDialog(){
     this.dialoagService.open(EmerAddComponent,null).then(res =>{
-      debugger
+
       if(res){
         this.getList()
       }

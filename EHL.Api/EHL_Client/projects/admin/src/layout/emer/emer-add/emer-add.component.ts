@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import {
@@ -35,8 +35,8 @@ export class EmerAddComponent {
   rawInput: string = '';
   filteredInput: string = '';
   alertMessage: string = '';
-  apiUrl:string = 'emer';
-  constructor(@Inject(MAT_DIALOG_DATA) data,private authService: AuthService, private apiService: ApiService,private fb: FormBuilder,private dialogRef: MatDialogRef<EmerAddComponent>,private toastr: ToastrService) {
+  apiUrl: string = 'emer';
+  constructor(@Inject(MAT_DIALOG_DATA) data, private authService: AuthService, private apiService: ApiService, private fb: FormBuilder, private dialogRef: MatDialogRef<EmerAddComponent>, private toastr: ToastrService) {
     this.wingId = parseInt(this.authService.getWingId());
     if (data) {
       this.bindDataToForm(data);
@@ -54,11 +54,11 @@ export class EmerAddComponent {
       }
     });
   }
+
   bindDataToForm(form) {
-    debugger;
-    if(form.subFunction == 'SCALES')
+    if (form.subFunction == 'SCALES')
       this.getSubFunctionField(form.subFunction)
-    if(form.subFunctionCategory != null && form.subFunctionCategory != undefined){
+    if (form.subFunctionCategory != null && form.subFunctionCategory != undefined) {
       this.getSubFunctionType(form.subFunctionCategory);
     }
     this.fileName = form.fileName;
@@ -77,12 +77,12 @@ export class EmerAddComponent {
       eqpt: [form.eqpt, [Validators.required]],
       emerFile: [form.emerFile, [Validators.required]],
       remarks: [form.remarks],
-      subFunctionCategory:[form.subFunctionCategory],
-      subFunctionType:[form.subFunctionType],
+      subFunctionCategory: [form.subFunctionCategory],
+      subFunctionType: [form.subFunctionType],
       id: [form.id],
     });
     this.getCategory(form.wingId);
-    this.getSubCategory(form.categoryId,false);
+    this.getSubCategory(form.categoryId, false);
     this.getEqpt(form.subCategoryId);
   }
 
@@ -114,13 +114,18 @@ export class EmerAddComponent {
         }
       });
   }
-  getSubCategory(categoryId,isUserInput:boolean=true) {
+  getSubCategory(categoryId, isUserInput: boolean = true) {
+    if (isUserInput) {
+      this.emerForm.patchValue({ subCategoryId: null, });
+      this.emerForm.patchValue({ eqpt: null, });
+    }
+
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
         if (res) {
           this.subCategoryList = res;
-          if(isUserInput)
+          if (isUserInput)
             this.eqptList = [];
         }
       });
@@ -197,7 +202,7 @@ export class EmerAddComponent {
     if (subFunction == 'SCALES') {
       this.subNarrowFunctionDropdown = [
         'INITIAL STOCKING GUIDES AND MAINTENANCE SCALES',
-        'INITIAL STOCKING GUIDES' ,
+        'INITIAL STOCKING GUIDES',
         'MAINTENANCE SCALES',
         'SPECIAL MAINTENANCE SCALES',
         'WAR MAINTENANCE SCALES',
@@ -230,12 +235,18 @@ export class EmerAddComponent {
       const fileInput = this.emerForm.get('emerFile')?.value;
       if (fileInput) {
         formData.append('emerFile', fileInput, fileInput.name);
-      }else{
-        formData.append('fileName', this.fileName);
-        formData.append('filePath', this.filePath);
+      } else {
+        if (this.fileName != '' && this.fileName != null) {
+          formData.append('fileName', this.fileName);
+          formData.append('filePath', this.filePath);
+        } else {
+          return this.alertMessage = 'File is required';
+        }
       }
-      const category = this.categoryList.find((item) => item.id == this.emerForm.get('categoryId')?.value)?.name || '';
-      const subCategory = this.subCategoryList.find((item) => item.id == this.emerForm.get('subCategoryId')?.value)?.name || '';
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.emerForm, 'emerFile')
+      if (isValid) {
+        const category = this.categoryList.find((item) => item.id == this.emerForm.get('categoryId')?.value)?.name || '';
+        const subCategory = this.subCategoryList.find((item) => item.id == this.emerForm.get('subCategoryId')?.value)?.name || '';
         formData.append('category', category);
         formData.append('subCategory', subCategory);
         formData.append('wingId', this.emerForm.get('wingId')?.value);
@@ -258,6 +269,11 @@ export class EmerAddComponent {
             this.toastr.error('Error submitting form', 'Error');
           },
         });
+      } else {
+        this.emerForm.markAllAsTouched();
+        return;
+      }
+
     }
     // add new emer
     else {
@@ -281,14 +297,14 @@ export class EmerAddComponent {
         formData.append('remarks', this.emerForm.get('remarks')?.value);
         formData.append('emerFile', this.emerForm.get('emerFile')?.value);
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
-        next: (res) => {
-          this.toastr.success('Form submitted successfully', 'Success');
-          this.dialogRef.close(true);
-        },
-        error: (err) => {
-          this.toastr.error('Error submitting form', 'Error');
-        },
-      });
+          next: (res) => {
+            this.toastr.success('Form submitted successfully', 'Success');
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting form', 'Error');
+          },
+        });
       } else {
         const fileInput = this.emerForm.get('emerFile')?.value;
         if (!fileInput)
