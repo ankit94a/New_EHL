@@ -1,8 +1,10 @@
-﻿using EHL.Business.Implements;
+﻿using EHL.Api.Helpers;
+using EHL.Business.Implements;
 using EHL.Business.Interfaces;
 using EHL.Common.Models;
 using InSync.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using static EHL.Common.Enum.Enum;
 
 namespace EHL.Api.Controllers
 {
@@ -14,6 +16,7 @@ namespace EHL.Api.Controllers
 		{
 			_attributeManager = attributeManager;
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("wing")]
 		public IActionResult AddCategory([FromBody] Wing wing)
 		{
@@ -23,7 +26,8 @@ namespace EHL.Api.Controllers
 			wing.IsActive = true;
 			return Ok(_attributeManager.AddWing(wing));
 		}
-        [HttpPost, Route("wing/update")]
+		[Authorization(RoleType.Admin)]
+		[HttpPost, Route("wing/update")]
         public IActionResult UpdateCategory([FromBody] Wing wing)
         {
             wing.CreatedBy = HttpContext.GetUserId();
@@ -32,7 +36,8 @@ namespace EHL.Api.Controllers
             wing.IsActive = true;
             return Ok(_attributeManager.UpdateWing(wing));
         }
-        [HttpPost, Route("category")]
+		[Authorization(RoleType.Admin)]
+		[HttpPost, Route("category")]
 		public IActionResult AddCategory([FromBody] Category category)
 		{
 			category.Name = category.Name.ToUpper();
@@ -42,7 +47,8 @@ namespace EHL.Api.Controllers
 			category.IsActive = true;
 			return Ok(_attributeManager.AddCategory(category));
 		}
-        [HttpPost, Route("category/update")]
+		[Authorization(RoleType.Admin)]
+		[HttpPost, Route("category/update")]
         public IActionResult UpdateCategory([FromBody] Category category)
         {
             category.Name = category.Name.ToUpper();
@@ -52,7 +58,8 @@ namespace EHL.Api.Controllers
             category.IsActive = true;
             return Ok(_attributeManager.UpdateCategory(category));
         }
-        [HttpPost, Route("subcategory")]
+		[Authorization(RoleType.Admin)]
+		[HttpPost, Route("subcategory")]
 		public IActionResult AddSubCategory([FromBody] SubCategory subCategory)
 		{
 			subCategory.Name = subCategory.Name.ToUpper();
@@ -62,6 +69,7 @@ namespace EHL.Api.Controllers
 			subCategory.IsActive = true;
 			return Ok(_attributeManager.AddSubCategory(subCategory));
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("eqpt")]
 		public IActionResult AddEqpt([FromBody] Eqpt eqpt)
 		{
@@ -92,21 +100,25 @@ namespace EHL.Api.Controllers
 		{
 			return Ok(_attributeManager.GetEqpt(categoryId,subCategoryId));
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPut, Route("category")]
 		public IActionResult DeactiveCategory([FromBody] Category category)
 		{
 			return Ok(_attributeManager.DeactivateCategory(category.Id));
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPut, Route("subcategory")]
 		public IActionResult DeactiveSubCategory([FromBody] SubCategory subCategory)
 		{
 			return Ok(_attributeManager.DeactivateSubCategory(subCategory.Id));
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPut, Route("eqpt")]
 		public IActionResult DeactiveEqpt([FromBody] Eqpt eqpt)
 		{
 			return Ok(_attributeManager.DeactivateCategory(eqpt.Id));
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("delete")]
 		public IActionResult DeleteEmer([FromBody] DeleteEmer data)
 		{

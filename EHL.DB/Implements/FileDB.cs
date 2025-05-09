@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using EHL.DB.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +21,17 @@ namespace EHL.DB.Implements
 
 		public async Task<AttachedFile> GetDocumentById(long Id, string downloadType)
 		{
-			string query = "SELECT * FROM documents WHERE id = @id";
-
-			var result = await connection.QueryFirstOrDefaultAsync<AttachedFile>(query, new { id = Id });
-
-			return result;
+			try
+			{
+				string query = "SELECT * FROM documents WHERE id = @id";
+				var result = await connection.QueryFirstOrDefaultAsync<AttachedFile>(query, new { id = Id });
+				return result;
+			}
+			catch(Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=FileDB,method=GetDocumentById");
+				throw;
+			}			
 		}
 
 	}

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using EHL.DB.Infrastructure;
 using Microsoft.Extensions.Configuration;
@@ -26,7 +27,7 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ex)
 			{
-				// .Error(ex, "User Loggin error in method GetUserByEmailPassword");
+				EHLLogger.Error(ex, "Class=UserDB,method=GetUserByEmailPassword");
 				throw;
 			}
 		}
@@ -40,6 +41,7 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ee)
 			{
+				EHLLogger.Error(ee, "Class=UserDB,method=GetAllRolePermission");
 				throw;
 			}
 		}

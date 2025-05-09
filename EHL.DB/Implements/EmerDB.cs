@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using EHL.DB.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,8 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=GetAllEmer");
+				throw;
 			}
 
 		}
@@ -41,7 +43,8 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=GetAllMasterSheet");
+				throw;
 			}
 
 		}
@@ -55,7 +58,8 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=GetLatestEmer");
+				throw;
 			}
 
 		}
@@ -63,25 +67,15 @@ namespace EHL.DB.Implements
 		{
 			try
 			{
-				string query = @"
-			WITH ranked_policies AS (
-				SELECT *, 
-					   ROW_NUMBER() OVER (PARTITION BY type ORDER BY id DESC) AS rn
-				FROM policy
-				WHERE type IN ('Technical Manuals', 'Policy Compendium', 'Advisories', 'ISPL', 'Misc','EP Contract')
-				AND isactive = 1
-			)
-			SELECT * 
-			FROM ranked_policies
-			WHERE rn <= 2
-			ORDER BY type, id DESC;
-		";
+				string query = @"WITH ranked_policies AS (SELECT *, ROW_NUMBER() OVER (PARTITION BY type ORDER BY id DESC) AS rn FROM policy WHERE type IN ('Technical Manuals', 'Policy Compendium', 'Advisories', 'ISPL', 'Misc','EP Contract') AND isactive = 1)
+								SELECT * FROM ranked_policies WHERE rn <= 2 ORDER BY type, id DESC;";
 
 				var result = connection.Query<Policy>(query).ToList();
 				return result;
 			}
 			catch (Exception ex)
 			{
+				EHLLogger.Error(ex, "Class=EmerDB,method=GetLatestTwoPoliciesPerType");
 				throw;
 			}
 		}
@@ -96,31 +90,25 @@ namespace EHL.DB.Implements
 			}
 			catch (Exception ex)
 			{
-				throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=GetEmerIndex");
+				throw;
 			}
-
 		}
 		public bool AddEmer(EmerModel emer)
 		{
 			try
 			{
-				// Ensure that CreatedOn and UpdatedOn are DateTime values before the insert
 				if (emer.CreatedOn == default)
 					emer.CreatedOn = DateTime.Now;
 
-
-				string query = @"insert into emer 
-                            (emernumber, subject, subfunction, category, subcategory, categoryid, subcategoryid, eqpt, remarks, fileid, createdby, createdon, isactive,wing,wingid,subfunctioncategory,subfunctiontype,filename,filepath)
-                          values 
-                            (@emernumber, @subject, @subfunction, @category, @subcategory, @categoryid, @subcategoryid, @eqpt, @remarks, @fileid, @createdby, @createdon, @isactive,@wing,@wingid,@subfunctioncategory,@subfunctiontype,@filename,@filepath)";
-
+				string query = @"insert into emer (emernumber, subject, subfunction, category, subcategory, categoryid, subcategoryid, eqpt, remarks, fileid, createdby, createdon, isactive,wing,wingid,subfunctioncategory,subfunctiontype,filename,filepath) values  (@emernumber, @subject, @subfunction, @category, @subcategory, @categoryid, @subcategoryid, @eqpt, @remarks, @fileid, @createdby, @createdon, @isactive,@wing,@wingid,@subfunctioncategory,@subfunctiontype,@filename,@filepath)";
 				var result = connection.Execute(query, emer);
 				return result > 0;
 			}
 			catch (Exception ex)
 			{
-				// Handle exception (Log it)
-				throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=AddEmer");
+				throw;
 			}
 		}
 
@@ -128,23 +116,17 @@ namespace EHL.DB.Implements
         {
             try
             {
-                // Ensure that CreatedOn and UpdatedOn are DateTime values before the insert
                 if (emer.CreatedOn == default)
                     emer.CreatedOn = DateTime.Now;
 
-
-                string query = @"insert into emerindex 
-                            (emernumber, subject,  category, categoryid,  createdby, createdon, isactive,wing,wingid,filename,filepath)
-                          values 
-                            (@emernumber, @subject, @category, @categoryid,  @createdby, @createdon, @isactive,@wing,@wingid,@filename,@filepath)";
-
+                string query = @"insert into emerindex (emernumber, subject,  category, categoryid,  createdby, createdon, isactive,wing,wingid,filename,filepath) values (@emernumber, @subject, @category, @categoryid,  @createdby, @createdon, @isactive,@wing,@wingid,@filename,@filepath)";
                 var result = connection.Execute(query, emer);
                 return result > 0;
             }
             catch (Exception ex)
             {
-                // Handle exception (Log it)
-                throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=AddEmerIndex");
+				throw;
             }
         }
 
@@ -152,21 +134,14 @@ namespace EHL.DB.Implements
         {
             try
             {
-               string query = @"UPDATE emerIndex SET
-                         emernumber = @EmerNumber,
-                         subject = @Subject,
-                         category = @Category,
-                         categoryid = @CategoryId,
-                      filename = @FileName,
-                      filepath=@FilePath
-                      WHERE id = @Id";
-
+               string query = @"UPDATE emerIndex SET emernumber = @EmerNumber,subject = @Subject,category = @Category,categoryid = @CategoryId,filename = @FileName,filepath=@FilePath WHERE id = @Id";
                 var result = await connection.ExecuteAsync(query, emer);
                 return result > 0;
             }
             catch (Exception ex)
             {
-                throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=UpdateEmerIndex");
+				throw ;
             }
         }
         public bool DeactiveEmerIndex(long Id)
@@ -174,15 +149,13 @@ namespace EHL.DB.Implements
             try
             {
                 string query = @"UPDATE emerindex SET isactive = 0 WHERE id = @Id";
-
-                // ✅ Pass the parameter here
                 var result = connection.Execute(query, new { Id });
-
                 return result > 0;
             }
             catch (Exception ex)
             {
-                throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=DeactiveEmerIndex");
+				throw;
             }
         }
 
@@ -191,69 +164,31 @@ namespace EHL.DB.Implements
             try
             {
                 string query = @"UPDATE emer SET isactive = 0 WHERE id = @Id";
-
-                // ✅ Pass the parameter here
                 var result = connection.Execute(query, new { Id });
-
                 return result > 0;
             }
             catch (Exception ex)
             {
-                throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=DeactivateEmer");
+				throw;
             }
         }
-
-        //      public bool UpdateEmer(EmerModel emer)
-        //{
-        //	try
-        //	{
-        //		string query = string.Format(@"update emer set emernumber=@emerNumber,subject=@subject,subfunction=@subFunction,category=@category,subcategory=@subCategory,eqpt=@eqpt,fileid=@fileId,updatedby=@updatedBy,updatedon=@updatedOn,isactive=@isActive where id = @id");
-        //		var result = connection.Execute(query,new { emernumber=emer.EmerNumber, subject=emer.Subject, subfunction=emer.SubFunction, category=emer.Category,
-        //                  id = emer.Id,
-        //                  eqpt = emer.Eqpt,
-        //                  subcategory =emer.SubCategory,
-        //			//metainfo=emer.MetaInfo,
-        //			fileid = emer.FileId,
-        //			updatedby = emer.UpdatedBy,
-        //			updatedon = emer.UpdatedOn,
-        //			isactive = emer.IsActive
-        //		});
-        //		return result > 0;
-        //	}
-        //	catch (Exception ex)
-        //	{
-        //		throw ex;
-        //	}
-        //}
 
         public async Task<bool> UpdateEmer(EmerModel emer)
         {
             try
             {
-                string query = @"UPDATE emer SET
-                         emernumber = @EmerNumber,
-                         subject = @Subject,
-                         subfunction = @SubFunction,
-                         wing = @Wing,
-                         wingid = @WingId,
-                         category = @Category,
-                         categoryid = @CategoryId,
-                         subcategory = @SubCategory,
-                         subcategoryid = @SubCategoryId,
-                         eqpt = @Eqpt,
-				remarks = @Remarks,
-                         updatedby = @UpdatedBy,
-                         updatedon = @UpdatedOn,
-                         subfunctioncategory = @SubFunctionCategory,
-                         subfunctiontype = @SubFunctionType,filename = @FileName,filepath=@FilePath
-                      WHERE id = @Id";
+                string query = @"UPDATE emer SET emernumber = @EmerNumber, subject = @Subject,subfunction = @SubFunction,wing = @Wing,wingid = @WingId,category = @Category,categoryid = @CategoryId,subcategory = @SubCategory,
+                         subcategoryid = @SubCategoryId,eqpt = @Eqpt,remarks = @Remarks,updatedby = @UpdatedBy,updatedon = @UpdatedOn,subfunctioncategory = @SubFunctionCategory,
+                         subfunctiontype = @SubFunctionType,filename = @FileName,filepath=@FilePath WHERE id = @Id";
 
                 var result = await connection.ExecuteAsync(query, emer);
                 return result > 0;
             }
             catch (Exception ex)
             {
-                throw ex;
+				EHLLogger.Error(ex, "Class=EmerDB,method=UpdateEmer");
+				throw;
             }
         }
 
@@ -261,16 +196,12 @@ namespace EHL.DB.Implements
 		{
 			try
 			{
-				// Ensure that the Document (byte array) is being passed correctly
 				if (document.Document == null || document.Document.Length == 0)
 				{
 					throw new ArgumentException("Document content cannot be empty.");
 				}
 
-				string query = @"
-            INSERT INTO documents (document, filetype, name, size, createdby, updatedby, createdon, isactive, isdeleted)
-            VALUES (@document, @filetype, @name, @size, @createdby, @updatedby, @createdon, @isactive, @isdeleted);
-            SELECT CAST(SCOPE_IDENTITY() AS BIGINT);";
+				string query = @"INSERT INTO documents (document, filetype, name, size, createdby, updatedby, createdon, isactive, isdeleted) VALUES (@document, @filetype, @name, @size, @createdby, @updatedby, @createdon, @isactive, @isdeleted); SELECT CAST(SCOPE_IDENTITY() AS BIGINT);";
 
 				// Use Dapper to execute the query and insert the file data into the database
 				var parameters = new
@@ -288,12 +219,12 @@ namespace EHL.DB.Implements
 
 				// Execute the query and get the inserted ID
 				var id = connection.ExecuteScalar<long>(query, parameters);
-
 				return id;
 			}
 			catch (Exception ex)
 			{
-				throw new Exception("An error occurred while inserting the document.", ex);
+				EHLLogger.Error(ex, "Class=EmerDB,method=AddFile");
+				throw;
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using EHL.DB.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -19,31 +20,67 @@ namespace EHL.DB.Implements
 
 		public List<Policy> GetAllPolicyByWing(long wingId)
 		{
-			string query = string.Format(@"select * from policy where wingid = @wingid and isactive = 1");
-			return connection.Query<Policy>(query, new { wingid = wingId }).ToList();
+			try
+			{
+				string query = string.Format(@"select * from policy where wingid = @wingid and isactive = 1 and type in ('Technical Manuals', 'Advisories', 'Misc')");
+				return connection.Query<Policy>(query, new { wingid = wingId }).ToList();
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=PolicyDB,method=GetAllPolicyByWing");
+				throw;
+			}
+
 		}
 
 		public bool AddPolicy(Policy policy)
 		{
-            policy.FileName = policy.PolicyFile.FileName;
-            string query = string.Format(@"insert into policy (type,wingid,categoryid,wing,category,subcategory,subcategoryid,eqpt,filename,remarks,filepath) values (@type,@wingid,@categoryid,@wing,@category,@subcategory,@subcategoryid,@eqpt,@fileName,@remarks,@filepath)");
-			return connection.Execute(query, policy) > 0;
-		}
-        public bool UpdatePolicy(Policy policy)
-        {
-            if (policy.PolicyFile != null)
-            {
-                policy.FileName = policy.PolicyFile.FileName;
-            }
-			string query = @"UPDATE policy SET type = @Type,wingid = @WingId,categoryid = @CategoryId,wing = @Wing,subcategory = @subcategory,subcategoryid = @subcategoryid,updatedby=@updatedby,updatedon=@updatedon,
-						eqpt = @eqpt,category = @Category,filename = @FileName,remarks = @Remarks,filepath = @FilePath WHERE id = @Id"; 
-			return connection.Execute(query, policy) > 0;
+			try
+			{
+				policy.FileName = policy.PolicyFile.FileName;
+				string query = string.Format(@"insert into policy (type,wingid,categoryid,wing,category,subcategory,subcategoryid,eqpt,filename,remarks,filepath) values (@type,@wingid,@categoryid,@wing,@category,@subcategory,@subcategoryid,@eqpt,@fileName,@remarks,@filepath)");
+				return connection.Execute(query, policy) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=PolicyDB,method=AddPolicy");
+				throw;
+			}
 
-        }
-        public List<Policy> GetAdvisioriesByWing(long wingId, string Type)
+		}
+		public bool UpdatePolicy(Policy policy)
 		{
-			string query = string.Format(@"select * from policy where wingid = @wingid and type=@type and isactive = 1");
-			return connection.Query<Policy>(query, new { wingid = wingId,type=Type }).ToList();
+			try
+			{
+				if (policy.PolicyFile != null)
+				{
+					policy.FileName = policy.PolicyFile.FileName;
+				}
+				string query = @"UPDATE policy SET type = @Type,wingid = @WingId,categoryid = @CategoryId,wing = @Wing,subcategory = @subcategory,subcategoryid = @subcategoryid,updatedby=@updatedby,updatedon=@updatedon,
+						eqpt = @eqpt,category = @Category,filename = @FileName,remarks = @Remarks,filepath = @FilePath WHERE id = @Id";
+				return connection.Execute(query, policy) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=PolicyDB,method=UpdatePolicy");
+				throw;
+			}
+
+
+		}
+		public List<Policy> GetAdvisioriesByWing(long wingId, string Type)
+		{
+			try
+			{
+				string query = string.Format(@"select * from policy where wingid = @wingid and type=@type and isactive = 1");
+				return connection.Query<Policy>(query, new { wingid = wingId, type = Type }).ToList();
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=PolicyDB,method=GetAdvisioriesByWing");
+				throw;
+			}
+
 		}
 	}
 }

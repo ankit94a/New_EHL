@@ -137,14 +137,6 @@
 
   },
   {
-    "text": "Home Page",
-    "icon": "fa-solid fa-house",
-    "routerLink": "/landing-page-update",
-    "children": [],
-    "permissionName": "HomePage",
-    "permissionAction": "ViewAll"
-  },
-  {
     "text": "Attribute",
     "icon": "fa-brands fa-creative-commons-nd",
     "routerLink": "/attribute",

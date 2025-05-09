@@ -23,10 +23,10 @@ namespace InSync.Api.Helpers
 		{
 			return Convert.ToInt32(httpContext.User.Claims.Where(c => c.Type == EHLConstant.RoleId).FirstOrDefault().Value);
 		}
-		//public static RoleType GetRoleType(this HttpContext httpContext)
-		//{
-		//    return (RoleType)Enum.Parse(typeof(RoleType), httpContext.User.Claims.Where(c => c.Type == EHLConstant.RoleType).FirstOrDefault().Value);
-		//}
+		public static RoleType GetRoleType(this HttpContext httpContext)
+		{
+			return (RoleType)Enum.Parse(typeof(RoleType), httpContext.User.Claims.Where(c => c.Type == EHLConstant.RoleType).FirstOrDefault().Value);
+		}
 
 	}
 }

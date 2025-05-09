@@ -35,6 +35,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
+    this.tablePaginationSettings.enableColumn = true;
     if (this.userType != '2') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
@@ -70,16 +71,15 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     deleteEpContract.TableName = 'Policy';
 
     this.dialogService
-      .confirmDialog('Would you like to delete Ep-Contract?')
+      .confirmDialog('Are you sure you want to delete this Ep-Contract?')
       .subscribe((res) => {
         if (res) {
           this.apiService
             .postWithHeader(`attribute/delete`, deleteEpContract)
             .subscribe({
               next: (res) => {
-                this.epContractList = this.epContractList.splice(row.index, 1);
                 this.toastr.success('Deleted Successfully', 'Success');
-                // this.dialogRef?.close(true);
+                this.getAllContract();
               },
               error: (err) => {
                 this.toastr.error('Failed to Delete', 'Error');
@@ -106,6 +106,20 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
       displayName: 'Category',
       isSearchable: true,
       hide: false,
+      type: 'text',
+    },
+    {
+      name: 'subCategory',
+      displayName: 'Sub Category',
+      isSearchable: true,
+      hide: true,
+      type: 'text',
+    },
+    {
+      name: 'eqpt',
+      displayName: 'Eqpt',
+      isSearchable: true,
+      hide: true,
       type: 'text',
     },
     {

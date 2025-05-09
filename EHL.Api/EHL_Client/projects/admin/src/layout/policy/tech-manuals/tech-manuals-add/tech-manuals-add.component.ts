@@ -53,17 +53,17 @@ export class TechManualsAddComponent {
   }
   bindDataToForm(policyData) {
     this.categoryId = policyData.categoryId;
-    this.getSubCategory(policyData.categoryId);
+    this.getSubCategory(policyData.categoryId,false);
     this.getEqpt(policyData.subCategoryId);
     this.policy = this.fb.group({
       categoryId: [policyData.categoryId, [Validators.required]],
       id: [policyData.id],
       type: [{ value: policyData.type,disabled:true}, [Validators.required]],
       wingId: [{ value: policyData.wingId, disabled: true },[Validators.required],],
-      category: [policyData.category],
-      subCategory: [policyData.subCategory],
+      category: [policyData.category,[Validators.required]],
+      subCategory: [policyData.subCategory,[Validators.required]],
       subCategoryId: [policyData.subCategoryId,[Validators.required]],
-      eqpt: [policyData.eqpt],
+      eqpt: [policyData.eqpt,[Validators.required]],
       policyFile: [null, [Validators.required]],
       remarks: [policyData.remarks],
     });
@@ -87,6 +87,10 @@ export class TechManualsAddComponent {
     });
   }
   getSubCategory(categoryId,isUserInput:boolean=true) {
+    if (isUserInput) {
+      this.policy.patchValue({ subCategoryId: null, });
+      this.policy.patchValue({ eqpt: null, });
+    }
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
@@ -117,15 +121,23 @@ export class TechManualsAddComponent {
     ).name;
     formData.append('wing', wing);
     const policyId = this.policy.get('id')?.value;
+    //edit
+    if (policyId > 0) {
+
     const fileInput = this.policy.get('policyFile')?.value;
     if (fileInput) {
       formData.append('policyFile', fileInput, fileInput.name);
     } else {
-      formData.append('fileName', this.fileName);
-      formData.append('filePath', this.filePath);
+      if (this.fileName != '' && this.fileName != null) {
+        formData.append('fileName', this.fileName);
+        formData.append('filePath', this.filePath);
+      } else {
+        return this.alertMessage = 'File is required';
+      }
     }
-    //edit
-    if (policyId > 0) {
+    var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.policy, 'policyFile')
+      if(isValid){
+
         formData.append('id',this.policy.get('id')?.value);
         formData.append('wing', wing);
         var category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value).name;
@@ -151,7 +163,10 @@ export class TechManualsAddComponent {
             this.toastr.error('Error submitting Tech Manual', 'Error');
           },
         });
-
+      }else{
+        this.policy.markAllAsTouched();
+        return;
+      }
     }
     //add
     else {

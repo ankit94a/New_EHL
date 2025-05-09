@@ -1,7 +1,9 @@
-﻿using EHL.Business.Interfaces;
+﻿using EHL.Api.Helpers;
+using EHL.Business.Interfaces;
 using EHL.Common.Models;
 using InSync.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using static EHL.Common.Enum.Enum;
 
 namespace EHL.Api.Controllers
 {
@@ -14,6 +16,7 @@ namespace EHL.Api.Controllers
 			_policyManger = policyManger;
 		}
 
+		[Authorization(RoleType.Admin)]
 		[HttpPost]
 		public async Task<IActionResult> AddPolicy([FromForm] Policy policy)
 		{
@@ -31,7 +34,9 @@ namespace EHL.Api.Controllers
 			}
 			return Ok(await _policyManger.AddPolicy(policy));
 		}
-        [HttpPost, Route("update")]
+
+		[Authorization(RoleType.Admin)]
+		[HttpPost, Route("update")]
         public async Task<IActionResult> UpdatePolicy([FromForm] Policy policy)
         {
             policy.UpdatedBy = HttpContext.GetUserId();

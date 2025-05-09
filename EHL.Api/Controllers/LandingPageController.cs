@@ -1,6 +1,8 @@
-﻿using EHL.Business.Interfaces;
+﻿using EHL.Api.Helpers;
+using EHL.Business.Interfaces;
 using EHL.Common.Models;
 using Microsoft.AspNetCore.Mvc;
+using static EHL.Common.Enum.Enum;
 
 namespace EHL.Api.Controllers
 {
@@ -12,6 +14,7 @@ namespace EHL.Api.Controllers
 		{
 			_landingPageManager = landingPageManager;
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("news")]
 		public IActionResult AddNews([FromBody] News news)
 		{
@@ -27,6 +30,7 @@ namespace EHL.Api.Controllers
 		{
 			return Ok(_landingPageManager.GetProfile());
 		}
+		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("profile")]
 		public IActionResult AddProfile([FromBody] LandingProfile profile)
 		{

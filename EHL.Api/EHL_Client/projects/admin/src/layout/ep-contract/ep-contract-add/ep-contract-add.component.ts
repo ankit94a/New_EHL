@@ -2,7 +2,12 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { ApiService } from 'projects/shared/src/service/api.service';
-import { Category, Eqpt, SubCategory, Wing } from 'projects/shared/src/models/attribute.model';
+import {
+  Category,
+  Eqpt,
+  SubCategory,
+  Wing,
+} from 'projects/shared/src/models/attribute.model';
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'projects/shared/src/service/auth.service';
@@ -12,7 +17,7 @@ import { AuthService } from 'projects/shared/src/service/auth.service';
   standalone: true,
   imports: [SharedLibraryModule],
   templateUrl: './ep-contract-add.component.html',
-  styleUrl: './ep-contract-add.component.scss'
+  styleUrl: './ep-contract-add.component.scss',
 })
 export class EpContractAddComponent {
   policy: FormGroup;
@@ -21,50 +26,88 @@ export class EpContractAddComponent {
   subCategoryList: SubCategory[] = [];
   eqptList: Eqpt[] = [];
   fileName: string | null = null;
+  filePath: string = '';
   fileSizeFormatted: string | null = null;
-  wingId:number;
-  constructor(private authService:AuthService, @Inject(MAT_DIALOG_DATA) data,private dialogRef:MatDialogRef<EpContractAddComponent>, private apiService: ApiService,private fb: FormBuilder,private toastr: ToastrService,private dailogRef: MatDialogRef<EpContractAddComponent>) {
-    this.wingId = parseInt(this.authService.getWingId())
+  wingId: number;
+  categoryId: number;
+  apiUrl: string = '';
+  alertMessage: string = '';
+  constructor(
+    private authService: AuthService,
+    @Inject(MAT_DIALOG_DATA) data,
+    private dialogRef: MatDialogRef<EpContractAddComponent>,
+    private apiService: ApiService,
+    private fb: FormBuilder,
+    private toastr: ToastrService
+  ) {
+    this.wingId = parseInt(this.authService.getWingId());
     this.getWings();
-    if(data != null){
-      this.bindDataToForm(data)
-    }else{
+    if (data != null) {
+      this.apiUrl = 'policy/update';
+      this.bindDataToForm(data);
+    } else {
+      this.apiUrl = 'policy';
       this.createForm();
     }
-
   }
-  bindDataToForm(policyData){
-    this.getCategory(policyData.wingId)
+  bindDataToForm(policyData) {
+    this.categoryId = policyData.categoryId;
+    this.getSubCategory(policyData.categoryId, false);
+    this.getEqpt(policyData.subCategoryId);
     this.policy = this.fb.group({
-      type: [{value: policyData.type,disabled:true}, [Validators.required]],
-      wingId: [{value:policyData.wingId,disabled:true}, [Validators.required]],
-      categoryId: [{value:policyData.categoryId,disabled:true}, [Validators.required]],
+      categoryId: [policyData.categoryId, [Validators.required]],
+      id: [policyData.id, [Validators.required]],
+      type: [{ value: policyData.type, disabled: true }, [Validators.required]],
+      wingId: [
+        { value: policyData.wingId, disabled: true },
+        [Validators.required],
+      ],
+      category: [policyData.category, [Validators.required]],
+      subCategory: [policyData.subCategory, [Validators.required]],
+      subCategoryId: [policyData.subCategoryId, [Validators.required]],
+      eqpt: [policyData.eqpt, [Validators.required]],
       policyFile: [null, [Validators.required]],
-      remarks: [{value:policyData.remarks,disabled:true}],
+      remarks: [policyData.remarks],
     });
+
+    this.fileName = policyData.fileName;
+    this.fileSizeFormatted = 'Not Defined';
+    this.filePath = policyData.filePath;
   }
   createForm() {
     this.policy = this.fb.group({
-      type: [ {value: 'EP Contract',disabled:true}, [Validators.required]],
+      id: [0],
+      type: [{ value: 'EP Contract', disabled: true }, [Validators.required]],
       wingId: [{ value: this.wingId, disabled: true }, [Validators.required]],
       categoryId: ['', [Validators.required]],
+      categogry: ['', [Validators.required]],
+      subCategory: ['', [Validators.required]],
+      subCategoryId: ['', [Validators.required]],
+      eqpt: ['', [Validators.required]],
       policyFile: [null, [Validators.required]],
       remarks: [''],
     });
   }
-  getSubCategory(categoryId) {
+  getSubCategory(categoryId, isUserInput: boolean = true) {
+    if (isUserInput) {
+      this.policy.patchValue({ subCategoryId: null });
+      this.policy.patchValue({ eqpt: null });
+    }
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
         if (res) {
           this.subCategoryList = res;
+          if (isUserInput) this.eqptList = [];
         }
       });
   }
+
   getEqpt(subCategoryId) {
-    let categoryId = this.policy.get('categoryId')?.value;
+    // let categoryId = this.policy.get('categoryId')?.value;
+
     this.apiService
-      .getWithHeaders('attribute/eqpt' + categoryId + '/' + subCategoryId)
+      .getWithHeaders('attribute/eqpt' + this.categoryId + '/' + subCategoryId)
       .subscribe((res) => {
         if (res) {
           this.eqptList = res;
@@ -76,40 +119,117 @@ export class EpContractAddComponent {
     var wing = this.wingList.find(
       (item) => item.id == this.policy.get('wingId')?.value
     ).name;
-    var category = this.categoryList.find(
-      (item) => item.id == this.policy.get('categoryId')?.value
-    ).name;
-
     formData.append('wing', wing);
-    formData.append('category', category);
-    if (this.policy.valid) {
-      formData.append('type', this.policy.get('type')?.value);
-      formData.append('wingId', this.policy.get('wingId')?.value);
-      formData.append('categoryId', this.policy.get('categoryId')?.value);
-      formData.append('policyFile', this.policy.get('policyFile')?.value);
-      formData.append('remarks', this.policy.get('remarks')?.value);
+    const policyId = this.policy.get('id')?.value;
+    //edit ep contract
+    if (policyId > 0) {
 
-      // Append the file to FormData
-      const fileInput = this.policy.get('policyFile')?.value;
-      if (fileInput) {
-        formData.append('policyFile', fileInput, fileInput.name); // Append the file
+    const fileInput = this.policy.get('policyFile')?.value;
+    if (fileInput) {
+      formData.append('policyFile', fileInput, fileInput.name);
+    } else {
+      if (this.fileName != '' && this.fileName != null) {
+        formData.append('fileName', this.fileName);
+        formData.append('filePath', this.filePath);
+      } else {
+        return (this.alertMessage = 'File is required');
       }
-      this.apiService.postWithHeader('policy', formData).subscribe({
-        next: (res) => {
-          this.toastr.success('Policy submitted successfully', 'Success');
-          this.dialogRef.close(true);
-        },
-        error: (err) => {
-          this.toastr.error('Error submitting policy', 'Error');
-        }
-      });
+    }
+    var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(
+      this.policy,
+      'policyFile'
+    );
+      if (isValid) {
+        formData.append('id', policyId);
+        formData.append('wing', wing);
+        var category = this.categoryList.find(
+          (item) => item.id == this.policy.get('categoryId')?.value
+        ).name;
+        var subCategory = this.subCategoryList.find(
+          (item) => item.id == this.policy.get('subCategoryId')?.value
+        )?.name;
+        formData.append('category', category);
+        formData.append('subCategory', subCategory);
+        formData.append('eqpt', this.policy.get('eqpt')?.value);
+        formData.append(
+          'subCategoryId',
+          this.policy.get('subCategoryId')?.value
+        );
+        formData.append('type', this.policy.get('type')?.value);
+        formData.append('wingId', this.policy.get('wingId')?.value);
+        formData.append('categoryId', this.policy.get('categoryId')?.value);
+        formData.append('policyFile', this.policy.get('policyFile')?.value);
+        formData.append('remarks', this.policy.get('remarks')?.value);
+
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success(
+              'EP Contract submitted successfully',
+              'Success'
+            );
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting EP Contract', 'Error');
+          },
+        });
+      } else {
+        this.policy.markAllAsTouched();
+        return;
+      }
+    }
+    //add ep contract
+    else {
+      debugger
+      if (this.policy.valid) {
+        const category =
+          this.categoryList.find(
+            (item) => item.id == this.policy.get('categoryId')?.value
+          )?.name || '';
+        const subCategory =
+          this.subCategoryList.find(
+            (item) => item.id == this.policy.get('subCategoryId')?.value
+          )?.name || '';
+        formData.append('type', this.policy.get('type')?.value);
+        formData.append('wingId', this.policy.get('wingId')?.value);
+        formData.append('id', policyId);
+        formData.append('category', category);
+        formData.append('categoryId', this.policy.get('categoryId')?.value);
+        formData.append(
+          'subCategoryId',
+          this.policy.get('subCategoryId')?.value
+        );
+        formData.append('subCategory', subCategory);
+        formData.append('eqpt', this.policy.get('eqpt')?.value);
+        formData.append('policyFile', this.policy.get('policyFile')?.value);
+        formData.append('remarks', this.policy.get('remarks')?.value);
+
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success(
+              'EP Contract submitted successfully',
+              'Success'
+            );
+
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting EP Contract', 'Error');
+          },
+        });
+      } else {
+        const fileInput = this.policy.get('policyFile')?.value;
+        if (!fileInput) this.alertMessage = 'File is required';
+        this.policy.markAllAsTouched();
+        return;
+      }
     }
   }
   getWings() {
     this.apiService.getWithHeaders('attribute/wing').subscribe((res) => {
       if (res) {
         this.wingList = res;
-        this.getCategory(this.wingId)
+        this.getCategory(this.wingId);
       }
     });
   }
@@ -145,20 +265,34 @@ export class EpContractAddComponent {
         this.policy.patchValue({
           policyFile: file,
         });
+        this.alertMessage = '';
       } else {
         this.fileName = null;
         this.fileSizeFormatted = null;
-        alert(
-          'Invalid file type! Only PDF, Word, and Excel files are allowed.'
-        );
+        this.alertMessage =
+          'Invalid file type! Only PDF, Word, and Excel files are allowed.';
       }
     }
   }
 
   close() {
-    this.dailogRef.close(true);
+    this.dialogRef.close(true);
   }
   reset() {
     this.createForm();
+  }
+  removeFile(): void {
+    this.fileName = null;
+    this.fileSizeFormatted = null;
+    this.policy.patchValue({
+      policyFile: null,
+    });
+    // Clear the file input as well
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 }

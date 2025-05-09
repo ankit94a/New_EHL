@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using EHL.DB.Interfaces;
 using Microsoft.Extensions.Configuration;
@@ -19,81 +20,192 @@ namespace EHL.DB.Implements
 		}
         public bool AddWing(Wing wing)
         {
-            string query = string.Format(@"insert into wing (name,createdby,createdon,isactive) values(@name,@createdby,@createdon,@isactive)");
-            return connection.Execute(query, wing) > 0;
+			try
+			{
+				string query = string.Format(@"insert into wing (name,createdby,createdon,isactive) values(@name,@createdby,@createdon,@isactive)");
+				return connection.Execute(query, wing) > 0;
+			}
+			catch(Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=AddWing");
+				throw;
+			}
         }
         public bool UpdateWing(Wing wing)
         {
-			//wing.Name = wing.Name.ToUpper();
-            string query = "UPDATE wing SET name = @Name WHERE id = @Id";
-            return connection.Execute(query, new { wing.Name, wing.Id }) > 0;
+			try
+			{
+				string query = "UPDATE wing SET name = @Name WHERE id = @Id";
+				return connection.Execute(query, new { wing.Name, wing.Id }) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=UpdateWing");
+				throw;
+			}
 
         }
         public bool AddCategory(Category category)
 		{
-			category.Name = category.Name.ToUpper();
-			string query = string.Format(@"insert into category (name,createdby,createdon,isactive,wingid) values(@name,@createdby,@createdon,@isactive,@wingid)");
-			return connection.Execute(query, category) > 0;
+			try
+			{
+				category.Name = category.Name.ToUpper();
+				string query = string.Format(@"insert into category (name,createdby,createdon,isactive,wingid) values(@name,@createdby,@createdon,@isactive,@wingid)");
+				return connection.Execute(query, category) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=AddCategory");
+				throw;
+			}
 		}
         public bool UpdateCategory(Category category)
         {
-            string query = "UPDATE category SET name = @Name WHERE id = @Id AND wingId = @WingId";
-            return connection.Execute(query, new { category.Name, category.Id, category.WingId }) > 0;
+			try
+			{
+				string query = "UPDATE category SET name = @Name WHERE id = @Id AND wingId = @WingId";
+				return connection.Execute(query, new { category.Name, category.Id, category.WingId }) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=UpdateCategory");
+				throw;
+			}
         }
 
         public List<Wing> GetWing()
 		{
-			string query = string.Format(@"select * from wing where isactive=1");
-			return connection.Query<Wing>(query).ToList();
+			try
+			{
+				string query = string.Format(@"select * from wing where isactive=1");
+				return connection.Query<Wing>(query).ToList();
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=GetWing");
+				throw;
+			}
 		}
 		public List<Category> GetCategories(long wingId)
 		{
-			string query = string.Format(@"select * from category where wingid=@wingid and isactive=1");
-			return connection.Query<Category>(query,new {wingid = wingId}).ToList();
+			try
+			{
+				string query = string.Format(@"select * from category where wingid=@wingid and isactive=1");
+				return connection.Query<Category>(query, new { wingid = wingId }).ToList();
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=GetCategories");
+				throw;
+			}
 		}
 		public bool DeactivateCategory(long Id)
 		{
-			string query = string.Format(@"update category set isactive=0 where id=@id");
-			return connection.Execute(query, new { id = Id }) > 0;
+			try
+			{
+				string query = string.Format(@"update category set isactive=0 where id=@id");
+				return connection.Execute(query, new { id = Id }) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=DeactivateCategory");
+				throw;
+			}
 		}
 
 		public bool AddSubCategory(SubCategory subCategory)
 		{
-			string query = string.Format(@"insert into subcategory (name,createdby,createdon,isactive,categoryid) values(@name,@createdby,@createdon,@isactive,@categoryid)");
-			return connection.Execute(query, subCategory) > 0;
+			try
+			{
+				string query = string.Format(@"insert into subcategory (name,createdby,createdon,isactive,categoryid) values(@name,@createdby,@createdon,@isactive,@categoryid)");
+				return connection.Execute(query, subCategory) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=AddSubCategory");
+				throw;
+			}
 		}
 
 		public List<SubCategory> GetSubCategories(long categoryId)
 		{
-			string query = string.Format(@"select * from subcategory where categoryid = @categoryid and isactive=1");
-			return connection.Query<SubCategory>(query, new { categoryid = categoryId }).ToList();
+			try
+			{
+				string query = string.Format(@"select * from subcategory where categoryid = @categoryid and isactive=1");
+				return connection.Query<SubCategory>(query, new { categoryid = categoryId }).ToList();
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=GetSubCategories");
+				throw;
+			}
 		}
 		public bool DeactivateSubCategory(long Id)
 		{
-			string query = string.Format(@"update subcategory set isactive=0 where id=@id");
-			return connection.Execute(query, new { id = Id }) > 0;
+			try
+			{
+				string query = string.Format(@"update subcategory set isactive=0 where id=@id");
+				return connection.Execute(query, new { id = Id }) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=DeactivateSubCategory");
+				throw;
+			}
 		}
 
 		public bool AddEqpt(Eqpt eqpt)
 		{
-			string query = string.Format(@"insert into eqpt (name,createdby,createdon,isactive,categoryid,subcategoryid) values(@name,@createdby,@createdon,@isactive,@categoryid,@subcategoryid)");
-			return connection.Execute(query, eqpt) > 0;
+			try
+			{
+				string query = string.Format(@"insert into eqpt (name,createdby,createdon,isactive,categoryid,subcategoryid) values(@name,@createdby,@createdon,@isactive,@categoryid,@subcategoryid)");
+				return connection.Execute(query, eqpt) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=AddEqpt");
+				throw;
+			}
 		}
 
 		public List<Eqpt> GetEqpt(long categoryId,long subCategoryId)
 		{
-			string query = string.Format(@"select * from eqpt where categoryid = @categoryid and subcategoryid=@subcategoryid and isactive=1");
-			return connection.Query<Eqpt>(query, new { categoryid = categoryId, subcategoryid=subCategoryId }).ToList();
+			try
+			{
+				string query = string.Format(@"select * from eqpt where categoryid = @categoryid and subcategoryid=@subcategoryid and isactive=1");
+				return connection.Query<Eqpt>(query, new { categoryid = categoryId, subcategoryid = subCategoryId }).ToList();
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=GetEqpt");
+				throw;
+			}
 		}
 		public bool DeactivateEqpt(long Id)
 		{
-			string query = string.Format(@"update eqpt set isactive=0 where id=@id");
-			return connection.Execute(query, new { id = Id }) > 0;
+			try
+			{
+				string query = string.Format(@"update eqpt set isactive=0 where id=@id");
+				return connection.Execute(query, new { id = Id }) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, "Class=AttributeDB,method=DeactivateEqpt");
+				throw;
+			}		
 		}
         public bool DeleteEmer(DeleteEmer data)
         {
-            string query = $"UPDATE {data.TableName} SET isactive = 0 WHERE id = @id";
-            return connection.Execute(query, new { id = data.Id }) > 0;
+			try
+			{
+				string query = $"UPDATE {data.TableName} SET isactive = 0 WHERE id = @id";
+				return connection.Execute(query, new { id = data.Id }) > 0;
+			}
+			catch (Exception ex)
+			{
+				EHLLogger.Error(ex, $"Class=AttributeDB,Delete from ,table = {data.TableName}");
+				throw;
+			}
         }
 
     }

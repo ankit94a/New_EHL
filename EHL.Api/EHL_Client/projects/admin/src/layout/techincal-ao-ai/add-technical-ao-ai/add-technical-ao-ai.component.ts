@@ -19,6 +19,8 @@ export class AddTechnicalAoAiComponent {
   fileName: string | null = null;
   fileSizeFormatted: string | null = null;
   apiUrl: string | '';
+  filePath: string = '';
+  alertMessage: string = '';
   constructor(
     private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) data,
@@ -39,37 +41,49 @@ export class AddTechnicalAoAiComponent {
     this.TechnicalAoAi = this.fb.group({
       id: [TechnicalAoAiData.id],
       type: [TechnicalAoAiData.type, [Validators.required]],
-      subject: [TechnicalAoAiData.subject],
-      reference: [TechnicalAoAiData.reference],
+      subject: [TechnicalAoAiData.subject,[Validators.required]],
+      reference: [TechnicalAoAiData.reference,[Validators.required]],
       TechnicalAoAiFile: [TechnicalAoAiData.file, [Validators.required]],
     });
+    this.fileName = TechnicalAoAiData.fileName;
+    this.fileSizeFormatted = 'Not Defined';
+    this.filePath = TechnicalAoAiData.filePath;
   }
   createForm() {
     this.TechnicalAoAi = this.fb.group({
       type: ['', [Validators.required]],
-      subject: [''],
-      reference: [''],
+      subject: ['',[Validators.required]],
+      reference: ['',[Validators.required]],
       TechnicalAoAiFile: [null, [Validators.required]],
     });
   }
 
   save() {
+    debugger
     const formData = new FormData();
-    if (this.TechnicalAoAi.valid) {
-      formData.append(
-        'id',
-        this.TechnicalAoAi.get('id')?.value
-          ? this.TechnicalAoAi.get('id')?.value
-          : '0'
-      );
+
+    const TechnicalAoAiId = this.TechnicalAoAi.get('id')?.value;
+    //edit
+    if(TechnicalAoAiId >0){
+      const fileInput = this.TechnicalAoAi.get('TechnicalAoAiFile')?.value;
+      if (fileInput) {
+        formData.append('TechnicalAoAiFile', fileInput, fileInput.name);
+      } else {
+        if (this.fileName != '' && this.fileName != null) {
+          formData.append('fileName', this.fileName);
+          formData.append('filePath', this.filePath);
+        } else {
+          return this.alertMessage = 'File is required';
+        }
+      }
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.TechnicalAoAi, 'TechnicalAoAiFile')
+    if (isValid) {
+      formData.append('id',TechnicalAoAiId);
       formData.append('type', this.TechnicalAoAi.get('type')?.value);
       formData.append('subject', this.TechnicalAoAi.get('subject')?.value);
       formData.append('reference', this.TechnicalAoAi.get('reference')?.value);
       // Append the file to FormData
-      const fileInput = this.TechnicalAoAi.get('TechnicalAoAiFile')?.value;
-      if (fileInput) {
-        formData.append('TechnicalAoAiFile', fileInput, fileInput.name); // Append the file
-      }
+
       this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
         next: (res) => {
           this.toastr.success(
@@ -82,6 +96,40 @@ export class AddTechnicalAoAiComponent {
           this.toastr.error('Error submitting TechnicalAoAi', 'Error');
         },
       });
+    }else{
+    this.TechnicalAoAi.markAllAsTouched();
+    return;
+  }
+    }
+    //add
+    else{
+
+      if (this.TechnicalAoAi.valid) {
+        formData.append('id', '0' );
+        formData.append('type', this.TechnicalAoAi.get('type')?.value);
+        formData.append('subject', this.TechnicalAoAi.get('subject')?.value);
+        formData.append('reference', this.TechnicalAoAi.get('reference')?.value);
+        formData.append('TechnicalAoAiFile', this.TechnicalAoAi.get('TechnicalAoAiFile')?.value);
+        // Append the file to FormData
+
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success(
+              'TechnicalAoAi submitted successfully',
+              'Success'
+            );
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting TechnicalAoAi', 'Error');
+          },
+        });
+      }else {
+          const fileInput = this.TechnicalAoAi.get('TechnicalAoAiFile')?.value;
+          if (!fileInput) this.alertMessage = 'File is required';
+            this.TechnicalAoAi.markAllAsTouched();
+          return;
+        }
     }
   }
 
@@ -123,5 +171,19 @@ export class AddTechnicalAoAiComponent {
   }
   reset() {
     this.createForm();
+  }
+  removeFile(): void {
+    this.fileName = null;
+    this.fileSizeFormatted = null;
+    this.TechnicalAoAi.patchValue({
+      policyFile: null,
+    });
+    // Clear the file input as well
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = '';
+    }
   }
 }

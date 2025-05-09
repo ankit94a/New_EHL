@@ -1,8 +1,10 @@
-﻿using EHL.Business.Implements;
+﻿using EHL.Api.Helpers;
+using EHL.Business.Implements;
 using EHL.Business.Interfaces;
 using EHL.Common.Models;
 using InSync.Api.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using static EHL.Common.Enum.Enum;
 
 namespace EHL.Api.Controllers
 {
@@ -15,7 +17,9 @@ namespace EHL.Api.Controllers
         {
             _technichalAoAiManager = technicalAoAiManager;
         }
-        [HttpPost]
+
+		[Authorization(RoleType.Admin)]
+		[HttpPost]
         public async Task<IActionResult> AddTechnicalAoAi([FromForm] TechnicalAoAi technicalAoAi)
         {
             technicalAoAi.CreatedBy = HttpContext.GetUserId();
@@ -36,15 +40,15 @@ namespace EHL.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet]
-       
+        [HttpGet]   
         public IActionResult GetList()
         {
 
             return Ok(_technichalAoAiManager.GetList());
         }
 
-        [HttpPost, Route("update")]
+		[Authorization(RoleType.Admin)]
+		[HttpPost, Route("update")]
         public async Task<IActionResult> UpdateTechnicalAoAi([FromForm] TechnicalAoAi technicalAoAi)
         {
             technicalAoAi.UpdatedBy = HttpContext.GetUserId();

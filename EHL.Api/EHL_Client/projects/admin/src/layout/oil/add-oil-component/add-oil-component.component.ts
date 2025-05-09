@@ -11,14 +11,16 @@ import {
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'projects/shared/src/service/auth.service';
+
+
 @Component({
+  selector: 'app-add-oil-component',
+  standalone: true,
   imports: [SharedLibraryModule],
- selector: 'app-defect-report-add',
- standalone: true,
- templateUrl: './defect-report-add.component.html',
- styleUrl: './defect-report-add.component.scss'
+  templateUrl: './add-oil-component.component.html',
+  styleUrl: './add-oil-component.component.scss'
 })
-export class DefectReportAddComponent {
+export class AddOilComponentComponent {
   policy: FormGroup;
   categoryList: Category[] = [];
   wingList: Wing[] = [];
@@ -34,7 +36,7 @@ export class DefectReportAddComponent {
   constructor(
     private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) data,
-    private dialogRef: MatDialogRef<DefectReportAddComponent>,
+    private dialogRef: MatDialogRef<AddOilComponentComponent>,
     private apiService: ApiService,
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -50,7 +52,6 @@ export class DefectReportAddComponent {
     }
   }
   bindDataToForm(policyData) {
-
     this.categoryId = policyData.categoryId;
     this.getSubCategory(policyData.categoryId,false);
     this.getEqpt(policyData.subCategoryId);
@@ -74,7 +75,7 @@ export class DefectReportAddComponent {
   }
   createForm() {
     this.policy = this.fb.group({
-      type: [{ value: 'Defect Report', disabled: true }, [Validators.required]],
+      type: [{ value: 'Oil and Lubs', disabled: true }, [Validators.required]],
       wingId: [{ value: this.wingId, disabled: true }, [Validators.required]],
       categoryId: ['', [Validators.required]],
       categogry: [''],
@@ -85,11 +86,11 @@ export class DefectReportAddComponent {
       remarks: [''],
     });
   }
-  getSubCategory(categoryId,isUserInput:boolean=true) {
-    if (isUserInput) {
-      this.policy.patchValue({ subCategoryId: null, });
-      this.policy.patchValue({ eqpt: null, });
-    }
+    getSubCategory(categoryId, isUserInput: boolean = true) {
+      if (isUserInput) {
+        this.policy.patchValue({ subCategoryId: null, });
+        this.policy.patchValue({ eqpt: null, });
+      }
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
@@ -119,31 +120,32 @@ export class DefectReportAddComponent {
       (item) => item.id == this.policy.get('wingId')?.value
     ).name;
     formData.append('wing', wing);
+    const policyId = this.policy.get('id')?.value? this.policy.get('id')?.value : 0;
 
-    const policyId = this.policy.get('id')?.value;
     //edit
     if (policyId > 0) {
-
-    const fileInput = this.policy.get('policyFile')?.value;
-    if (fileInput) {
-      formData.append('policyFile', fileInput, fileInput.name);
-    } else {
-      if (this.fileName != '' && this.fileName != null) {
-        formData.append('fileName', this.fileName);
-        formData.append('filePath', this.filePath);
+      const fileInput = this.policy.get('policyFile')?.value;
+      if (fileInput) {
+        formData.append('policyFile', fileInput, fileInput.name);
       } else {
-        return this.alertMessage = 'File is required';
+        if (this.fileName != '' && this.fileName != null) {
+          formData.append('fileName', this.fileName);
+          formData.append('filePath', this.filePath);
+        } else {
+          return this.alertMessage = 'File is required';
+        }
       }
-    }
-    var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.policy, 'policyFile')
-      if (isValid) {
-        formData.append('id',this.policy.get('id')?.value);
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.policy, 'policyFile')
+
+if(isValid){
+        formData.append('id',policyId);
         formData.append('wing', wing);
         var category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value).name;
         var subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name;
         formData.append('category', category);
         formData.append('subCategory', subCategory);
         formData.append('eqpt', this.policy.get('eqpt')?.value);
+        formData.append('subCategoryId', this.policy.get('subCategoryId')?.value);
         formData.append('type', this.policy.get('type')?.value);
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
@@ -152,31 +154,31 @@ export class DefectReportAddComponent {
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success('Defect Report submitted successfully', 'Success');
+            this.toastr.success('ISPL submitted successfully', 'Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
-            this.toastr.error('Error submitting Defect Report', 'Error');
+            this.toastr.error('Error submitting ISPL', 'Error');
           },
         });
       }else{
         this.policy.markAllAsTouched();
         return;
       }
+
     }
     //add
     else {
-
+      const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
+      const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
+      formData.append('type', this.policy.get('type')?.value);
+      formData.append('wingId', this.policy.get('wingId')?.value);
+      formData.append(
+        'id',
+        this.policy.get('id')?.value ? this.policy.get('id')?.value : '0'
+      );
 
       if (this.policy.valid) {
-        const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
-        const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
-        formData.append('type', this.policy.get('type')?.value);
-        formData.append('wingId', this.policy.get('wingId')?.value);
-        formData.append(
-          'id',
-          this.policy.get('id')?.value ? this.policy.get('id')?.value : '0'
-        );
         formData.append('category', category);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
         formData.append('subCategoryId',this.policy.get('subCategoryId')?.value);
@@ -187,11 +189,11 @@ export class DefectReportAddComponent {
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success('Defect Report submitted successfully', 'Success');
+            this.toastr.success('ISPL submitted successfully', 'Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
-            this.toastr.error('Error submitting Defect Report', 'Error');
+            this.toastr.error('Error submitting ISPL', 'Error');
           },
         });
       } else {

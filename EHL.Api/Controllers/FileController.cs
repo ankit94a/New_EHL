@@ -3,6 +3,9 @@ using EHL.Common.Models;
 using Microsoft.AspNetCore.Mvc;
 using EHL.Common.Enum;
 using iText.Kernel.Pdf.Extgstate;
+using System.Net.Sockets;
+using System.Net;
+using System;
 namespace EHL.Api.Controllers
 {
 	[Route("api/[controller]")]
@@ -53,33 +56,40 @@ namespace EHL.Api.Controllers
 						using (var writer = new iText.Kernel.Pdf.PdfWriter(tempMemoryStream, writerProperties))
 						using (var pdfDoc = new iText.Kernel.Pdf.PdfDocument(reader, writer))
 						{
-							// Create a bold font (Helvetica-Bold)
-							var font = iText.Kernel.Font.PdfFontFactory.CreateFont(
-								iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
+							var font = iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
 
 							int numberOfPages = pdfDoc.GetNumberOfPages();
-
+							var ipAddress = GetLocalIPAddress();
+							string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 							for (int i = 1; i <= numberOfPages; i++)
 							{
 								var page = pdfDoc.GetPage(i);
 								var pageSize = page.GetPageSize();
-
-								// Create canvas for watermark
 								var canvas = new iText.Kernel.Pdf.Canvas.PdfCanvas(page);
 								var gs = new PdfExtGState().SetFillOpacity(0.3f);
 								canvas.SetExtGState(gs);
-								canvas.SetFillColor(iText.Kernel.Colors.ColorConstants.RED)
-									.BeginText()
-									.SetFontAndSize(font, 60)
-									.SetTextMatrix(100, page.GetPageSize().GetHeight() / 2)
-									.ShowText("CONFIDENTIAL")
-									.EndText();
-							}
+								float centerX = pageSize.GetWidth() / 4;
+								float centerY = pageSize.GetHeight() / 3;
+								float angle = 45;
+								double radians = angle * (Math.PI / 180);
+								float cos = (float)Math.Cos(radians);
+								float sin = (float)Math.Sin(radians);
+								float lineSpacing = 40;
 
+								canvas.SetFillColor(iText.Kernel.Colors.ColorConstants.RED)
+									  .BeginText()
+									  .SetFontAndSize(font, 60)
+									  .SetTextMatrix(cos, sin, -sin, cos, centerX, centerY + lineSpacing / 2)
+									  .ShowText(ipAddress)
+									  .EndText();
+
+								canvas.BeginText().SetFontAndSize(font, 50)
+										.SetTextMatrix(cos, sin, -sin, cos, centerX, centerY - (lineSpacing * 1.2f)) // move down more for top margin
+										.ShowText(dateTime).EndText();
+							}
 							pdfDoc.Close();
 						}
 
-						// Copy the temporary stream to our main stream
 						tempMemoryStream.Position = 0;
 						await tempMemoryStream.CopyToAsync(memoryStream);
 						memoryStream.Position = 0;
@@ -92,7 +102,6 @@ namespace EHL.Api.Controllers
 			}
 			else
 			{
-				// For non-PDF, just copy the file as-is
 				using (var stream = new FileStream(file.FilePath, FileMode.Open, FileAccess.Read))
 				{
 					await stream.CopyToAsync(memoryStream);
@@ -107,12 +116,12 @@ namespace EHL.Api.Controllers
 		{
 			public override void Close()
 			{
-				// Do nothing - prevent closing
+
 			}
 
 			protected override void Dispose(bool disposing)
 			{
-				// Do nothing - prevent disposing
+
 			}
 
 			public void ReallyClose()
@@ -121,7 +130,18 @@ namespace EHL.Api.Controllers
 			}
 		}
 
-		// Helper function to determine the MIME type
+		public static string GetLocalIPAddress()
+		{
+			var host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (var ip in host.AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					return ip.ToString(); // Return the first IPv4 address
+				}
+			}
+			throw new Exception("No network adapters with an IPv4 address in the system!");
+		}
 		private string GetMimeType(string extension)
 		{
 			var mimeTypes = new Dictionary<string, string>

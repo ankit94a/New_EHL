@@ -45,7 +45,8 @@ namespace EHL.Common.Enum
 		public enum RoleType
 		{
 			Admin = 1,
-			User = 2
+			Officer,
+			User 
 		}
 		[JsonConverter(typeof(StringEnumConverter))]
 		public enum DownloadFileType

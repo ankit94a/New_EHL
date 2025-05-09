@@ -48,7 +48,8 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
       .open(AddTechnicalAoAiComponent, null, '50vw')
       .then((res) => {
         if (res) {
-          // this.getAll
+          this.getTechnicalAoAi();
+          this.toastr.success('Added Successfully', 'Success');
         }
       });
   }
@@ -63,7 +64,12 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
 
   edit(row) {
     row.isEdit = true;
-    this.dialogService.open(AddTechnicalAoAiComponent, row);
+    this.dialogService.open(AddTechnicalAoAiComponent, row).then((res) => {
+      if (res) {
+        this.getTechnicalAoAi();
+
+      }
+    });
   }
   delete(row) {
     let deleteTechnicalAoAi: DeleteModel = new DeleteModel();
@@ -78,7 +84,7 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
             .postWithHeader(`attribute/delete`, deleteTechnicalAoAi)
             .subscribe({
               next: (res) => {
-                this.TechnicalAoAi = this.TechnicalAoAi.splice(row.index, 1);
+                this.getTechnicalAoAi();
                 this.toastr.success('Deleted Successfully', 'Success');
                 // this.dailogRef?.close(true);
               },

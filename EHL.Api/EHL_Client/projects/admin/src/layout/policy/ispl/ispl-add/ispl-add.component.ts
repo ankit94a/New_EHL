@@ -51,7 +51,6 @@ export class IsplAddComponent {
     }
   }
   bindDataToForm(policyData) {
-
     this.categoryId = policyData.categoryId;
     this.getSubCategory(policyData.categoryId,false);
     this.getEqpt(policyData.subCategoryId);
@@ -60,10 +59,10 @@ export class IsplAddComponent {
       id: [policyData.id],
       type: [{ value: policyData.type, disabled: true }, [Validators.required]],
       wingId: [{ value: policyData.wingId, disabled: true },[Validators.required],],
-      category: [policyData.category],
-      subCategory: [policyData.subCategory],
+      category: [policyData.category,[Validators.required]],
+      subCategory: [policyData.subCategory,[Validators.required]],
       subCategoryId: [policyData.subCategoryId,[Validators.required]],
-      eqpt: [policyData.eqpt],
+      eqpt: [policyData.eqpt,[Validators.required]],
       policyFile: [null, [Validators.required]],
       remarks: [policyData.remarks],
     });
@@ -86,7 +85,11 @@ export class IsplAddComponent {
       remarks: [''],
     });
   }
-  getSubCategory(categoryId,isUserInput:boolean=true) {
+    getSubCategory(categoryId, isUserInput: boolean = true) {
+      if (isUserInput) {
+        this.policy.patchValue({ subCategoryId: null, });
+        this.policy.patchValue({ eqpt: null, });
+      }
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
@@ -116,19 +119,24 @@ export class IsplAddComponent {
       (item) => item.id == this.policy.get('wingId')?.value
     ).name;
     formData.append('wing', wing);
+    const policyId = this.policy.get('id')?.value? this.policy.get('id')?.value : 0;
 
-    const policyId = this.policy.get('id')?.value;
-    const fileInput = this.policy.get('policyFile')?.value;
-    if (fileInput) {
-      formData.append('policyFile', fileInput, fileInput.name);
-    } else {
-      formData.append('fileName', this.fileName);
-      formData.append('filePath', this.filePath);
-    }
     //edit
     if (policyId > 0) {
+      const fileInput = this.policy.get('policyFile')?.value;
+      if (fileInput) {
+        formData.append('policyFile', fileInput, fileInput.name);
+      } else {
+        if (this.fileName != '' && this.fileName != null) {
+          formData.append('fileName', this.fileName);
+          formData.append('filePath', this.filePath);
+        } else {
+          return this.alertMessage = 'File is required';
+        }
+      }
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.policy, 'policyFile')
 
-
+if(isValid){
         formData.append('id',policyId);
         formData.append('wing', wing);
         var category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value).name;
@@ -152,6 +160,10 @@ export class IsplAddComponent {
             this.toastr.error('Error submitting ISPL', 'Error');
           },
         });
+      }else{
+        this.policy.markAllAsTouched();
+        return;
+      }
 
     }
     //add

@@ -159,16 +159,24 @@ export class EmerIndexAddComponent {
     if (emerId > 0) {
       this.apiUrl = 'emer/index/update';
       const fileInput = this.emerForm.get('emerFile')?.value;
+
       if (fileInput) {
         formData.append('emerFile', fileInput, fileInput.name);
       } else {
-        formData.append('fileName', this.fileName);
-        formData.append('filePath', this.filePath);
+        if (this.fileName != '' && this.fileName != null) {
+          formData.append('fileName', this.fileName);
+          formData.append('filePath', this.filePath);
+        } else {
+          return this.alertMessage = 'File is required';
+        }
       }
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.emerForm, 'emerFile')
+      if(isValid){
       formData.append('id', emerId);
       formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
       formData.append('wingId', wingId);
       formData.append('categoryId', categoryId);
+      formData.append('category', category);
       formData.append('subject', this.emerForm.get('subject')?.value);
       formData.append('wing', this.wingName);
       this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
@@ -181,6 +189,10 @@ export class EmerIndexAddComponent {
           this.toastr.error('Error submitting form', 'Error');
         },
       });
+    } else {
+      this.emerForm.markAllAsTouched();
+      return;
+    }
     }
     //index add
     else {
@@ -196,6 +208,7 @@ export class EmerIndexAddComponent {
         formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
         formData.append('wingId', wingId);
         formData.append('categoryId', categoryId);
+        formData.append('category', category);
         formData.append('subject', this.emerForm.get('subject')?.value);
         formData.append('wing', this.wingName);
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
