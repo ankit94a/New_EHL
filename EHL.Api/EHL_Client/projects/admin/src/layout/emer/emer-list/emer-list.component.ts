@@ -24,9 +24,8 @@ import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 export class EmerListComponent extends TablePaginationSettingsConfig{
   emerList:EmerModel[]=[];
   isRefresh:boolean=false;
-   filterModel:PolicyFilterModel = new PolicyFilterModel();
-   userType;
-    // categoryList:Category[]=[];
+  filterModel:PolicyFilterModel = new PolicyFilterModel();
+  userType;
   constructor(private spinner: NgxSpinnerService,private dialoagService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService){
     super();
     this.userType = this.authService.getRoleType()
@@ -39,7 +38,6 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false
     this.filterModel.wingId = parseInt(this.authService.getWingId())
-    // this.getCategory()
     this.getList();
   }
   getList(){
@@ -52,7 +50,6 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
     })
   }
   edit(row){
-
     row.isEdit = true;
     this.dialoagService.open(EmerAddComponent,row).then(res =>{
       if(res){
@@ -60,10 +57,7 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
       }
     });
   }
-  // view(row){
-  //   row.isEdit = false;
-  //   this.dialoagService.open(EmerAddComponent,row)
-  // }
+
   del(row){
     this.dialoagService.confirmDialog(`Are you sure you want to delete EMER ${row.item.emerNumber}?`).subscribe(res =>{
       if(res){
@@ -77,7 +71,6 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
   }
   openDialog(){
     this.dialoagService.open(EmerAddComponent,null).then(res =>{
-
       if(res){
         this.getList()
       }
@@ -90,7 +83,7 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
       download.name = $event.fileName;
       download.fileType = DownloadFileType.Emer;
       this.downloadService.download(download)
-    }
+  }
 
   getReadableFileSize(size: number): string {
     if (size < 1024) return `${size} bytes`;
@@ -98,9 +91,6 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
     else return `${(size / 1048576).toFixed(2)} MB`;
   }
   columns = [
-    // {
-    //   name: 'id', displayName: 'Id', isSearchable: true,hide: false,type:'text'
-    // },
     {
       name: 'fileName', displayName: 'File', isSearchable: true,hide: false,valueType:'link',valuePrepareFunction:(row) =>{
         return row.fileName
