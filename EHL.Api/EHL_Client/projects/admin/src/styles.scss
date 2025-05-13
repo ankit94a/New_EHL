@@ -209,6 +209,35 @@ h6 {
 .btn {
 	margin: 3px;
 }
+.input-btn{
+  width: 300px;
+}
+
+.file-info {
+  position: relative;
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  margin-top: 10px;
+}
+
+.remove-btn {
+  position: absolute !important;
+  top: -5px;
+  right: -5px;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.alert{
+  display: flex;
+  font-size: 12px;
+  color: #f44336;
+}
 
 .without-label {
 	padding-top: 5%;
@@ -217,6 +246,19 @@ h6 {
 .link-btn {
 	cursor: pointer;
 }
+
+
+.btn-danger {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+.btn-danger:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}
+
 
 .insync-label {
 	align-items: center;

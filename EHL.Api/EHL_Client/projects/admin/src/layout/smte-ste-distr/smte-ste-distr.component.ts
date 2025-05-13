@@ -35,17 +35,15 @@ export class SmteSteDistrComponent extends TablePaginationSettingsConfig {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
-    if (this.userType != '2') {
+    if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
-      // this.tablePaginationSettings.enableView = true;
       this.tablePaginationSettings.enableDelete = true;
     }
-
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
     this.filterModel.wingId = parseInt(this.authService.getWingId());
-    this.filterModel.type = 'Oil and Lubs';
+    this.filterModel.type = 'SMTE / STE';
     this.getPolicyByWing();
   }
   openDailog() {

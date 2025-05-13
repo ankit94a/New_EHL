@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-8">Technical AO/AI</div>
       <div class="col-md-4">
-        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType != '2'">+ Add Technical Ao/Ai</button>
+        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType == '1'">+ Add Technical Ao/Ai</button>
       </div>
     </div>
     <app-table *ngIf="TechnicalAoAi.length > 0" [rowData]="TechnicalAoAi" [tablePaginationSettings]="tablePaginationSettings"

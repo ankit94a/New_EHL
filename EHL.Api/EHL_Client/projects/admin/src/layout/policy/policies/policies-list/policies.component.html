@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-10 ">In Service</div>
       <div class="col-md-2" align="end">
-        <button  class="btn btn-danger"  (click)="openDailog()" *ngIf="userType != '2'">+ Add Policy</button>
+        <button  class="btn btn-danger"  (click)="openDailog()" *ngIf="userType == '1'">+ Add Policy</button>
       </div>
     </div>
     <app-table *ngIf="defectReports.length > 0" [rowData]="defectReports" [tablePaginationSettings]="tablePaginationSettings"

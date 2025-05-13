@@ -4,7 +4,7 @@
     <div class="row">
       <div class="col-md-10">Policy NGE List</div>
       <div class="col-md-2">
-        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType != '2'">+ Add Policy NGE</button>
+        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType == '1'">+ Add Policy NGE</button>
       </div>
     </div>
     <app-table *ngIf="ispl.length > 0" [rowData]="ispl" [tablePaginationSettings]="tablePaginationSettings"

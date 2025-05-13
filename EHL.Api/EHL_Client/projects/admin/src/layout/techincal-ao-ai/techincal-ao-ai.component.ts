@@ -31,9 +31,8 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
-    if (this.userType != '2') {
+    if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
-      // this.tablePaginationSettings.enableView = true;
       this.tablePaginationSettings.enableDelete = true;
     }
 

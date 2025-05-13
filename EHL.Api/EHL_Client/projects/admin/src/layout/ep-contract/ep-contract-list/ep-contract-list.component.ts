@@ -36,7 +36,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
     this.tablePaginationSettings.enableColumn = true;
-    if (this.userType != '2') {
+    if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
     }
