@@ -9,6 +9,9 @@ import { DefectReportAddComponent } from './defect-report-add/defect-report-add.
 import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
+import { DownloadService } from 'projects/shared/src/service/download.service';
+import { DownloadModel } from 'projects/shared/src/models/download.model';
+import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 
 @Component({
   selector: 'app-defect-report',
@@ -22,7 +25,7 @@ export class DefectReportComponent extends TablePaginationSettingsConfig{
   filterModel:Policy = new Policy();
   isRefresh:boolean=false;
   userType;
-  constructor(private authService:AuthService,private apiService:ApiService,private dialogService:BISMatDialogService,private toastr: ToastrService){
+  constructor(private authService:AuthService,private apiService:ApiService,private dialogService:BISMatDialogService,private toastr: ToastrService,private downloadService:DownloadService){
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
@@ -45,8 +48,12 @@ export class DefectReportComponent extends TablePaginationSettingsConfig{
         }
       })
     }
-  getFileId(row){
-
+  getFileId($event) {
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.Policy;
+    this.downloadService.download(download)
   }
   getPolicyByWing(){
     this.apiService.postWithHeader('policy/type/',this.filterModel).subscribe(res =>{

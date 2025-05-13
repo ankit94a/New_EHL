@@ -12,6 +12,7 @@ import { DownloadService } from 'projects/shared/src/service/download.service';
 import { AuthService } from 'projects/shared/src/service/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
+import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 
 @Component({
   selector: 'app-tech-manuals',
@@ -45,11 +46,12 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
 
   }
   getFileId($event) {
-    var download = new DownloadModel();
-    download.filePath = $event.filePath;
-    download.name = $event.fileName;
-    this.downloadService.download(download)
-  }
+           var download = new DownloadModel();
+           download.filePath = $event.filePath;
+           download.name = $event.fileName;
+           download.fileType = DownloadFileType.Policy;
+           this.downloadService.download(download)
+       }
 
   view(row){
     row.isEdit = false;
