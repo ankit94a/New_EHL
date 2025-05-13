@@ -4,8 +4,8 @@
       <mat-tab label="Wing">
         <div class="row">
           <div class="col-md-10"></div>
-          <div class="col-md-2">
-            <button class="btn btn-link" (click)="addWing()">+ Add Wing</button>
+          <div class="col-md-2" align="end">
+            <button class="btn btn-danger" (click)="addWing()">+ Add Wing</button>
           </div>
         </div>
 
@@ -48,7 +48,7 @@
 
             <!-- Pagination -->
             <mat-paginator
-              [length]="categoryList.length"
+              [length]="paginatorLength"
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25]"
               showFirstLastButtons
@@ -59,8 +59,8 @@
       <mat-tab label="Category">
         <div class="row">
           <div class="col-md-10"></div>
-          <div class="col-md-2">
-            <button class="btn btn-link" (click)="addCategory()">
+          <div class="col-md-2" align="end">
+            <button class="btn btn-danger" (click)="addCategory()">
               + Add Category
             </button>
           </div>
@@ -128,7 +128,7 @@
             </div>
             <!-- Pagination -->
             <mat-paginator
-              [length]="categoryList.length"
+              [length]="paginatorLength"
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25]"
               showFirstLastButtons
@@ -139,8 +139,8 @@
       <mat-tab label="Sub-Category">
         <div class="row d-flex">
           <div class="col-md-10"></div>
-          <div class="col-md-2">
-            <button class="btn btn-link" (click)="addSubCategory()">
+          <div class="col-md-2" align="end">
+            <button class="btn btn-danger" (click)="addSubCategory()">
               + Add Sub-Category
             </button>
           </div>
@@ -223,7 +223,7 @@
             </div>
 
             <mat-paginator
-              [length]="categoryList.length"
+              [length]="paginatorLength"
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25]"
               showFirstLastButtons
@@ -234,8 +234,8 @@
       <mat-tab label="EQPT">
         <div class="row">
           <div class="col-md-10"></div>
-          <div class="col-md-2">
-            <button class="btn btn-link" (click)="addEqpt()">+ Add Eqpt</button>
+          <div class="col-md-2" align="end">
+            <button class="btn btn-danger" (click)="addEqpt()">+ Add Eqpt</button>
           </div>
         </div>
         <mat-card>
@@ -338,7 +338,7 @@
 
             <!-- Pagination -->
             <mat-paginator
-              [length]="categoryList.length"
+              [length]="paginatorLength"
               [pageSize]="10"
               [pageSizeOptions]="[5, 10, 25]"
               showFirstLastButtons

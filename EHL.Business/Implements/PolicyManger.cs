@@ -35,12 +35,11 @@ namespace EHL.Business.Implements
 					}
 					string fullFilePath = Path.Combine(uploadsFolder, policy.PolicyFile.FileName);
 					// Generate a unique file name using GUID + original extension
-
+					policy.FilePath = policy.PolicyFile.FileName;
 
 					using (var fileStream = new FileStream(fullFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
 					{
 						await policy.PolicyFile.CopyToAsync(fileStream);
-						policy.FilePath = policy.FileName;
 					}
 
 				}

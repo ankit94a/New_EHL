@@ -9,6 +9,9 @@ import { AddTechnicalAoAiComponent } from '../techincal-ao-ai/add-technical-ao-a
 import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
+import { DownloadModel } from 'projects/shared/src/models/download.model';
+import { DownloadFileType } from 'projects/shared/src/models/enum.model';
+import { DownloadService } from 'projects/shared/src/service/download.service';
 
 @Component({
   selector: 'app-techincal-ao-ai',
@@ -26,7 +29,7 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
     private authService: AuthService,
     private apiService: ApiService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService
+    private toastr: ToastrService,private downloadService:DownloadService
   ) {
     super();
     this.userType = this.authService.getRoleType();
@@ -60,7 +63,13 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
       }
     });
   }
-
+ getFileId($event) {
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.TechnicalAoAi;
+    this.downloadService.download(download)
+  }
   edit(row) {
     row.isEdit = true;
     this.dialogService.open(AddTechnicalAoAiComponent, row).then((res) => {

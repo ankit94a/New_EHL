@@ -31,6 +31,14 @@ namespace EHL.Api.Controllers
 			{
 				rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "policy");
 			}
+			else if (file.FileType == Common.Enum.Enum.DownloadFileType.Index)
+			{
+				rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index");
+			}
+			else if (file.FileType == Common.Enum.Enum.DownloadFileType.TechnicalAoAI)
+			{
+				rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "technicalAoAi");
+			}
 
 			var fullFilePath = Path.Combine(rootPath, fileNameOnly);
 			file.FilePath = fullFilePath;

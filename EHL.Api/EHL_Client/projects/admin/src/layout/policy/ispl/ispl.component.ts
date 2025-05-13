@@ -13,6 +13,9 @@ import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dial
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
 import { IsplAddComponent } from './ispl-add/ispl-add.component';
+import { DownloadModel } from 'projects/shared/src/models/download.model';
+import { DownloadFileType } from 'projects/shared/src/models/enum.model';
+import { DownloadService } from 'projects/shared/src/service/download.service';
 
 @Component({
   selector: 'app-ispl',
@@ -30,7 +33,7 @@ export class IsplComponent extends TablePaginationSettingsConfig {
     private authService: AuthService,
     private apiService: ApiService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService
+    private toastr: ToastrService,private downloadService:DownloadService
   ) {
     super();
     this.userType = this.authService.getRoleType();
@@ -55,7 +58,13 @@ export class IsplComponent extends TablePaginationSettingsConfig {
       }
     });
   }
-  getFileId(row) {}
+ getFileId($event) {
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.Policy;
+    this.downloadService.download(download)
+  }
   getPolicyByWing() {
     this.apiService
       .postWithHeader('policy/type/', this.filterModel)

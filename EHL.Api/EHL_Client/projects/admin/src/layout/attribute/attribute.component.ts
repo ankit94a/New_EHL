@@ -46,6 +46,7 @@ export class AttributeComponent {
   categoryId: number;
   subCategoryId: number;
   wingId: number;
+  paginatorLength:number;
   constructor(
     private dialogService: BISMatDialogService,
     private apiService: ApiService,
@@ -161,6 +162,7 @@ export class AttributeComponent {
         this.data.paginator = this.paginator;
         this.data.sort = this.sort;
         this.wingId = this.wing[0].id;
+        this.paginatorLength = this.wing.length
       }
     });
   }
@@ -169,13 +171,15 @@ export class AttributeComponent {
       .getWithHeaders('attribute/category' + wingId)
       .subscribe((res) => {
         if (res) {
+          debugger
           this.categoryList = res;
           this.dataSource.data = this.categoryList;
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.categoryId = this.categoryList[0].id;
           this.wingId = this.categoryList[0].wingId;
-          this.getSubCategory(this.categoryId);
+          this.paginatorLength = this.categoryList.length
+          // this.getSubCategory(this.categoryId);
         }
       });
   }
@@ -193,6 +197,8 @@ export class AttributeComponent {
         ...item,
         wingId: this.wingId
       }));
+      debugger
+      this.paginatorLength = this.subCategoryList.length
           this.dataSource1.data = this.subCategoryList;
           this.dataSource1.paginator = this.paginator;
           this.dataSource1.sort = this.sort;
@@ -213,6 +219,7 @@ export class AttributeComponent {
         ...item,
         wingId: this.wingId
       }));
+      this.paginatorLength = this.eqptList.length
           this.dataSource2.data = this.eqptList;
           this.dataSource2.paginator = this.paginator;
           this.dataSource2.sort = this.sort;

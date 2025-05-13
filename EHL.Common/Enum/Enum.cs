@@ -52,7 +52,9 @@ namespace EHL.Common.Enum
 		public enum DownloadFileType
 		{
 			Emer = 1,
-			Policy
+			Policy,
+			Index,
+			TechnicalAoAI
 		}
 	}
 }

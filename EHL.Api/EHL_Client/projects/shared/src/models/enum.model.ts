@@ -41,5 +41,7 @@ export enum PermissionAction {
 
 export enum DownloadFileType {
   Emer = 'emer',
-  Policy = 'policy'
+  Policy = 'policy',
+  Index = 'index',
+  TechnicalAoAi = 'technicalAoAi'
 }
