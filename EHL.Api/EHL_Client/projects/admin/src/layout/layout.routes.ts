@@ -40,19 +40,9 @@ export const routes: Routes = [
               loadComponent: () => import('./mrls-dist-list/mrls-dist.component').then(m =>m.MrlsDistComponent),
               canActivate: [AuthGuard]
             },
-             {
-              path: 'service',
-              loadComponent: () => import('./policy/in-service/in-service.component').then(m => m.InServiceComponent),
-              canActivate: [AuthGuard],
-            },
             {
               path: 'nge',
               loadComponent:() => import('./policy/nge/nge.component').then(m =>m.NgeComponent),
-              canActivate: [AuthGuard],
-            },
-            {
-              path: 'file-management',
-              loadComponent:() => import('./file-upload/file-upload.component').then(m =>m.FileUploadComponent),
               canActivate: [AuthGuard],
             },
             {

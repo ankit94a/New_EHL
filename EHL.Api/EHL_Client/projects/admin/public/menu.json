@@ -86,7 +86,7 @@
       {
         "text": "In Servise",
         "icon":"fa-solid fa-file-contract",
-        "routerLink":"/service",
+        "routerLink":"/policy",
         "permissionAction":"ViewAll",
         "permissionName": "Policy Compendium"
       },
@@ -141,13 +141,6 @@
     "icon": "fa-brands fa-creative-commons-nd",
     "routerLink": "/attribute",
     "permissionName": "Attribute",
-    "permissionAction": "ViewAll"
-  },
-  {
-    "text": "File Management",
-    "icon": "fa-brands fa-creative-commons-nd",
-    "routerLink": "/file-management",
-    "permissionName": "File",
     "permissionAction": "ViewAll"
   }
 ]
