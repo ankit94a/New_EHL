@@ -79,7 +79,7 @@ export class OilComponent extends TablePaginationSettingsConfig {
     isplModel.TableName = 'policy';
 
     this.dialogService
-      .confirmDialog('Are you sure you want to delete this ISPL?')
+      .confirmDialog('Are you sure you want to delete this Oil and Lubs?')
       .subscribe((res) => {
         if (res) {
           this.apiService

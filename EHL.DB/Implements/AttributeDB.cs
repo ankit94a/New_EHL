@@ -131,6 +131,7 @@ namespace EHL.DB.Implements
 		{
 			try
 			{
+
 				string query = string.Format(@"select * from subcategory where categoryid = @categoryid and isactive=1");
 				return connection.Query<SubCategory>(query, new { categoryid = categoryId }).ToList();
 			}
@@ -140,13 +141,21 @@ namespace EHL.DB.Implements
 				throw;
 			}
 		}
-		public bool DeactivateSubCategory(long Id)
+		public bool UpdateSubCategory(SubCategory subCategory)
 		{
 			try
 			{
-				string query = string.Format(@"update subcategory set isactive=0 where id=@id");
-				return connection.Execute(query, new { id = Id }) > 0;
-			}
+                //string query = string.Format(@"update subcategory set (name,createdby,createdon,isactive,categoryid) values(@name,@createdby,@createdon,@isactive,@categoryid) where id=@id");
+                string query = @"UPDATE subcategory 
+                         SET name = @name,
+                             updatedby =@updatedby,
+                             updatedon =@updatedon,
+                             categoryid = @categoryid
+                         WHERE id = @id";
+
+                return connection.Execute(query, subCategory) > 0;
+
+            }
 			catch (Exception ex)
 			{
 				EHLLogger.Error(ex, "Class=AttributeDB,method=DeactivateSubCategory");
@@ -181,13 +190,21 @@ namespace EHL.DB.Implements
 				throw;
 			}
 		}
-		public bool DeactivateEqpt(long Id)
+		public bool UpdateEqpt(Eqpt eqpt)
 		{
 			try
 			{
-				string query = string.Format(@"update eqpt set isactive=0 where id=@id");
-				return connection.Execute(query, new { id = Id }) > 0;
-			}
+
+                string query = @"UPDATE eqpt 
+                         SET name = @Name,
+                             updatedby =@Updatedby,
+                             updatedon =@Updatedon,
+                             categoryid = @CategoryId,
+                             subCategoryid = @SubCategoryId
+                         WHERE id = @Id";
+
+                return connection.Execute(query, eqpt) > 0;
+            }
 			catch (Exception ex)
 			{
 				EHLLogger.Error(ex, "Class=AttributeDB,method=DeactivateEqpt");

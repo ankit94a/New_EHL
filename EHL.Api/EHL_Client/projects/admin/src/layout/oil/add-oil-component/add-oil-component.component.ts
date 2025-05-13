@@ -146,19 +146,18 @@ if(isValid){
         formData.append('subCategory', subCategory);
         formData.append('eqpt', this.policy.get('eqpt')?.value);
         formData.append('subCategoryId', this.policy.get('subCategoryId')?.value);
-        formData.append('type', this.policy.get('type')?.value);
+        formData.append('type', 'Oil and Lubs');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
         formData.append('policyFile', this.policy.get('policyFile')?.value);
         formData.append('remarks', this.policy.get('remarks')?.value);
-
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success('ISPL submitted successfully', 'Success');
+            this.toastr.success('Oil and Lubs submitted successfully', 'Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
-            this.toastr.error('Error submitting ISPL', 'Error');
+            this.toastr.error('Error submitting Oil and Lubs', 'Error');
           },
         });
       }else{
@@ -171,7 +170,7 @@ if(isValid){
     else {
       const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
       const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
-      formData.append('type', this.policy.get('type')?.value);
+      formData.append('type', 'Oil and Lubs');
       formData.append('wingId', this.policy.get('wingId')?.value);
       formData.append(
         'id',
@@ -189,11 +188,11 @@ if(isValid){
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success('ISPL submitted successfully', 'Success');
+            this.toastr.success('Oil and Lubs submitted successfully', 'Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
-            this.toastr.error('Error submitting ISPL', 'Error');
+            this.toastr.error('Error submitting Oil and Lubs', 'Error');
           },
         });
       } else {

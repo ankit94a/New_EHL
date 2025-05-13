@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Category, Eqpt, SubCategory, Wing } from 'projects/shared/src/models/attribute.model';
 import { ApiService } from 'projects/shared/src/service/api.service';
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-eqpt',
@@ -16,14 +16,48 @@ export class EqptComponent {
   categoryList:Category[]=[];
   subCategoryList:SubCategory[]=[];
   eqpt:Eqpt=new Eqpt();
-    wing:Wing[]=[]
-   constructor(private apiService:ApiService,private toastr:ToastrService,private dailogRef:MatDialogRef<EqptComponent>){
+  wing:Wing[]=[]
+  wingId:number=0;
+  categoryId:number;
+  subCategoryId:number;
+  apiUrl:string='';
+   constructor( @Inject(MAT_DIALOG_DATA) data: any,private apiService:ApiService,private toastr:ToastrService,private dailogRef:MatDialogRef<EqptComponent>){
       this.getWing();
+        if (data != null) {
+       this.getCategory(data.wingId);
+       this.categoryId = data.categoryId;
+       this.getSubCategory(data.categoryId);
+       this.subCategoryId = data.subCategoryId;
+      this.bindDataToForm(data),
+      this.apiUrl='attribute/eqpt/update'
+    } else {
+      this.createForm();
+      this.apiUrl ='attribute/eqpt'
     }
+    }
+      bindDataToForm(attrData) {
+        debugger
+    (this.eqpt.id = attrData.id),
+      (this.eqpt.categoryId = attrData.categoryId),
+      (this.eqpt.wingId = attrData.wingId),
+      (this.eqpt.categoryId = attrData.categoryId),
+      (this.eqpt.subCategoryId = attrData.subCategoryId),
+      (this.eqpt.name = attrData.name);
+      // this.filterCategory(attrData.categoryId)
+  }
+  createForm() {
+    (this.eqpt.id = 0),
+      (this.eqpt.categoryId = 0),
+      (this.eqpt.name = ''),
+      (this.eqpt.wingId = 0),
+      (this.eqpt.subCategoryId = 0)
+
+  }
     getCategory(categoryId){
       this.apiService.getWithHeaders('attribute/category'+categoryId).subscribe(res =>{
         if(res){
           this.categoryList=res;
+
 
         }
       })
@@ -43,9 +77,12 @@ export class EqptComponent {
       })
     }
     save(){
-      this.apiService.postWithHeader('attribute/eqpt',this.eqpt).subscribe(res =>{
+      // console.log(this.eqpt, this.apiUrl)
+      debugger
+      this.apiService.postWithHeader(this.apiUrl,this.eqpt).subscribe(res =>{
+        debugger
         if(res){
-          this.toastr.success("Sub-Category added successfully",'success');
+          this.toastr.success("Eqpt added successfully",'success');
           this.dailogRef.close(true);
         }
       })

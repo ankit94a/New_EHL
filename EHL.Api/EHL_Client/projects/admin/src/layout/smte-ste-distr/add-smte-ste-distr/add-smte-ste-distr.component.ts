@@ -12,14 +12,15 @@ import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'projects/shared/src/service/auth.service';
 
+
 @Component({
-  imports: [SharedLibraryModule],
-  selector: 'app-ispl-add',
+  selector: 'app-add-smte-ste-distr',
   standalone: true,
-  templateUrl: './ispl-add.component.html',
-  styleUrl: './ispl-add.component.scss',
+  imports: [SharedLibraryModule],
+  templateUrl: './add-smte-ste-distr.component.html',
+  styleUrl: './add-smte-ste-distr.component.scss'
 })
-export class IsplAddComponent {
+export class AddSmteSteDistrComponent {
   policy: FormGroup;
   categoryList: Category[] = [];
   wingList: Wing[] = [];
@@ -35,7 +36,7 @@ export class IsplAddComponent {
   constructor(
     private authService: AuthService,
     @Inject(MAT_DIALOG_DATA) data,
-    private dialogRef: MatDialogRef<IsplAddComponent>,
+    private dialogRef: MatDialogRef<AddSmteSteDistrComponent>,
     private apiService: ApiService,
     private fb: FormBuilder,
     private toastr: ToastrService,
@@ -74,7 +75,7 @@ export class IsplAddComponent {
   }
   createForm() {
     this.policy = this.fb.group({
-      type: [{ value: 'ISPL', disabled: true }, [Validators.required]],
+      type: [{ value: 'SMTE / STE', disabled: true }, [Validators.required]],
       wingId: [{ value: this.wingId, disabled: true }, [Validators.required]],
       categoryId: ['', [Validators.required]],
       categogry: [''],
@@ -145,7 +146,7 @@ if(isValid){
         formData.append('subCategory', subCategory);
         formData.append('eqpt', this.policy.get('eqpt')?.value);
         formData.append('subCategoryId', this.policy.get('subCategoryId')?.value);
-        formData.append('type', 'ispl');
+        formData.append('type', 'SMTE / STE');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
         formData.append('policyFile', this.policy.get('policyFile')?.value);
@@ -170,7 +171,7 @@ if(isValid){
     else {
       const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
       const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
-      formData.append('type', 'ispl');
+      formData.append('type', 'SMTE / STE');
       formData.append('wingId', this.policy.get('wingId')?.value);
       formData.append(
         'id',

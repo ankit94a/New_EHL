@@ -249,6 +249,7 @@
                     [(ngModel)]="wingId"
                     panelClass="custom-dropdown"
                     placeholder="Category"
+                    (selectionChange)="getCategory($event.value)"
                   >
                     <mat-option *ngFor="let wing of wing" [value]="wing.id">
                       {{ wing.name }}
@@ -264,6 +265,7 @@
                     [(ngModel)]="categoryId"
                     panelClass="custom-dropdown"
                     placeholder="Category"
+                    (selectionChange)="getSubCategory($event.value)"
                   >
                     <mat-option
                       *ngFor="let category of categoryList"

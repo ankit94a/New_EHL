@@ -18,10 +18,10 @@ namespace EHL.DB.Interfaces
 		public bool DeactivateCategory(long Id);
 		public bool AddSubCategory(SubCategory subCategory);
 		public List<SubCategory> GetSubCategories(long categoryId);
-		public bool DeactivateSubCategory(long Id);
+		public bool UpdateSubCategory(SubCategory subCategory);
 		public bool AddEqpt(Eqpt eqpt);
 		public List<Eqpt> GetEqpt(long categoryId,long subCategoryId);
-		public bool DeactivateEqpt(long Id);
+		public bool UpdateEqpt(Eqpt eqpt);
         public bool DeleteEmer(DeleteEmer data);
     }
 }

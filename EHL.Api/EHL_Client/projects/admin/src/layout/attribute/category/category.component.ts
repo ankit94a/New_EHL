@@ -36,7 +36,6 @@ export class CategoryComponent {
     this.category.id = attrData.id;
     this.category.wingId=attrData.wingId;
     this.category.name = attrData.name;
-    this.category.wingId = attrData.wingId;
   }
   createForm() {
     this.category.name = '';

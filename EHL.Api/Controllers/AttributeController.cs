@@ -107,16 +107,20 @@ namespace EHL.Api.Controllers
 			return Ok(_attributeManager.DeactivateCategory(category.Id));
 		}
 		[Authorization(RoleType.Admin)]
-		[HttpPut, Route("subcategory")]
-		public IActionResult DeactiveSubCategory([FromBody] SubCategory subCategory)
+		[HttpPost, Route("subcategory/update")]
+		public IActionResult UpdateSubCategory([FromBody] SubCategory subCategory)
 		{
-			return Ok(_attributeManager.DeactivateSubCategory(subCategory.Id));
+            subCategory.UpdatedBy = HttpContext.GetUserId();
+            subCategory.UpdatedOn = DateTime.Now;
+            return Ok(_attributeManager.UpdateSubCategory(subCategory));
 		}
 		[Authorization(RoleType.Admin)]
-		[HttpPut, Route("eqpt")]
-		public IActionResult DeactiveEqpt([FromBody] Eqpt eqpt)
+		[HttpPost, Route("eqpt/update")]
+		public IActionResult UpdateEqpt([FromBody] Eqpt eqpt)
 		{
-			return Ok(_attributeManager.DeactivateCategory(eqpt.Id));
+            eqpt.UpdatedBy = HttpContext.GetUserId();
+            eqpt.UpdatedOn = DateTime.Now;
+            return Ok(_attributeManager.UpdateEqpt(eqpt));
 		}
 		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("delete")]

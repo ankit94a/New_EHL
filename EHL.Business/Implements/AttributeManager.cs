@@ -52,9 +52,9 @@ namespace EHL.Business.Implements
 		{
 			return _attributeDb.GetSubCategories(categoryId);
 		}
-		public bool DeactivateSubCategory(long Id)
+		public bool UpdateSubCategory(SubCategory subCategory)
 		{
-			return _attributeDb.DeactivateSubCategory(Id);
+			return _attributeDb.UpdateSubCategory(subCategory);
 		}
 
 		public bool AddEqpt(Eqpt eqpt)
@@ -65,9 +65,9 @@ namespace EHL.Business.Implements
 		{
 			return _attributeDb.GetEqpt(categoryId, subCategoryId);
 		}
-		public bool DeactivateEqpt(long Id)
+		public bool UpdateEqpt(Eqpt eqpt)
 		{
-			return _attributeDb.DeactivateEqpt(Id);
+			return _attributeDb.UpdateEqpt(eqpt);
 		}
         public bool DeleteEmer(DeleteEmer data)
         {

@@ -12,16 +12,16 @@ import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
-import { AddNgeComponent } from './add-nge/add-nge.component';
+import { AddMrlsDistComponent } from './add-mrls-dist-component/add-mrls-dist-component.component';
 
 @Component({
-  selector: 'app-nge',
+  selector: 'app-mrls',
   standalone: true,
   imports: [SharedLibraryModule,ZipperTableComponent],
-  templateUrl: './nge.component.html',
-  styleUrl: './nge.component.scss'
+  templateUrl: './mrls-dist.component.html',
+  styleUrl: './mrls-dist.component.scss'
 })
-export class NgeComponent extends TablePaginationSettingsConfig {
+export class MrlsDistComponent extends TablePaginationSettingsConfig {
   ispl: Policy[] = [];
   filterModel: Policy = new Policy();
   isRefresh: boolean = false;
@@ -45,11 +45,11 @@ export class NgeComponent extends TablePaginationSettingsConfig {
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
     this.filterModel.wingId = parseInt(this.authService.getWingId());
-    this.filterModel.type = 'Policy NGE';
+    this.filterModel.type = 'Mrls Dist';
     this.getPolicyByWing();
   }
   openDailog() {
-    this.dialogService.open(AddNgeComponent, null, '50vw').then((res) => {
+    this.dialogService.open(AddMrlsDistComponent, null, '50vw').then((res) => {
       if (res) {
         this.getPolicyByWing();
       }
@@ -67,7 +67,7 @@ export class NgeComponent extends TablePaginationSettingsConfig {
   }
   edit(row) {
     row.isEdit = true;
-    this.dialogService.open(AddNgeComponent, row).then((res) => {
+    this.dialogService.open(AddMrlsDistComponent, row).then((res) => {
       if (res) {
         this.getPolicyByWing();
       }

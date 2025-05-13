@@ -155,7 +155,7 @@ export class EpContractAddComponent {
           'subCategoryId',
           this.policy.get('subCategoryId')?.value
         );
-        formData.append('type', this.policy.get('type')?.value);
+        formData.append('type', 'EP Contract');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
         formData.append('policyFile', this.policy.get('policyFile')?.value);
@@ -190,7 +190,7 @@ export class EpContractAddComponent {
           this.subCategoryList.find(
             (item) => item.id == this.policy.get('subCategoryId')?.value
           )?.name || '';
-        formData.append('type', this.policy.get('type')?.value);
+        formData.append('type', 'EP Contract');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('id', policyId);
         formData.append('category', category);

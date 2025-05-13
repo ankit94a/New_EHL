@@ -4,7 +4,7 @@
     <div class="col">
       <mat-form-field appearance="fill">
         <mat-label>Wing</mat-label>
-        <mat-select [multiple]="false" (selectionChange)="getCategory($event.value)" panelClass="custom-dropdown" placeholder="Wing">
+        <mat-select [multiple]="false" [(ngModel)]="subCategory.wingId" (selectionChange)="getCategory($event.value)" panelClass="custom-dropdown" placeholder="Wing">
           <mat-option *ngFor="let wing of wing" [value]="wing.id">
             {{ wing.name }}
           </mat-option>

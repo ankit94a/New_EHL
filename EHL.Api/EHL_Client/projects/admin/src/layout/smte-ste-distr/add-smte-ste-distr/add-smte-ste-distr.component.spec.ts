@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MrlsDistListComponent } from './mrls-dist-list.component';
+import { AddSmteSteDistrComponent } from './add-smte-ste-distr.component';
 
-describe('MrlsDistListComponent', () => {
-  let component: MrlsDistListComponent;
-  let fixture: ComponentFixture<MrlsDistListComponent>;
+describe('AddSmteSteDistrComponent', () => {
+  let component: AddSmteSteDistrComponent;
+  let fixture: ComponentFixture<AddSmteSteDistrComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MrlsDistListComponent]
+      imports: [AddSmteSteDistrComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(MrlsDistListComponent);
+    fixture = TestBed.createComponent(AddSmteSteDistrComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -20,6 +20,8 @@ import { EqptComponent } from './eqpt/eqpt.component';
 import { WingComponent } from './wing/wing.component';
 import { DeleteModel } from '../../../../shared/src/models/attribute.model';
 import { ToastrService } from 'ngx-toastr';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
+
 
 @Component({
   selector: 'app-attribute',
@@ -47,7 +49,8 @@ export class AttributeComponent {
   constructor(
     private dialogService: BISMatDialogService,
     private apiService: ApiService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+      private EncryptionService:EncryptionService,
   ) {
     this.getWing();
   }
@@ -70,11 +73,13 @@ export class AttributeComponent {
         break;
       case 3:
         this.activeTab = 'eqpt'; // emer tha
+        this.getCategory(this.wingId);
+        this.getSubCategory(this.categoryId);
         this.getEqpt();
         // if(this.categoryList.length == 0){
 
         // }
-        await this.getCategory(this.wingId);
+        // await this.getCategory(this.wingId);
 
         // this.getSubCategory(this.categoryId);
         break;
@@ -85,13 +90,13 @@ export class AttributeComponent {
   edit(item) {
     item.isEdit = true;
     if (this.activeTab === 'wing') {
-      this.dialogService.open(WingComponent, item, '30vw').then((res) => {
+      this.dialogService.open(WingComponent, item, '40vw').then((res) => {
         if (res) {
           this.getWing();
         }
       });
     } else if (this.activeTab === 'category') {
-      this.dialogService.open(CategoryComponent, item, '30vw').then((res) => {
+      this.dialogService.open(CategoryComponent, item, '40vw').then((res) => {
         if (res) {
           this.getCategory(this.wingId);
         }
@@ -124,9 +129,8 @@ export class AttributeComponent {
     let deleteAttr: DeleteModel = new DeleteModel();
     deleteAttr.Id = row.id;
     deleteAttr.TableName = this.activeTab;
-
     this.dialogService
-      .confirmDialog('Would you like to delete This Attribute?')
+      .confirmDialog('Are you sure you want to delete this Attribute?')
       .subscribe((res) => {
         if (res) {
           this.apiService
@@ -170,6 +174,7 @@ export class AttributeComponent {
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.categoryId = this.categoryList[0].id;
+          this.wingId = this.categoryList[0].wingId;
           this.getSubCategory(this.categoryId);
         }
       });
@@ -181,8 +186,13 @@ export class AttributeComponent {
     this.apiService
       .getWithHeaders('attribute/subcategory' + categoryId)
       .subscribe((res) => {
+
         if (res) {
           this.subCategoryList = res;
+        this.subCategoryList = res.map(item => ({
+        ...item,
+        wingId: this.wingId
+      }));
           this.dataSource1.data = this.subCategoryList;
           this.dataSource1.paginator = this.paginator;
           this.dataSource1.sort = this.sort;
@@ -199,6 +209,10 @@ export class AttributeComponent {
       .subscribe((res) => {
         if (res) {
           this.eqptList = res;
+            this.eqptList = res.map(item => ({
+        ...item,
+        wingId: this.wingId
+      }));
           this.dataSource2.data = this.eqptList;
           this.dataSource2.paginator = this.paginator;
           this.dataSource2.sort = this.sort;
@@ -215,16 +229,16 @@ export class AttributeComponent {
   addCategory() {
 
     this.dialogService.open(CategoryComponent, null, '30vw').then((res) => {
-console.log("yash")
+
       if (res) {
 
         this.getCategory(this.wingId);
       }
-      console.log("yash2")
+
     });
   }
   addSubCategory() {
-    this.dialogService.open(SubCategoryComponent, null, '40vw').then((res) => {
+    this.dialogService.open(SubCategoryComponent,null, '40vw').then((res) => {
       if (res) {
         this.getSubCategory(this.categoryId);
       }

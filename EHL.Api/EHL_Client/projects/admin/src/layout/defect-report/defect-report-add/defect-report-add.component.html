@@ -2,7 +2,7 @@
 <form [formGroup]="policy" (ngSubmit)="save()">
 <mat-dialog-content>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field appearance="fill">
         <mat-label>Wing</mat-label>
         <mat-select [multiple]="false" formControlName="wingId" (selectionChange)="getCategory($event.value)" panelClass="custom-dropdown" placeholder="Wing">
@@ -15,18 +15,8 @@
         </mat-error>
       </mat-form-field>
   </div>
-  <div class="col-md-4">
-    <mat-form-field appearance="fill">
-      <mat-label>Policy Letter & Misc Type</mat-label>
-      <mat-select formControlName="type" panelClass="custom-dropdown" placeholder="Policy letter & Misc type">
-        <mat-option [value]="'Defect Report'">Defect Report</mat-option>
-      </mat-select>
-      <mat-error *ngIf="policy.get('type')?.touched && policy.get('type')?.hasError('required')">
-        Policy Letter & Misc Type is required
-      </mat-error>
-    </mat-form-field>
-  </div>
-    <div class="col-md-4">
+
+    <div class="col-md-6">
       <mat-form-field appearance="fill">
         <mat-label>Category</mat-label>
         <mat-select [multiple]="false" formControlName="categoryId"  [(ngModel)]="categoryId" (selectionChange)="getSubCategory($event.value)"

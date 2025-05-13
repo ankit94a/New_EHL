@@ -144,7 +144,7 @@ export class DefectReportAddComponent {
         formData.append('category', category);
         formData.append('subCategory', subCategory);
         formData.append('eqpt', this.policy.get('eqpt')?.value);
-        formData.append('type', this.policy.get('type')?.value);
+        formData.append('type', 'Defect Report');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
         formData.append('policyFile', this.policy.get('policyFile')?.value);
@@ -171,7 +171,7 @@ export class DefectReportAddComponent {
       if (this.policy.valid) {
         const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
         const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
-        formData.append('type', this.policy.get('type')?.value);
+        formData.append('type', 'Defect Report');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append(
           'id',

@@ -1,1 +1,16 @@
-<p>nge works!</p>
+<mat-card>
+  <!-- <mat-card-header>Policy List</mat-card-header> -->
+  <mat-card-content>
+    <div class="row">
+      <div class="col-md-10">Policy NGE List</div>
+      <div class="col-md-2">
+        <button class="btn btn-link" (click)="openDailog()" *ngIf="userType != '2'">+ Add Policy NGE</button>
+      </div>
+    </div>
+    <app-table *ngIf="ispl.length > 0" [rowData]="ispl" [tablePaginationSettings]="tablePaginationSettings"
+      [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
+       [sqColumnDefinition]="columns" (edit)="edit($event)" (delete)="delete($event)" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
+      >
+    </app-table>
+  </mat-card-content>
+</mat-card>

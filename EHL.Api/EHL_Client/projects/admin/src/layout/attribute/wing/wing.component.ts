@@ -40,6 +40,7 @@ export class WingComponent {
     this.apiUrl = this.wing.id > 0 ? 'attribute/wing/update' : 'attribute/wing';
   }
   bindDataToForm(attrData) {
+
     this.wing.name = attrData.name;
     this.wing.id = attrData.id;
   }
@@ -57,15 +58,15 @@ export class WingComponent {
 
   async save() {
 
-    const encryptedName = await this.EncryptionService.encrypt(this.wing.name);
+  //   const encryptedName = await this.EncryptionService.encrypt(this.wing.name);
 
-  // Replace wing name with encrypted string before saving
-  const encryptedWing = {
-    ...this.wing,
-    name: encryptedName
-  };
+  // // Replace wing name with encrypted string before saving
+  // const encryptedWing = {
+  //   ...this.wing,
+  //   name: encryptedName
+  // };
   // Replace wing name with encrypted data before saving
-    this.apiSerive.postWithHeader(this.apiUrl, encryptedWing).subscribe((res) => {
+    this.apiSerive.postWithHeader(this.apiUrl, this.wing).subscribe((res) => {
       if (res) {
         this.toastr.success('Category added successfully', 'success');
         this.dailogRef.close(true);

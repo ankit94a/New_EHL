@@ -37,7 +37,7 @@ export const routes: Routes = [
             },
             {
               path: 'mrls-distr',
-              loadComponent: () => import('./mrls-dist-list/mrls-dist-list.component').then(m =>m.MrlsDistListComponent),
+              loadComponent: () => import('./mrls-dist-list/mrls-dist.component').then(m =>m.MrlsDistComponent),
               canActivate: [AuthGuard]
             },
              {
