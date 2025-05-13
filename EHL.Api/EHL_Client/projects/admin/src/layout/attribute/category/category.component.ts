@@ -33,14 +33,14 @@ export class CategoryComponent {
   }
 
   bindDataToForm(attrData) {
-    this.category.id = attrData.id;
-    this.category.wingId=attrData.wingId;
-    this.category.name = attrData.name;
+    (this.category.id = attrData.id),
+    (this.category.wingId=attrData.wingId),
+    (this.category.name = attrData.name);
   }
   createForm() {
-    this.category.name = '';
-    this.category.wingId = 0;
-    this.category.id = 0;
+    (this.category.name = ''),
+    (this.category.wingId = 0),
+    (this.category.id = 0)
   }
   getWingById(id){
     this.apiSerive.getWithHeaders('attribute/wing').subscribe(res =>{
@@ -61,8 +61,9 @@ export class CategoryComponent {
   close() {
     this.dailogRef.close(true);
   }
-  // reset() {
-  // }
+  reset() {
+    this.createForm();
+  }
   save(){
     this.apiSerive.postWithHeader(this.apiUrl ,this.category).subscribe(res =>{
       if(res){

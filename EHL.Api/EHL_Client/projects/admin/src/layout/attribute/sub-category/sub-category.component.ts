@@ -52,7 +52,7 @@ export class SubCategoryComponent {
       this.filterCategory(attrData.categoryId)
   }
   createForm() {
-    (this.subCategory.id = 0),
+      (this.subCategory.id = 0),
       (this.subCategory.categoryId = 0),
       (this.subCategory.name = '');
   }
@@ -77,6 +77,12 @@ export class SubCategoryComponent {
           this.categoryList = res;
         }
       });
+  }
+    close() {
+    this.dailogRef.close(true);
+  }
+    reset() {
+    this.createForm();
   }
   save() {
     debugger

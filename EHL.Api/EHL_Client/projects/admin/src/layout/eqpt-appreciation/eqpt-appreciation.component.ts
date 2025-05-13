@@ -44,7 +44,7 @@ export class EqptAppreciationComponent extends TablePaginationSettingsConfig {
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
     this.filterModel.wingId = parseInt(this.authService.getWingId());
-    this.filterModel.type = 'Oil and Lubs';
+    this.filterModel.type = 'Eqpt Appreciation';
     this.getPolicyByWing();
   }
   openDailog() {

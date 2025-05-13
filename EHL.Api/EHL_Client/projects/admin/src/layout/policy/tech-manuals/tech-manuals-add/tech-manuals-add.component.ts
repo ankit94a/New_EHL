@@ -262,6 +262,8 @@ export class TechManualsAddComponent {
   }
   reset() {
     this.createForm();
+    this.fileName = '';
+    this.fileSizeFormatted = '';
   }
   removeFile(): void {
     this.fileName = null;

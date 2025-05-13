@@ -74,14 +74,15 @@ export class EpContractAddComponent {
     this.fileSizeFormatted = 'Not Defined';
     this.filePath = policyData.filePath;
   }
+
   createForm() {
     this.policy = this.fb.group({
-      id: [0],
+
       type: [{ value: 'EP Contract', disabled: true }, [Validators.required]],
       wingId: [{ value: this.wingId, disabled: true }, [Validators.required]],
       categoryId: ['', [Validators.required]],
-      categogry: ['', [Validators.required]],
-      subCategory: ['', [Validators.required]],
+      categogry: ['',],
+      subCategory: ['', ],
       subCategoryId: ['', [Validators.required]],
       eqpt: ['', [Validators.required]],
       policyFile: [null, [Validators.required]],
@@ -120,7 +121,7 @@ export class EpContractAddComponent {
       (item) => item.id == this.policy.get('wingId')?.value
     ).name;
     formData.append('wing', wing);
-    const policyId = this.policy.get('id')?.value;
+    const policyId = this.policy.get('id')?.value?this.policy.get('id')?.value:0;
     //edit ep contract
     if (policyId > 0) {
 
@@ -280,6 +281,8 @@ export class EpContractAddComponent {
   }
   reset() {
     this.createForm();
+    this.fileName = '';
+    this.fileSizeFormatted = '';
   }
   removeFile(): void {
     this.fileName = null;

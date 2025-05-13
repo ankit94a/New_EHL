@@ -168,6 +168,7 @@ if(isValid){
     }
     //add
     else {
+      debugger
       const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
       const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
       formData.append('type', 'Oil and Lubs');
@@ -258,6 +259,8 @@ if(isValid){
   }
   reset() {
     this.createForm();
+    this.fileName = '';
+    this.fileSizeFormatted = '';
   }
   removeFile(): void {
     this.fileName = null;
