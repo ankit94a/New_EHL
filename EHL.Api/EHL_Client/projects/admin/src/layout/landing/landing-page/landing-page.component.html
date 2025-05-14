@@ -4,16 +4,13 @@
     <div class="col-md-11 no-space">
       <div class="header">EQUIPMENT HELPLINE</div>
     </div>
-    <a href='/wing' class="btn-link">Go To Wings</a>
-    <div class="col-md-1 no-space">
-
-      <button class="btn" (click)="openDialog()" mat-button>
-        <!-- <img src="/login.svg" alt="svg"> -->
-
-        <i class="fa fa-sign-out btn-white px-2" aria-hidden="true"></i>
-         <span class="btn-white"> Sign in</span>
-      </button>
-    </div>
+    <div class="btn_class">
+  <a href="/wing-list/" mat-button> Go To Wings</a>
+  <button mat-button class="btn-white-button" (click)="openDialog()">
+    <i class="fa fa-sign-out" aria-hidden="true"></i>
+    <span>Sign in</span>
+  </button>
+</div>
   </div>
 </div>
   <div class="banner">
@@ -123,7 +120,7 @@
         </div>
         <div class="news-content-vertical">
           <ul class="news-list scroll-vertical">
-            <li *ngFor="let item of latestEmer" (click)="getFileId(item)">
+            <li *ngFor="let item of latestEmer" (click)="getFileId(item,'emer')">
               {{ item.emerNumber }}  -  {{ item.subject }} <span *ngIf="item.status" class="badge">New</span>
             </li>
           </ul>
@@ -166,7 +163,7 @@
         <div class="news-header">Technical Reference</div>
         <div class="news-content-vertical">
           <ul class="news-list list-unstyled small scroll-vertical">
-            <li *ngFor="let type of latestTechnicalReference">
+            <li *ngFor="let type of latestTechnicalReference" (click)="getFileId(type,'policy')">
               {{ type.type }} - {{ type.remarks }}
             </li>
           </ul>

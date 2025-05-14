@@ -75,12 +75,18 @@ export class LandingPageComponent {
   openDialog(){
     this.dialogService.open(LoginComponent,null,'30vw','42vh');
   }
-getFileId($event) {
+getFileId($event,type) {
 
       var download = new DownloadModel();
       download.filePath = $event.filePath;
       download.name = $event.fileName;
-      download.fileType = DownloadFileType.Emer;
+      if(type == 'emer'){
+        download.fileType = DownloadFileType.Emer;
+      }else{
+        download.fileType = DownloadFileType.Policy;
+      }
       this.downloadService.download(download)
     }
+
+
 }

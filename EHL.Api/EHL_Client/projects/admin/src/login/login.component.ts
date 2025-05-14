@@ -33,15 +33,23 @@ export class LoginComponent {
     if (this.loginform.invalid) {
       return;
     }
-    this.apiService.postWithHeader('auth/login',this.loginform.value).subscribe(res =>{
-      if(res && res.token){
-        this.authService.setToken(res.token)
-        this.authService.setUserDetails(res.user)
+    this.apiService.postWithHeader('auth/login',this.loginform.value).subscribe(async (res) =>{
+      debugger
+      if(res){
+        // this.authService.setToken(res.token)
+        // this.authService.setUserDetails(res.user)
+        await this.getUserRole()
         this.dialog.closeAll();
-        // this.languageService.setLanguage('en')
         this.router.navigate(['/wing']);
       }else {
         this.router.navigate(['/landing']);
+      }
+    })
+  }
+  getUserRole(){
+    this.apiService.getWithHeaders('auth/role/type').subscribe(res =>{
+      if(res){
+        this.authService.setRoleType(res)
       }
     })
   }

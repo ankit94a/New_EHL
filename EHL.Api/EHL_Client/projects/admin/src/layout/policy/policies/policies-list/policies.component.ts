@@ -35,6 +35,7 @@ export class PoliciesComponent extends TablePaginationSettingsConfig {
     private toastr: ToastrService,private downloadService:DownloadService
   ) {
     super();
+    debugger
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
     if (this.userType == '1') {

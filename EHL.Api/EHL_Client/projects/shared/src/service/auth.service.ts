@@ -8,6 +8,10 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   private wingSubject = new BehaviorSubject<string | null>(null);
   wing$ = this.wingSubject.asObservable();
+  private wingIdSubject = new BehaviorSubject<string | null>(null);
+  wingId$ = this.wingSubject.asObservable();
+  private userRoleSubject = new BehaviorSubject<string | null>(null);
+  roleType$ = this.userRoleSubject.asObservable();
   constructor(private router:Router) { }
 
   isAuthenticated(): boolean {
@@ -29,16 +33,10 @@ export class AuthService {
   getUserName(){
     return localStorage.getItem("EHL_UserName");
   }
-  getRoleType(){
-    return localStorage.getItem("EHL_RoleType");
-  }
   getRoleId(){
     return localStorage.getItem("EHL_RoleId");
   }
   clear() {
-    localStorage.removeItem('EHL_TOKEN');
-    localStorage.removeItem('EHL_RoleType');
-    localStorage.removeItem('EHL_UserName');
     this.navigateToLogin(this.router.routerState.snapshot.url);
 
   }
@@ -46,17 +44,20 @@ export class AuthService {
     this.router.navigate(['/landing'], { queryParams: { 1: { returnUrl: stateUrl } } });
   }
   setWingDetails(wing){
-    localStorage.setItem("Wing_Name",wing.name);
     this.wingSubject.next(wing.name);
-    localStorage.setItem("Wing_Id",wing.id);
+    this.wingIdSubject.next(wing.id);
+  }
+  setRoleType(role){
+    this.userRoleSubject.next(role);
+  }
+  getRoleType(){
+    return this.userRoleSubject.getValue();
   }
   getWingName(){
-    if(localStorage.getItem("Wing_Name"))
-      this.wingSubject.next(localStorage.getItem("Wing_Name"))
     return this.wingSubject.getValue();
   }
   getWingId(){
-    return localStorage.getItem("Wing_Id");
+    return this.wingIdSubject.getValue();
   }
   clearWing() {
     this.wingSubject.next(null);

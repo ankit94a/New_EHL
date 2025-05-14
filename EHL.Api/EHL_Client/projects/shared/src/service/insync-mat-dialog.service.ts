@@ -45,4 +45,19 @@ export class BISMatDialogService {
     });
     return dialogRef.afterClosed();
   }
+   openDialogForChatBox(compononetName,dataObject) {
+  const dialogConfig = new MatDialogConfig();
+  dialogConfig.disableClose = false;
+  dialogConfig.autoFocus = true;
+  dialogConfig.data = dataObject;
+  dialogConfig.width= '25vw';
+  dialogConfig. maxWidth='65vw';
+  dialogConfig.height = '30vw';
+  dialogConfig.backdropClass = 'blur-background';
+  dialogConfig.position = { bottom: '10px', right: '20px' };
+  dialogConfig.panelClass = 'custom-dialog-container';  // Optional: for custom styling
+
+  // Open the dialog
+  this.dialog.open(compononetName, dialogConfig);
+}
 }

@@ -5,7 +5,7 @@ export const routes: Routes = [
   {
       path: '',
       loadChildren: () => import('../layout/layout.routes').then(m => m.routes),
-      canActivate: [AuthGuard],
+      // canActivate: [AuthGuard],
   },
   {
       path: 'landing',

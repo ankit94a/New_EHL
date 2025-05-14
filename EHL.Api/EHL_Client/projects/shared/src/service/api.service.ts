@@ -12,7 +12,7 @@ export class ApiService {
   constructor(private http: HttpClient) { }
 
   getWithHeaders(url: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}${url}`).pipe(
+    return this.http.get(`${this.baseUrl}${url}`,{ withCredentials: true }).pipe(
       map((res: any) => {
         if (res) {
           return res;
@@ -24,7 +24,7 @@ export class ApiService {
       })
     );
   }
-  postWithHeaderToDownload(url: string, data: any): Observable<Blob> {
+  postWithHeaderToDownload(url: string, data: any,): Observable<Blob> {
     const headers = new HttpHeaders({
       'Accept': 'application/octet-stream' // Ensures the backend returns binary data
     });
@@ -40,7 +40,9 @@ export class ApiService {
     );
   }
   postWithHeader(url: string, Data: any): Observable<any> {
-    return this.http.post(`${this.baseUrl}` + url, Data).pipe(map(
+    return this.http.post(`${this.baseUrl}` + url, Data,{
+  withCredentials: true
+}).pipe(map(
       (res: any) => {
         if (res) {
           return res;

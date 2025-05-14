@@ -11,6 +11,7 @@ using EHL.Business.Implements;
 using EHL.DB.Infrastructure;
 using EHL.DB.Implements;
 using BIS.Api.Extensions;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace EHL.Api
 {
@@ -39,6 +40,15 @@ namespace EHL.Api
 						   .AllowCredentials();
 				});
 			});
+			services.Configure<FormOptions>(options =>
+			{
+				options.MultipartBodyLengthLimit = 104857600;
+			});
+			services.AddHttpContextAccessor();
+			//services.AddSession();
+			services.AddSession();
+
+
 			services.AddResponseCompression(options =>
 			{
 				options.EnableForHttps = true;
@@ -72,7 +82,7 @@ namespace EHL.Api
 				app.UseSwagger();
 				app.UseSwaggerUI(c =>
 				{
-					c.SwaggerEndpoint("/swagger/v1/swagger.json", "BIS API v1");
+					c.SwaggerEndpoint("/swagger/v1/swagger.json", "EHL API v1");
 					c.RoutePrefix = string.Empty;
 				});
 
@@ -93,9 +103,11 @@ namespace EHL.Api
 			app.UseWebSockets();
 			app.UseRouting();
 			app.UseCors("_myAllowSpecificOrigins");
+
 			app.UseAuthentication();
 			app.UseAuthorization();
 			app.UseResponseCompression();
+			app.UseSession();
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();

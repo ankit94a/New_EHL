@@ -1,4 +1,5 @@
-﻿using EHL.Api.Helpers;
+﻿using EHL.Api.Authorization;
+using EHL.Api.Helpers;
 using EHL.Business.Interfaces;
 using EHL.Common.Models;
 using InSync.Api.Helpers;
@@ -11,16 +12,21 @@ namespace EHL.Api.Controllers
 	public class EmerController : ControllerBase
 	{
 		private readonly IEmerManager _emmerManager;
+		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public EmerController(IEmerManager emmerManager)
+		public EmerController(IEmerManager emmerManager, IHttpContextAccessor httpContextAccessor)
 		{
 			_emmerManager = emmerManager;
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		[HttpGet, Route("wing/{wingId}")]
 		public IActionResult GetAllEmer(long wingId)
 		{
-			var role = HttpContext.GetRoleType();
+			var sessUser = new SessionManager(_httpContextAccessor);
+			var userId = sessUser.UserId;
+			var roleType = sessUser.RoleType;
+			
 			return Ok(_emmerManager.GetAllEmer(wingId));
 		}
 		[HttpGet, Route("mastersheet")]
@@ -31,6 +37,7 @@ namespace EHL.Api.Controllers
 		[HttpGet, Route("latest/emer")]
 		public IActionResult GetLatestEmer()
 		{
+
 			return Ok(_emmerManager.GetLatestEmer());
 		}
 		[HttpGet, Route("latest/policy")]

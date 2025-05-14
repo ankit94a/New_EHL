@@ -1,8 +1,153 @@
-.logo{
+.logo {
   height: 55px;
   width: 60px;
   border-radius: 50%;
 }
-.content{
+
+.content {
   min-height: 87.9vh;
 }
+
+.chat-btn-wrapper.minimized {
+  transform: scale(0.6);
+  transform: translateX(95px);
+}
+
+.chat-btn-wrapper {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  transition: transform 0.4s ease;
+  z-index: 10;
+}
+
+.chat-popup,
+.chat-plus-icon {
+  background-color: rgb(212, 68, 68);
+  color: #fff;
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  bottom: 6vw;
+  right: 5vw;
+  position: absolute;
+
+}
+
+.chat-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  position: absolute;
+  bottom: 2vw;
+  right: 0vw;
+  // width: 50%;
+}
+
+.chatbox-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #fff;
+  object-fit: cover;
+  filter: drop-shadow(0.35rem 0.35rem 0.4rem rgba(0, 0, 0, 0.4));
+}
+
+.chatbox-text {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  font-family: 'Segoe UI', sans-serif;
+  pointer-events: none;
+}
+
+
+
+/* When minimized, push layout toward far right */
+// .chat-btn-wrapper.minimized {
+//   transform: translateX(95px); /* You can adjust this further if needed */
+// }
+
+
+// .chat-btn {
+//   background: none;
+//   border: none;
+//   padding: 0;
+//   cursor: pointer;
+//   position: relative;
+// }
+
+.chatbox-text {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 4px 10px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 6px;
+  font-family: 'Segoe UI', sans-serif;
+  pointer-events: none;
+}
+
+// /* Toggle buttons (- and +) */
+.chat-popup {
+  position: absolute;
+  bottom: 6vw;
+  right: 5vw;
+  background-color: rgb(212, 68, 68);
+  color: #fff;
+  font-size: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 20;
+}
+
+// .chat-plus-icon {
+// //  position: absolute;
+//   position: fixed;
+//   bottom: 6vw;
+//   right: 5vw;
+//   background-color: rgb(212, 68, 68);
+//   color: #fff;
+//   font-size: 24px;
+//   width: 30px;
+//   height: 30px;
+//   border-radius: 50%;
+//   border: none;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+//   cursor: pointer;
+//   transition: all 0.3s ease;
+//   z-index: 20;
+// }
+

@@ -1,15 +1,49 @@
-<div class="pdf-container">
-  <iframe
-    src="confidential.pdf"
-    width="100%"
-    height="100%"
-    style="border: none;"
-  ></iframe>
+<div class="pdf-container" *ngIf="isOfficerLoggedIn">
+  <iframe src="confidential.pdf" width="100%" height="100%" style="border: none;"></iframe>
+  <!-- <pdf-viewer
+      src="confidential.pdf"
+      [render-text]="true"
+      [show-all]="true"
+      style="display: block;"
+    ></pdf-viewer> -->
 </div>
 
+<div class="officer-infobox" *ngIf="!isOfficerLoggedIn">
+  <!-- <h4>Only For Officer's Login</h4>
+  <p>Insert your token</p>
+  <mat-form-field>
+    <mat-label>Token</mat-label>
+    <input type="text" placeholder="token">
+  </mat-form-field>
+  <div class="row">
+    <div class="col-md-1"><button class="btn btn-primary">Connect With Army No.</button></div>
+    <div class="col-md-1"><button class="btn btn-warning">Connect With FingerPrint</button></div>
+    <div class="col-md-1"><button class="btn btn-danger">Connect With User Name</button></div>
+  </div> -->
 
-<!-- <pdf-viewer src="confidential.pdf"
-              [render-text]="true"
-              [original-size]="false"
+   <div class="login-container">
+    <div class="login-box">
+      <!-- <div class="logo">
+        <i class="fa-solid fa-globe"></i>
+      </div> -->
+      <h2>Welcome back ! Only For Officer's Login</h2>
+      <p>Please enter your details to sign in</p>
 
-  ></pdf-viewer> -->
+      <form>
+        <label>Token</label>
+        <input type="email" placeholder="Token" required />
+
+        <!-- <label>Password</label>
+        <div class="password-field">
+          <input type="password" placeholder="••••••••" required />
+          <i class="fa-solid fa-eye-slash toggle-password"></i>
+        </div> -->
+
+        <button type="submit" class="sign-in">Via Army No</button>
+        <button type="submit" class="btn-all btn-warning">Via FingerPrint</button>
+        <button type="submit" class="btn-all btn-danger">Via User Name</button>
+      </form>
+    </div>
+  </div>
+</div>
+

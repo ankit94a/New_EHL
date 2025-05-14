@@ -13,7 +13,21 @@
     <div class="content" >
 
       <router-outlet></router-outlet>
+<div [ngClass]="{'minimized': isMinimized}" class="chat-btn-wrapper">
 
+   <!-- Toggle buttons -->
+   <button class="chat-popup" *ngIf="!isMinimized" (click)="changeClass()">-</button>
+   <button class="chat-plus-icon" *ngIf="isMinimized" (click)="changeClass()">+</button>
+
+   <!-- Main image button -->
+   <button class="chat-btn" (click)="chatbox()">
+     <img src="/army_man.jpg" alt="Army Man" class="chatbox-img">
+      <!-- <video src="/CHAT_AI.mp4" autoplay muted loop class="chatbox-video"></video> -->
+
+     <span class="chatbox-text">EHL</span>
+   </button>
+
+ </div>
     </div>
     <lib-footer></lib-footer>
   </mat-drawer-content>

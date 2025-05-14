@@ -19,6 +19,11 @@ public class Program
 
 		}).ConfigureWebHostDefaults(webBuilder =>
 		{
+			webBuilder.ConfigureKestrel(serverOptions =>
+			{
+				serverOptions.Limits.MaxRequestBodySize = 104857600; // 100 MB
+			});
 			webBuilder.UseStartup<Startup>();
+			
 		}).UseNLog();
 }

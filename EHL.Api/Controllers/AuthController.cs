@@ -11,36 +11,57 @@ namespace EHL.Api.Controllers
 	{
 		private readonly IUserManager _userManager;
 		readonly IJwtManager _jwtManager;
-		public AuthController(IUserManager userManager, IJwtManager jwtManager)
+		private IHttpContextAccessor _httpContextAccessor;
+		public AuthController(IUserManager userManager, IJwtManager jwtManager, IHttpContextAccessor httpContextAccessor)
 		{
 			_userManager = userManager;
 			_jwtManager = jwtManager;
+			_httpContextAccessor = httpContextAccessor;
 		}
 
 		[HttpPost, Route("login")]
-		public dynamic DoLogin([FromBody] Login login)
+		public bool DoLogin([FromBody] Login login)
 		{
 			IActionResult response = Unauthorized();
 			var user = _userManager.GetUserByEmailPassword(login.UserName, login.Password);
 			if (user != null)
 			{
 				var jwtToken = _jwtManager.GenerateJwtToken(user);
-				var model = new
+				var sessUser = new SessionManager(_httpContextAccessor)
 				{
-					userName = user.Name,
-					roleType = user.RoleType,
-					roleId = user.RoleId
+					UserId = user.Id,
+					UserName = user.Name,
+					RoleId = user.RoleId.ToString(),
+					RoleType = user.RoleType.ToString(),
+					Access_Token = jwtToken
 				};
-				response = Ok(new { token = jwtToken, user = model });
+				var _ = _httpContextAccessor.HttpContext.Session.Id;
+				return true;
 			}
-			return response;
+			return false;
 		}
 
-		[HttpGet,Route("rolepermission")]
+		[HttpGet, Route("rolepermission")]
 		public IActionResult GetRolePermission()
 		{
 			var roleId = HttpContext.GetRoleId();
 			return Ok(_userManager.GetAllRolePermission(roleId));
 		}
+		[HttpGet, Route("role/type")]
+		public IActionResult GetRole()
+		{
+			var sessUser = new SessionManager(_httpContextAccessor);
+			var roleType = sessUser.RoleType;
+			return Ok(roleType);
+		}
+
+		[HttpGet, Route("logout")]
+		public IActionResult UserLogout()
+		{
+			var sessUser = new SessionManager(_httpContextAccessor);
+			var result = sessUser.Logout();
+			return Ok(new { message = result });
+		}
+
 	}
 }

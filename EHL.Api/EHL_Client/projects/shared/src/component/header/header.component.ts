@@ -6,6 +6,7 @@ import { LanguageComponent } from '../language/language.component';
 import { UserProfileComponent } from 'projects/admin/src/layout/user-profile/user-profile.component';
 import { BISMatDialogService } from '../../service/insync-mat-dialog.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { ApiService } from '../../service/api.service';
 
 @Component({
   selector: 'app-header',
@@ -18,7 +19,7 @@ export class HeaderComponent implements OnInit {
   wing$: Observable<string | null>;
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
-  constructor(private authService:AuthService,private dialogService:BISMatDialogService) {
+  constructor(private authService:AuthService,private dialogService:BISMatDialogService,private apiService:ApiService) {
     this.wing$ = this.authService.wing$;
   }
 
@@ -39,8 +40,14 @@ export class HeaderComponent implements OnInit {
   }
 
   onLoggedout() {
-    this.authService.clear()
-    this.authService.clearWing();
+    // this.authService.clear()
+    // this.authService.clearWing();
+    this.apiService.getWithHeaders('auth/logout').subscribe(res =>{
+      debugger
+      if(res){
+        this.authService.clear()
+      }
+    })
   }
   openDialog(){
     this.dialogService.open(UserProfileComponent,null,'75vw','75vh')
