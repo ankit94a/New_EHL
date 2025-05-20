@@ -1,15 +1,18 @@
 <div class="layout">
   <div class="row">
     <div class="main">
-    <div class="col-md-11 no-space">
+      <div class="col-md-1">
+        <button mat-button class="btn-white-button" (click)="openDialog()">
+    <!-- <i class="fa fa-sign-out" aria-hidden="true"></i> -->
+    <span>Admin Login</span>
+  </button>
+      </div>
+    <div class="col-md-10 no-space">
       <div class="header">EQUIPMENT HELPLINE</div>
     </div>
     <div class="btn_class">
-  <a href="/wing-list/" mat-button> Go To Wings</a>
-  <button mat-button class="btn-white-button" (click)="openDialog()">
-    <i class="fa fa-sign-out" aria-hidden="true"></i>
-    <span>Sign in</span>
-  </button>
+  <a href="/wing" mat-button> User Login</a>
+  
 </div>
   </div>
 </div>
@@ -133,7 +136,7 @@
     <!-- EME Mission Section -->
     <div class="col-md-9 emi-img">
       <div class="box shadow-sm  border bg-light rounded">
-        <div class="news-header h4 mb-3">EME Mission</div>
+        <div class="news-header h4 mb-3">About EHL</div>
         <div class="emi-content row">
           <!-- Image & Text -->
           <div class="emi-content1">
@@ -179,7 +182,7 @@
   <br />
   <div class="row background landing-footer">
     <div class="col-md-5 center">
-      <div class="title">Contact No of HQ TGEME Wings</div>
+      <div class="title">Contact No of HQ TG EME Wings</div>
       <div class="row">
         <div class="col-6 contact-list">
           <p><strong>AE Wing:</strong> 123456789</p>

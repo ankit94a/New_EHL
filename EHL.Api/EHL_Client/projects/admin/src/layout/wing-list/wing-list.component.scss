@@ -8,7 +8,7 @@
   overflow: hidden;
   transition: transform 0.3s;
   // height: 390px;
-  height: 41vh;
+  height: 50vh;
 }
 
 // .card:hover {
@@ -17,7 +17,7 @@
 
 .card img {
   width: 100%;
-  height: 180px; /* Fixed height */
+  height: 130px; /* Fixed height */
   object-fit: cover; /* Show full image with cropping */
   flex-shrink: 0;
 }

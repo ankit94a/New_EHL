@@ -73,7 +73,7 @@ export class LandingPageComponent {
     })
   }
   openDialog(){
-    this.dialogService.open(LoginComponent,null,'30vw','42vh');
+    this.dialogService.open(LoginComponent,null,'30vw','52vh');
   }
 getFileId($event,type) {
 

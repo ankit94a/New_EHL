@@ -33,12 +33,12 @@ export class LoginComponent {
     if (this.loginform.invalid) {
       return;
     }
+    this.authService.setRoleType('1')
     this.apiService.postWithHeader('auth/login',this.loginform.value).subscribe(async (res) =>{
-      debugger
       if(res){
         // this.authService.setToken(res.token)
         // this.authService.setUserDetails(res.user)
-        await this.getUserRole()
+        // await this.getUserRole()
         this.dialog.closeAll();
         this.router.navigate(['/wing']);
       }else {
@@ -48,6 +48,7 @@ export class LoginComponent {
   }
   getUserRole(){
     this.apiService.getWithHeaders('auth/role/type').subscribe(res =>{
+      debugger
       if(res){
         this.authService.setRoleType(res)
       }

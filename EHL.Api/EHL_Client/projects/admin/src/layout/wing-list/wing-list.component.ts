@@ -16,7 +16,6 @@ export class WingListComponent {
   wingList:Wing[]=[];
   roleType;
   constructor(private apiService:ApiService,private authService:AuthService,private router: Router){
-
     this.getWingList();
     this.roleType = this.authService.getRoleType();
   }
@@ -35,7 +34,7 @@ export class WingListComponent {
   }
   setWingData(wing){
     this.authService.setWingDetails(wing);
-    if(this.roleType == '2' || this.roleType == '3'){
+    if(this.roleType == null ){
       this.router.navigate(['/emer']);
     }else{
       this.router.navigate(['/dashboard']);

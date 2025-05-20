@@ -4,12 +4,11 @@
   padding: 12px;
 
 }
-
 .heading::after,
 .chat::after {
   content: "";
   position: absolute;
-  left: 0;
+  left: 6px;
   bottom: 0;
   height: 4px;
   width: 100%;

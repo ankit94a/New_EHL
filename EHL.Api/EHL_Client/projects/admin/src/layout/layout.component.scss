@@ -30,8 +30,8 @@
   background-color: rgb(212, 68, 68);
   color: #fff;
   font-size: 30px;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   border: none;
   display: flex;
@@ -57,8 +57,8 @@
 }
 
 .chatbox-img {
-  width: 120px;
-  height: 120px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   background-color: #fff;
   object-fit: cover;
@@ -115,12 +115,12 @@
 .chat-popup {
   position: absolute;
   bottom: 6vw;
-  right: 5vw;
+  right: 4vw;
   background-color: rgb(212, 68, 68);
   color: #fff;
   font-size: 24px;
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   border-radius: 50%;
   border: none;
   display: flex;

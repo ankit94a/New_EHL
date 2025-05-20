@@ -48,7 +48,7 @@
 
   },
   {
-    "text": "Oil & Lubs",
+    "text": "Policies On Oils & Lubs",
     "icon": "fa-solid fa-newspaper",
     "routerLink": "/Oil",
     "permissionAction":"ViewAll",
@@ -84,7 +84,7 @@
     "permissionAction": "ViewAll",
     "children": [
       {
-        "text": "In Servise",
+        "text": "In Service",
         "icon":"fa-solid fa-file-contract",
         "routerLink":"/policy",
         "permissionAction":"ViewAll",

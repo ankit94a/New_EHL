@@ -6,15 +6,15 @@
   <div class="stats-row">
     <div class="stat-card bg-total">
       <h4 class="stat-title">Total Emer's</h4>
-      <h2 class="stat-value">10520</h2>
+      <h2 class="stat-value">{{totalEmer}}</h2>
     </div>
     <div class="stat-card bg-today">
-      <h4 class="stat-title">Today's Policies</h4>
-      <h2 class="stat-value">28</h2>
+      <h4 class="stat-title" *ngIf="wing$ | async as wing">{{wing}} Emer's</h4>
+      <h2 class="stat-value">{{totalWingEmer}}</h2>
     </div>
     <div class="stat-card bg-week">
-      <h4 class="stat-title">Last 7 Added Emer's</h4>
-      <h2 class="stat-value">6</h2>
+      <h4 class="stat-title" *ngIf="wing$ | async as wing">Last 6 Month Added {{wing}} Emer's</h4>
+      <h2 class="stat-value">{{lastSixMAddedEmer}}</h2>
     </div>
   </div>
 

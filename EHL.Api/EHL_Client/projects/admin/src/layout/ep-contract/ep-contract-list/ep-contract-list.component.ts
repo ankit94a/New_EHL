@@ -28,6 +28,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
   filterModel: PolicyFilterModel = new PolicyFilterModel();
   isRefresh: boolean = false;
   userType;
+  isOfficerLoggedIn:boolean =false;
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
@@ -42,6 +43,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
+      this.isOfficerLoggedIn = true;
     }
 
     this.tablePaginationSettings.pageSizeOptions = [50, 100];

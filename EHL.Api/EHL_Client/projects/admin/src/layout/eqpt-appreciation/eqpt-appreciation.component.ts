@@ -29,6 +29,7 @@ export class EqptAppreciationComponent extends TablePaginationSettingsConfig {
   filterModel: Policy = new Policy();
   isRefresh: boolean = false;
   userType;
+  isOfficerLoggedIn:boolean=false;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -41,6 +42,7 @@ export class EqptAppreciationComponent extends TablePaginationSettingsConfig {
     if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
+      this.isOfficerLoggedIn = true;
     }
 
     this.tablePaginationSettings.enableColumn = true;
