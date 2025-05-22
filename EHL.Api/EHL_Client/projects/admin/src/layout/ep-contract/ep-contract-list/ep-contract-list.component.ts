@@ -16,11 +16,12 @@ import { DeleteModel } from 'projects/shared/src/models/attribute.model';
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
+import { EcrTokenComponent } from 'projects/shared/src/component/ecr-token/ecr-token.component';
 
 @Component({
   selector: 'app-ep-contract-list',
   standalone: true,
-  imports: [SharedLibraryModule, ZipperTableComponent],
+  imports: [SharedLibraryModule, ZipperTableComponent,EcrTokenComponent],
   templateUrl: './ep-contract-list.component.html',
   styleUrl: './ep-contract-list.component.scss',
 })
@@ -29,6 +30,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
   filterModel: PolicyFilterModel = new PolicyFilterModel();
   isRefresh: boolean = false;
   userType;
+    isOfficerLoggedIn:boolean=false;
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
@@ -44,6 +46,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
+      this.isOfficerLoggedIn = true;
     }
 
     this.tablePaginationSettings.pageSizeOptions = [50, 100];

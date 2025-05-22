@@ -6,7 +6,10 @@
         <button class="btn btn-danger" (click)="openDailog()" *ngIf="userType == '1'">+ Add EpContract</button>
       </div>
     </div>
-    <div class="row">
+    <div class="pdf-container" *ngIf="!isOfficerLoggedIn">
+  <lib-ecr-token></lib-ecr-token>
+</div>
+    <div class="row" *ngIf="isOfficerLoggedIn">
       <div class="col-md-4">
         <mat-form-field appearance="fill">
           <mat-label>Contract Type</mat-label>
@@ -22,7 +25,7 @@
       </div>
     </div>
 
-    <app-table *ngIf="epContractList.length > 0" [rowData]="epContractList" [tablePaginationSettings]="tablePaginationSettings"
+    <app-table *ngIf="epContractList.length > 0 && isOfficerLoggedIn" [rowData]="epContractList" [tablePaginationSettings]="tablePaginationSettings"
       [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
       (edit)="edit($event)" (delete)="delete($event)" [sqColumnDefinition]="columns" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
       >

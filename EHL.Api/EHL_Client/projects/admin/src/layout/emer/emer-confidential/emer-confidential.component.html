@@ -1,4 +1,4 @@
-<div class="pdf-container">
+<div class="pdf-container" *ngIf="isOfficerLoggedIn">
   <iframe
     src="confidential.pdf"
     width="100%"
@@ -7,7 +7,9 @@
   ></iframe>
 </div>
 
-
+<div class="pdf-container" *ngIf="!isOfficerLoggedIn">
+  <lib-ecr-token></lib-ecr-token>
+</div>
 <!-- <pdf-viewer src="confidential.pdf"
               [render-text]="true"
               [original-size]="false"

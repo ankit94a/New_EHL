@@ -36,6 +36,31 @@
     max-height: 300px;
   }
 
-.sidebar-img{
-  /* background-image: url('../../../../admin/public/sidebar-1.jpg'); */
+
+
+.menu-icon {
+  font-size: 18px;
+  color: #000000;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.menu-icon:hover {
+  color: #c81414;
+  cursor: pointer;
+}
+
+.nav-caption {
+  font-size: 18px;
+  font-weight: 500;
+  color: #000000;
+  padding: 4px 8px;
+  white-space: nowrap;
+  text-transform: uppercase;
+  /* text-align: center; */
+  /* background-color: linear-gradient(60deg, rgb(139, 0, 0),rgb(255, 99, 71)); */
+
+}
+.nav-caption:hover {
+  color: #c81414;
+  cursor: pointer;
 }

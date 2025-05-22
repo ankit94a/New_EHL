@@ -6,7 +6,10 @@
         <button class="btn btn-danger" (click)="openDailog()" *ngIf="userType == '1'">+ Add Eqpt Appreciation</button>
       </div>
     </div>
-    <app-table *ngIf="ispl.length > 0" [rowData]="ispl" [tablePaginationSettings]="tablePaginationSettings"
+    <div class="pdf-container" *ngIf="!isOfficerLoggedIn">
+  <lib-ecr-token></lib-ecr-token>
+</div>
+    <app-table *ngIf="ispl.length > 0 && isOfficerLoggedIn" [rowData]="ispl" [tablePaginationSettings]="tablePaginationSettings"
       [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
        [sqColumnDefinition]="columns" (edit)="edit($event)" (delete)="delete($event)" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
       >

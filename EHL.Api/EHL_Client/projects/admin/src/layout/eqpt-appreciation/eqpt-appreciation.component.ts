@@ -18,11 +18,12 @@ import { AddEqptAppreciationComponent } from './add-eqpt-appreciation/add-eqpt-a
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
+import { EcrTokenComponent } from 'projects/shared/src/component/ecr-token/ecr-token.component';
 
 @Component({
   selector: 'app-eqpt-appreciation',
   standalone: true,
-imports: [SharedLibraryModule,ZipperTableComponent],
+imports: [SharedLibraryModule,ZipperTableComponent,EcrTokenComponent],
   templateUrl: './eqpt-appreciation.component.html',
   styleUrl: './eqpt-appreciation.component.scss'
 })
@@ -31,6 +32,7 @@ export class EqptAppreciationComponent extends TablePaginationSettingsConfig {
   filterModel: Policy = new Policy();
   isRefresh: boolean = false;
   userType;
+    isOfficerLoggedIn:boolean=false;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -44,6 +46,7 @@ export class EqptAppreciationComponent extends TablePaginationSettingsConfig {
     if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
+      this.isOfficerLoggedIn = true;
     }
 
     this.tablePaginationSettings.enableColumn = true;

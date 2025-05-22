@@ -35,10 +35,9 @@
         "permissionName": "IndexEmer",
         "permissionAction": "ViewAll"
       }
-
     ]
   },
-  {
+   {
 
     "text": "Tech Manuals/Publications",
     "icon": "fa-solid fa-bars-progress",
@@ -47,36 +46,14 @@
     "permissionAction": "ViewAll"
 
   },
-  {
-    "text": "Policies On Oils & Lubs",
-    "icon": "fa-solid fa-newspaper",
-    "routerLink": "/Oil",
-    "permissionAction":"ViewAll",
-    "permissionName": "Oillubs"
-  },
-  {
+    {
     "text": "Technical AO/AI",
     "icon": "fa-solid fa-newspaper",
     "routerLink": "/technical-ao/ai",
     "permissionName": "TechnicalAoAI",
     "permissionAction": "ViewAll"
   },
-  {
-    "text": "Contracts",
-    "icon": "fa-solid fa-truck-fast",
-    "routerLink": "/ep-contract",
-    "permissionName": "EpContract",
-    "permissionAction": "ViewAll"
-
-  },
-  {
-    "text": "MRLS Distr List",
-    "icon": "fa-solid fa-bookmark",
-    "routerLink": "/mrls-distr",
-    "permissionName": "MrlsDistrList",
-    "permissionAction": "ViewAll"
-  },
-  {
+   {
     "text": "Policies",
     "icon": "fa-solid fa-file-contract",
     "routerLink": "/policy",
@@ -99,32 +76,53 @@
       }
     ]
   },
+   {
+    "text": "Contracts",
+    "icon": "fa-solid fa-truck-fast",
+    "routerLink": "/ep-contract",
+    "permissionName": "EpContract",
+    "permissionAction": "ViewAll"
 
-  {
+  },
+    {
+    "text": "MRLS Distr List",
+    "icon": "fa-solid fa-bookmark",
+    "routerLink": "/mrls-distr",
+    "permissionName": "MrlsDistrList",
+    "permissionAction": "ViewAll"
+  },
+    {
     "text": "ISPL",
     "icon": "fa-solid fa-bookmark",
     "routerLink": "/ispl",
     "permissionName": "ISPL",
     "permissionAction": "ViewAll"
   },
-  {
-    "text": "Defect Report",
+    {
+    "text": "SMTE/STE Distr List",
     "icon": "fa-solid fa-file-excel",
-    "routerLink": "/defect-report",
+    "routerLink": "/smte/ste-distr",
     "permissionName": "DefectReport",
     "permissionAction": "ViewAll"
   },
-  {
+   {
+    "text": "Oils & Lubs",
+    "icon": "fa-solid fa-newspaper",
+    "routerLink": "/Oil",
+    "permissionAction":"ViewAll",
+    "permissionName": "Oillubs"
+  },
+    {
     "text": "Eqpt Appreciation",
     "icon": "fa-solid fa-file-excel",
     "routerLink": "/eqpt-appreciation",
     "permissionName": "DefectReport",
     "permissionAction": "ViewAll"
   },
-  {
-    "text": "SMTE/STE Distr List",
+    {
+    "text": "Defect Report",
     "icon": "fa-solid fa-file-excel",
-    "routerLink": "/smte/ste-distr",
+    "routerLink": "/defect-report",
     "permissionName": "DefectReport",
     "permissionAction": "ViewAll"
   },
@@ -134,9 +132,8 @@
     "routerLink": "/eqpt-mgrs",
     "permissionName": "EqptMgrs",
     "permissionAction": "ViewAll"
-
   },
-  {
+   {
     "text": "Attribute",
     "icon": "fa-brands fa-creative-commons-nd",
     "routerLink": "/attribute",

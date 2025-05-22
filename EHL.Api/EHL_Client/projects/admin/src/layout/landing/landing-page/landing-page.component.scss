@@ -27,27 +27,10 @@ $background-color:rgb(139, 0, 0);
     flex-wrap: wrap;
 }
 
-.btn-white-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: white !important;
-  background-color: transparent;
-  white-space: nowrap;
-  border: none;
-  font-size: 15px;
-  text-transform: none;
-}
-
-
-.btn-white-button i {
-  color: white !important;
-}
-
 
 a[mat-button] {
   white-space: nowrap;
-  color: white !important;
+  // color: white !important;
   text-transform: none;
   font-weight: 500;
 }
@@ -56,7 +39,7 @@ a[mat-button] {
 .btn {
   border: none;
   padding: 10px;
-  color: white;
+  background-color: #fff;
   cursor: pointer;
   border-radius: 4px;
   font-size: 16px;
@@ -442,4 +425,13 @@ a[mat-button] {
 }
 .btn-link{
   font-size: 14px;
+}
+
+a[mat-button] {
+  white-space: nowrap;
+  // color: white !important;
+  color: black;
+  background-color: #fff;
+  text-transform: none;
+  font-weight: 500;
 }

@@ -412,3 +412,16 @@ mat-header-row,
 .insync-row{
 		margin:0px !important;
 	  }
+
+    .pdf-container {
+  height: 78vh; /* full viewport height */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  color: #fff;
+  background-color: #fff;
+  display: flex;
+    align-items: center;
+    justify-content: center;
+}

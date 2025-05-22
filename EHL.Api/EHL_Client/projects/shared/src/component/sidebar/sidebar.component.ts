@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit {
   @Output() isloaded = new EventEmitter();
   roleType;
   constructor(private http: HttpClient,private authService:AuthService) {
-debugger
+
     this.http.get<any[]>('/menu.json').subscribe(data => {
       this.sideBarMenus = data;
     });

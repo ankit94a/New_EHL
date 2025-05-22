@@ -13,11 +13,12 @@ import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
 import { EncryptionService } from 'projects/shared/src/service/encryption.service';
+import { EcrTokenComponent } from 'projects/shared/src/component/ecr-token/ecr-token.component';
 
 @Component({
   selector: 'app-techincal-ao-ai',
   standalone: true,
-  imports: [SharedLibraryModule, ZipperTableComponent],
+  imports: [SharedLibraryModule, ZipperTableComponent,EcrTokenComponent],
   templateUrl: './techincal-ao-ai.component.html',
   styleUrl: './techincal-ao-ai.component.scss',
 })
@@ -26,6 +27,7 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
   filterModel: TechnicalAoAi = new TechnicalAoAi();
   isRefresh: boolean = false;
   userType;
+  isOfficerLoggedIn:boolean=false;
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
@@ -39,6 +41,7 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
     if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
+      this.isOfficerLoggedIn = true;
     }
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];

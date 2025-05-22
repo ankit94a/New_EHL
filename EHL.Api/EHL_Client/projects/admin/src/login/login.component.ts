@@ -48,7 +48,7 @@ export class LoginComponent {
   }
   getUserRole(){
     this.apiService.getWithHeaders('auth/role/type').subscribe(res =>{
-      debugger
+
       if(res){
         this.authService.setRoleType(res)
       }
