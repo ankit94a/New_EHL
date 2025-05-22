@@ -11,6 +11,7 @@ import {
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'projects/shared/src/service/auth.service';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-policy-add',
@@ -39,6 +40,7 @@ export class PolicyAddComponent {
     private apiService: ApiService,
     private fb: FormBuilder,
     private toastr: ToastrService,
+    private EncryptionService: EncryptionService
   ) {
     this.wingId = parseInt(this.authService.getWingId());
     this.getWings();
@@ -68,7 +70,7 @@ export class PolicyAddComponent {
     });
 
     this.fileName = policyData.fileName;
-    this.fileSizeFormatted = 'Not Defined';
+    this.fileSizeFormatted = '';
     this.filePath = policyData.filePath;
 
   }
@@ -112,15 +114,16 @@ export class PolicyAddComponent {
         }
       });
   }
-  save() {
-
+ async save() {
     const formData = new FormData();
     var wing = this.wingList.find(
       (item) => item.id == this.policy.get('wingId')?.value
     ).name;
     formData.append('wing', wing);
+    const policyId = this.policy.get('id')?.value
+      ? this.policy.get('id')?.value
+      : 0;
 
-    const policyId = this.policy.get('id')?.value;
 
     //edit
     if (policyId > 0) {
@@ -132,45 +135,63 @@ export class PolicyAddComponent {
           formData.append('fileName', this.fileName);
           formData.append('filePath', this.filePath);
         } else {
-          return this.alertMessage = 'File is required';
+          return (this.alertMessage = 'File is required');
         }
       }
-      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.policy, 'policyFile')
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(
+        this.policy,
+        'policyFile'
+      );
+
       if (isValid) {
-        formData.append('id',this.policy.get('id')?.value);
+        formData.append('id', policyId);
         formData.append('wing', wing);
-        var category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value).name;
-        var subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name;
-        formData.append('category', category);
-        formData.append('subCategory', subCategory);
-        formData.append('eqpt', this.policy.get('eqpt')?.value);
-        formData.append('subCategoryId', this.policy.get('subCategoryId')?.value);
-        formData.append('type', this.policy.get('type')?.value);
+        formData.append(
+          'subCategoryId',
+          this.policy.get('subCategoryId')?.value
+        );
+        formData.append('type', 'Policy Compendium');
         formData.append('wingId', this.policy.get('wingId')?.value);
         formData.append('categoryId', this.policy.get('categoryId')?.value);
         formData.append('policyFile', this.policy.get('policyFile')?.value);
-        formData.append('remarks', this.policy.get('remarks')?.value);
+
+       const rawObject = {
+          eqpt: this.policy.get('eqpt')?.value,
+          category: this.categoryList.find(
+            (x) => x.id == this.policy.get('categoryId')?.value
+          )?.name,
+          subCategory: this.subCategoryList.find(
+            (x) => x.id == this.policy.get('subCategoryId')?.value
+          )?.name,
+          remarks: this.policy.get('remarks')?.value,
+          wing: this.wingList.find(
+            (w) => w.id == this.policy.get('wingId')?.value
+          )?.name,
+        };
+        const encrypted = await this.EncryptionService.encryptObjectValues(
+          rawObject
+        );
+        Object.entries(encrypted).forEach(([key, value]) =>
+          formData.append(key, String(value))
+        );
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success('Policy submitted successfully', 'Success');
+            this.toastr.success('Policy Compendium submitted successfully', 'Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
-            this.toastr.error('Error submitting policy', 'Error');
+            this.toastr.error('Error submitting Policy Compendium', 'Error');
           },
         });
-      }else{
-         this.policy.markAllAsTouched();
+      } else {
+        this.policy.markAllAsTouched();
         return;
       }
     }
     //add
-
     else {
-      const category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
-      const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
-      formData.append('type', this.policy.get('type')?.value);
+      formData.append('type', 'Policy Compendium');
       formData.append('wingId', this.policy.get('wingId')?.value);
       formData.append(
         'id',
@@ -178,27 +199,47 @@ export class PolicyAddComponent {
       );
 
       if (this.policy.valid) {
-        formData.append('category', category);
+
         formData.append('categoryId', this.policy.get('categoryId')?.value);
-        formData.append('subCategoryId',this.policy.get('subCategoryId')?.value);
-        formData.append('subCategory', subCategory);
-        formData.append('eqpt', this.policy.get('eqpt')?.value);
+        formData.append(
+          'subCategoryId',
+          this.policy.get('subCategoryId')?.value
+        );
         formData.append('policyFile', this.policy.get('policyFile')?.value);
-        formData.append('remarks', this.policy.get('remarks')?.value);
+
+        const rawObject = {
+          eqpt: this.policy.get('eqpt')?.value,
+          category: this.categoryList.find(
+            (x) => x.id == this.policy.get('categoryId')?.value
+          )?.name,
+          subCategory: this.subCategoryList.find(
+            (x) => x.id == this.policy.get('subCategoryId')?.value
+          )?.name,
+          remarks: this.policy.get('remarks')?.value,
+          wing: this.wingList.find(
+            (w) => w.id == this.policy.get('wingId')?.value
+          )?.name,
+        };
+        const encrypted = await this.EncryptionService.encryptObjectValues(
+          rawObject
+        );
+        Object.entries(encrypted).forEach(([key, value]) =>
+          formData.append(key, String(value))
+        );
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success('Policy submitted successfully', 'Success');
+            this.toastr.success('Policy Compendium submitted successfully', 'Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
-            this.toastr.error('Error submitting policy', 'Error');
+            this.toastr.error('Error submitting Policy Compendium', 'Error');
           },
         });
       } else {
         const fileInput = this.policy.get('policyFile')?.value;
         if (!fileInput) this.alertMessage = 'File is required';
-          this.policy.markAllAsTouched();
+        this.policy.markAllAsTouched();
         return;
       }
     }

@@ -6,24 +6,7 @@
         <button class="btn btn-danger" (click)="openDailog()" *ngIf="userType == '1'">+ Add Technical Ao/Ai</button>
       </div>
     </div>
-
-      <div class="officer-infobox" *ngIf="!isOfficerLoggedIn">
-   <div class="login-container">
-    <div class="login-box">
-      <h2>Welcome back ! Only For Officer's Login</h2>
-      <p>Please enter your details to sign in</p>
-      <form>
-        <label>Token</label>
-        <input type="email" placeholder="Token" required />
-        <button type="submit" class="sign-in">Via Army No</button>
-        <button type="submit" class="btn-all btn-warning">Via FingerPrint</button>
-        <button type="submit" class="btn-all btn-danger">Via User Name</button>
-      </form>
-    </div>
-  </div>
-</div>
-
-    <app-table *ngIf="TechnicalAoAi.length > 0 && isOfficerLoggedIn" [rowData]="TechnicalAoAi" [tablePaginationSettings]="tablePaginationSettings"
+    <app-table *ngIf="TechnicalAoAi.length > 0" [rowData]="TechnicalAoAi" [tablePaginationSettings]="tablePaginationSettings"
       [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true"
        [sqColumnDefinition]="columns" (edit)="edit($event)" (delete)="delete($event)" (getFileId)="getFileId($event)" [tableMaxHeight]="'80vh'"
       >

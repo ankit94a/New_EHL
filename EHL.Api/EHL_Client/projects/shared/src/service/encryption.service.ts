@@ -1,22 +1,19 @@
+// encryption.service.ts
 import { Injectable } from '@angular/core';
 import { environment } from '../enviroments/environments.development';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class EncryptionService {
-  // Use the environment secret as the basis for key derivation.
+  static encryptObjectValues(wing: any) {
+    throw new Error('Method not implemented.');
+  }
   private password = environment.encryptionKey;
-  // Recommended iterations for PBKDF2 (can be increased for extra security, at the cost of performance)
-  private iterations = 150000;//100000
-  // Lengths in bytes for salt and initialization vector (IV)
-  private saltLength = 16; // 128-bit salt
-  private ivLength = 12;   // 96-bit IV for AES-GCM
+  private iterations = 150000;
+  private saltLength = 16;
+  private ivLength = 12;
 
-  // Derive a CryptoKey from the password and salt using PBKDF2
   private async deriveKey(salt: Uint8Array): Promise<CryptoKey> {
     const enc = new TextEncoder();
-    // Import the password as a raw key for PBKDF2
     const keyMaterial = await crypto.subtle.importKey(
       'raw',
       enc.encode(this.password),
@@ -24,93 +21,114 @@ export class EncryptionService {
       false,
       ['deriveKey']
     );
-    // Derive a 256-bit AES key using the provided salt and a high iteration count
     return crypto.subtle.deriveKey(
-      {
-        name: 'PBKDF2',
-        salt: salt,
-        iterations: this.iterations,
-        hash: 'SHA-512'
-      },
+      { name: 'PBKDF2', salt, iterations: this.iterations, hash: 'SHA-512' },
       keyMaterial,
-      {
-        name: 'AES-GCM',
-        length: 256
-      },
+      { name: 'AES-GCM', length: 256 },
       false,
       ['encrypt', 'decrypt']
     );
   }
 
-  // Helper: Convert an ArrayBuffer to a base64 string
   private bufferToBase64(buffer: ArrayBuffer): string {
-    const bytes = new Uint8Array(buffer);
-    let binary = '';
-    for (let i = 0; i < bytes.byteLength; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return window.btoa(binary);
+    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
   }
 
-  // Helper: Convert a base64 string back to an ArrayBuffer
   private base64ToBuffer(base64: string): ArrayBuffer {
-    const binary = window.atob(base64);
-    const bytes = new Uint8Array(binary.length);
-    for (let i = 0; i < binary.length; i++) {
-      bytes[i] = binary.charCodeAt(i);
-    }
-    return bytes.buffer;
+    const binary = atob(base64);
+    return Uint8Array.from(binary, (char) => char.charCodeAt(0)).buffer;
   }
 
-  // Encrypts plaintext and returns a base64 encoded string containing: salt | iv | ciphertext
   public async encrypt(plainText: string): Promise<string> {
     const enc = new TextEncoder();
-    // Generate a random salt and IV
     const salt = crypto.getRandomValues(new Uint8Array(this.saltLength));
     const iv = crypto.getRandomValues(new Uint8Array(this.ivLength));
-
-    // Derive an AES-256-GCM key from the password using the random salt
     const key = await this.deriveKey(salt);
-
-    // Encrypt the plaintext using the derived key and IV
-    const cipherBuffer = await crypto.subtle.encrypt(
-      { name: 'AES-GCM', iv: iv },
+    const cipher = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv },
       key,
       enc.encode(plainText)
     );
-
-    // Combine salt, IV, and ciphertext into one ArrayBuffer
-    const combinedBuffer = new Uint8Array(salt.byteLength + iv.byteLength + cipherBuffer.byteLength);
-    combinedBuffer.set(salt, 0);
-    combinedBuffer.set(iv, salt.byteLength);
-    combinedBuffer.set(new Uint8Array(cipherBuffer), salt.byteLength + iv.byteLength);
-
-    // Encode the combined buffer as base64 and return
-    return this.bufferToBase64(combinedBuffer.buffer);
+    const combined = new Uint8Array([
+      ...salt,
+      ...iv,
+      ...new Uint8Array(cipher),
+    ]);
+    return this.bufferToBase64(combined.buffer);
   }
 
-  // Decrypt a base64 encoded string (which contains salt | iv | ciphertext)
-  public async decrypt(encryptedData: string): Promise<string> {
-    // Convert the base64 input back to an ArrayBuffer
-    const combinedBuffer = this.base64ToBuffer(encryptedData);
-    const combined = new Uint8Array(combinedBuffer);
-
-    // Extract the salt, IV, and ciphertext based on their byte lengths
-    const salt = combined.slice(0, this.saltLength);
-    const iv = combined.slice(this.saltLength, this.saltLength + this.ivLength);
-    const cipherText = combined.slice(this.saltLength + this.ivLength);
-
-    // Re-derive the AES key using the extracted salt
+  public async decrypt(encrypted: string): Promise<string> {
+    const buffer = this.base64ToBuffer(encrypted);
+    const bytes = new Uint8Array(buffer);
+    const salt = bytes.slice(0, this.saltLength);
+    const iv = bytes.slice(this.saltLength, this.saltLength + this.ivLength);
+    const cipherText = bytes.slice(this.saltLength + this.ivLength);
     const key = await this.deriveKey(salt);
-
-    // Decrypt the ciphertext using the same parameters
-    const decryptedBuffer = await crypto.subtle.decrypt(
-      { name: 'AES-GCM', iv: iv },
+    const decrypted = await crypto.subtle.decrypt(
+      { name: 'AES-GCM', iv },
       key,
       cipherText
     );
-
-    const dec = new TextDecoder();
-    return dec.decode(decryptedBuffer);
+    return new TextDecoder().decode(decrypted);
   }
+
+  public async encryptObjectValues(obj: any): Promise<any> {
+    const encrypted: any = {};
+    for (const key in obj) {
+      const val = obj[key];
+      encrypted[key] =
+        typeof val === 'string' || typeof val === 'number'
+          ? await this.encrypt(String(val))
+          : val;
+    }
+    return encrypted;
+  }
+
+  public async decryptObjectValues(obj: any): Promise<any> {
+    const decrypted: any = {};
+    for (const key in obj) {
+      const val = obj[key];
+      try {
+        decrypted[key] = await this.decrypt(val);
+      } catch {
+        decrypted[key] = val;
+      }
+    }
+    return decrypted;
+  }
+
+public async decryptResponseList(data: any[]): Promise<any[]> {
+  return await Promise.all(
+    data.map(async (item: any) => {
+      const decryptedItem: any = {};
+
+      for (const [key, value] of Object.entries(item)) {
+        if (typeof value === 'string') {
+          decryptedItem[key] = await this.safeDecrypt(value);
+        } else {
+          decryptedItem[key] = value;
+        }
+      }
+
+      return decryptedItem;
+    })
+  );
+}
+private async safeDecrypt(value: string): Promise<string> {
+  // Check if it "looks like" an encrypted base64 string (length + allowed chars)
+  const base64Regex = /^[A-Za-z0-9+/=]{40,}$/;
+
+  if (!base64Regex.test(value)) {
+    return value; // Not encrypted, return as-is
+  }
+
+  try {
+    return await this.decrypt(value); // Your real decrypt logic
+  } catch (err) {
+    console.warn('Failed to decrypt, returning plain value:', err);
+    return value; // If decryption fails, treat as plain text
+  }
+}
+
+
 }

@@ -30,7 +30,6 @@ export class SubCategoryComponent {
     private toastr: ToastrService,
     private dailogRef: MatDialogRef<SubCategoryComponent>
   ) {
-    debugger
     this.getWing();
     if (data != null) {
        this.getCategory(data.wingId);
@@ -85,7 +84,6 @@ export class SubCategoryComponent {
     this.createForm();
   }
   save() {
-    debugger
     this.apiService
       .postWithHeader(this.apiUrl, this.subCategory)
       .subscribe((res) => {

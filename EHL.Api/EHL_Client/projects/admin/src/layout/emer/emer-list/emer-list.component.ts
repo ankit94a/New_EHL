@@ -13,76 +13,91 @@ import { AuthService } from 'projects/shared/src/service/auth.service';
 import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
-
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 @Component({
   selector: 'app-emer-list',
   standalone: true,
-  imports: [SharedLibraryModule,ZipperTableComponent,NgxSpinnerModule ],
+  imports: [SharedLibraryModule, ZipperTableComponent, NgxSpinnerModule],
   templateUrl: './emer-list.component.html',
-  styleUrl: './emer-list.component.scss'
+  styleUrl: './emer-list.component.scss',
 })
-export class EmerListComponent extends TablePaginationSettingsConfig{
-  emerList:EmerModel[]=[];
-  isRefresh:boolean=false;
-  filterModel:PolicyFilterModel = new PolicyFilterModel();
+export class EmerListComponent extends TablePaginationSettingsConfig {
+  emerList: EmerModel[] = [];
+  isRefresh: boolean = false;
+  filterModel: PolicyFilterModel = new PolicyFilterModel();
   userType;
-  constructor(private spinner: NgxSpinnerService,private dialoagService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService){
+  constructor(
+    private spinner: NgxSpinnerService,
+    private dialoagService: BISMatDialogService,
+    private apiService: ApiService,
+    private downloadService: DownloadService,
+    private authService: AuthService,
+    private EncryptionService: EncryptionService
+  ) {
     super();
-    this.userType = this.authService.getRoleType()
+    this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
-    if(this.userType == '1' ){
+    if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
     }
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
-    this.tablePaginationSettings.showFirstLastButtons = false
-    this.filterModel.wingId = parseInt(this.authService.getWingId())
+    this.tablePaginationSettings.showFirstLastButtons = false;
+    this.filterModel.wingId = parseInt(this.authService.getWingId());
     this.getList();
   }
-  getList(){
+  getList() {
     this.spinner.show();
-    this.apiService.getWithHeaders('emer/wing/'+this.filterModel.wingId).subscribe(res =>{
-      if(res){
-        this.spinner.hide();
-        this.emerList = res;
-      }
-    })
+    this.apiService
+      .getWithHeaders('emer/wing/' + this.filterModel.wingId)
+      .subscribe(async (res) => {
+        if (res) {
+          this.emerList = await this.EncryptionService.decryptResponseList(res);
+          this.spinner.hide();
+        }
+      });
   }
-  edit(row){
+  edit(row) {
     row.isEdit = true;
-    this.dialoagService.open(EmerAddComponent,row).then(res =>{
-      if(res){
-        this.getList()
+    this.dialoagService.open(EmerAddComponent, row).then((res) => {
+      if (res) {
+        this.getList();
       }
     });
   }
 
-  del(row){
-    this.dialoagService.confirmDialog(`Are you sure you want to delete EMER ${row.item.emerNumber}?`).subscribe(res =>{
-      if(res){
-        this.apiService.deleteWithHeaders(`emer/${row.item.id}`).subscribe(res =>{
-          if(res){
-           this.getList()
-          }
-        })
-      }
-    })
+  del(row) {
+    this.dialoagService
+      .confirmDialog(
+        `Are you sure you want to delete EMER ${row.item.emerNumber}?`
+      )
+      .subscribe((res) => {
+        if (res) {
+          this.apiService
+            .deleteWithHeaders(`emer/${row.item.id}`)
+            .subscribe((res) => {
+              if (res) {
+                this.getList();
+              }
+            });
+        }
+      });
   }
-  openDialog(){
-    this.dialoagService.open(EmerAddComponent,null).then(res =>{
-      if(res){
-        this.getList()
+  openDialog() {
+    this.dialoagService.open(EmerAddComponent, null).then((res) => {
+      if (res) {
+        this.getList();
       }
     });
   }
 
   getFileId($event) {
-      var download = new DownloadModel();
-      download.filePath = $event.filePath;
-      download.name = $event.fileName;
-      download.fileType = DownloadFileType.Emer;
-      this.downloadService.download(download)
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.Emer;
+    this.downloadService.download(download);
   }
 
   getReadableFileSize(size: number): string {
@@ -92,37 +107,77 @@ export class EmerListComponent extends TablePaginationSettingsConfig{
   }
   columns = [
     {
-      name: 'fileName', displayName: 'File', isSearchable: true,hide: false,valueType:'link',valuePrepareFunction:(row) =>{
-        return row.fileName
-      }
+      name: 'fileName',
+      displayName: 'File',
+      isSearchable: true,
+      hide: false,
+      valueType: 'link',
+      valuePrepareFunction: (row) => {
+        return row.fileName;
+      },
     },
     {
-      name: 'category', displayName: 'Category', isSearchable: true,hide: false,type:'text'
+      name: 'category',
+      displayName: 'Category',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'subCategory', displayName: 'Sub Category', isSearchable: true,hide: false,type:'text'
+      name: 'subCategory',
+      displayName: 'Sub Category',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'eqpt', displayName: 'EQPT', isSearchable: true,hide: false,type:'text'
+      name: 'eqpt',
+      displayName: 'EQPT',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'emerNumber', displayName: 'EmerNumber', isSearchable: true,hide: false,type:'text'
+      name: 'emerNumber',
+      displayName: 'EmerNumber',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'subject', displayName: 'Subject', isSearchable: true,hide: false,type:'text'
+      name: 'subject',
+      displayName: 'Subject',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'subFunction', displayName: 'Sub Funtion', isSearchable: true,hide: false,type:'text'
+      name: 'subFunction',
+      displayName: 'Sub Funtion',
+      isSearchable: true,
+      hide: false,
+      type: 'text',
     },
     {
-      name: 'subFunctionCategory', displayName: 'Sub FunctionCategory', isSearchable: true,hide: true,type:'text'
+      name: 'subFunctionCategory',
+      displayName: 'Sub FunctionCategory',
+      isSearchable: true,
+      hide: true,
+      type: 'text',
     },
     {
-      name: 'subFunctionType', displayName: 'Sub FunctionType', isSearchable: true,hide: true,type:'text'
+      name: 'subFunctionType',
+      displayName: 'Sub FunctionType',
+      isSearchable: true,
+      hide: true,
+      type: 'text',
     },
     {
-      name: 'remarks', displayName: 'Remarks', isSearchable: true,hide: true,type:'text'
+      name: 'remarks',
+      displayName: 'Remarks',
+      isSearchable: true,
+      hide: true,
+      type: 'text',
     },
-
-  ]
+  ];
 }

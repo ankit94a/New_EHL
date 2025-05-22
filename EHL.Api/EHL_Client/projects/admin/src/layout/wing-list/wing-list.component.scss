@@ -91,3 +91,40 @@
       min-height: 24.375rem;
   }
 }
+
+
+
+
+
+.card.expanded {
+  height: auto;
+}
+
+.folder-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.folder-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.folder-item:hover {
+  background-color: #e2e2e2;
+}
+
+.folder-item img {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 5px;
+}

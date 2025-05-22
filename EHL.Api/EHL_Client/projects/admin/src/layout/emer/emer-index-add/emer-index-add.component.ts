@@ -6,6 +6,7 @@ import { Category, Wing } from 'projects/shared/src/models/attribute.model';
 import { ApiService } from 'projects/shared/src/service/api.service';
 import { AuthService } from 'projects/shared/src/service/auth.service';
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-emer-index-add',
@@ -31,7 +32,8 @@ export class EmerIndexAddComponent {
     private apiService: ApiService,
     private fb: FormBuilder,
     private toastr: ToastrService,
-    private dialogRef: MatDialogRef<EmerIndexAddComponent>
+    private dialogRef: MatDialogRef<EmerIndexAddComponent>,
+    private EncryptionService: EncryptionService
   ) {
     this.wingId = parseInt(this.authService.getWingId());
     this.getWing();
@@ -146,14 +148,12 @@ export class EmerIndexAddComponent {
     this.fileName = '';
     this.fileSizeFormatted = '';
   }
-  save() {
+  async save() {
     const formData = new FormData();
     const emerId = this.emerForm.get('id')?.value;
     const wingId = this.emerForm.get('wingId')?.value;
     const categoryId = this.emerForm.get('categoryId')?.value;
-    const category =
-      this.categoryList.find((item) => item.id == categoryId)?.name || '';
-    formData.append('category', category);
+
     //index edit
 
     if (emerId > 0) {
@@ -173,12 +173,20 @@ export class EmerIndexAddComponent {
       var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.emerForm, 'emerFile')
       if(isValid){
       formData.append('id', emerId);
-      formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
       formData.append('wingId', wingId);
       formData.append('categoryId', categoryId);
-      formData.append('category', category);
-      formData.append('subject', this.emerForm.get('subject')?.value);
-      formData.append('wing', this.wingName);
+        const rawObject={
+          category: this.categoryList.find((item) => item.id == categoryId)?.name || '',
+          emerNumber: this.emerForm.get('emerNumber')?.value,
+          subject: this.emerForm.get('subject')?.value,
+        }
+          const encrypted = await this.EncryptionService.encryptObjectValues(
+          rawObject
+        );
+        Object.entries(encrypted).forEach(([key, value]) =>
+          formData.append(key, String(value))
+        );
+
       this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
         next: (res) => {
           this.toastr.success('Form submitted successfully', 'Success');
@@ -205,12 +213,24 @@ export class EmerIndexAddComponent {
         formData.append('filePath', this.filePath);
       }
       if (this.emerForm.valid) {
-        formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
-        formData.append('wingId', wingId);
-        formData.append('categoryId', categoryId);
-        formData.append('category', category);
-        formData.append('subject', this.emerForm.get('subject')?.value);
-        formData.append('wing', this.wingName);
+
+      formData.append('id', '0');
+      formData.append('wingId', wingId);
+      formData.append('categoryId', categoryId);
+
+        const rawObject={
+          wing: this.wingName,
+          category: this.categoryList.find((item) => item.id == categoryId)?.name || '',
+          emerNumber: this.emerForm.get('emerNumber')?.value,
+          subject: this.emerForm.get('subject')?.value,
+        }
+          const encrypted = await this.EncryptionService.encryptObjectValues(
+          rawObject
+        );
+        Object.entries(encrypted).forEach(([key, value]) =>
+          formData.append(key, String(value))
+        );
+
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
             this.toastr.success('Form submitted successfully', 'Success');

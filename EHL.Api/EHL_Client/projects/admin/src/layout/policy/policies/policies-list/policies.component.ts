@@ -15,6 +15,7 @@ import { DeleteModel } from 'projects/shared/src/models/attribute.model';
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-policy-sidebar',
@@ -32,10 +33,10 @@ export class PoliciesComponent extends TablePaginationSettingsConfig {
     private authService: AuthService,
     private apiService: ApiService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService
+    private toastr: ToastrService,private downloadService:DownloadService,
+    private EncryptionService: EncryptionService,
   ) {
     super();
-    debugger
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
     if (this.userType == '1') {
@@ -67,9 +68,9 @@ export class PoliciesComponent extends TablePaginationSettingsConfig {
   getPolicyByWing() {
     this.apiService
       .postWithHeader('policy/type/', this.filterModel)
-      .subscribe((res) => {
+      .subscribe(async(res) => {
         if (res) {
-          this.defectReports = res;
+          this.defectReports = await this.EncryptionService.decryptResponseList(res);
         }
       });
   }
@@ -82,35 +83,7 @@ export class PoliciesComponent extends TablePaginationSettingsConfig {
       });
     }
 
-  // edit(row) {
-  //   row.isEdit = true;
-  //   this.dialogService.open(PolicyAddComponent, row);
-  // }
-  // delete(row) {
-  //   let deleteDefectReport: DeleteModel = new DeleteModel();
-  //   deleteDefectReport.Id = row.item.id;
-  //   deleteDefectReport.TableName = 'Policy';
 
-  //   this.dialogService
-  //     .confirmDialog('Would you like to delete This Policy?')
-  //     .subscribe((res) => {
-  //       if (res) {
-  //         this.apiService
-  //           .postWithHeader(`attribute/delete`, deleteDefectReport)
-  //           .subscribe({
-  //             next: (res) => {
-  //               this.defectReports = this.defectReports.splice(row.index, 1);
-  //               this.toastr.success('Deleted Successfully', 'Success');
-  //               // this.dialogRef?.close(true);
-  //             },
-  //             error: (err) => {
-  //               this.toastr.error('Failed to Delete', 'Error');
-  //               console.error(err);
-  //             },
-  //           });
-  //       }
-  //     });
-  // }
   delete(row) {
     let policyModel: DeleteModel = new DeleteModel();
     policyModel.Id = row.item.id;

@@ -2,7 +2,7 @@
 <form [formGroup]="policy" (ngSubmit)="save()">
 <mat-dialog-content>
   <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field appearance="fill">
         <mat-label>Wing</mat-label>
         <mat-select [multiple]="false" formControlName="wingId" (selectionChange)="getCategory($event.value)" panelClass="custom-dropdown" placeholder="Wing">
@@ -16,7 +16,7 @@
       </mat-form-field>
   </div>
 
-    <div class="col-md-4">
+    <div class="col-md-6">
       <mat-form-field appearance="fill">
         <mat-label>Category</mat-label>
         <mat-select [multiple]="false" formControlName="categoryId" [(ngModel)]="categoryId" (selectionChange)="getSubCategory($event.value)"
@@ -73,15 +73,15 @@
     </div>
     <br>
     <div class="alert" *ngIf="alertMessage.length > 0">{{alertMessage}}</div>
-       <div *ngIf="fileName" class="file-info">
-         <div class="file-details">
-           <p><strong>File Name:</strong> {{ fileName }}</p>
-           <p *ngIf="fileSizeFormatted.length > 0 && fileSizeFormatted != null"><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
-         </div>
-         <button mat-icon-button class="remove-btn" type="button" (click)="removeFile()">
-           <img src="cross.png" alt="">
-         </button>
-       </div>
+      <div *ngIf="fileName" class="file-info">
+        <div class="file-details">
+          <p><strong>File Name:</strong> {{ fileName }}</p>
+          <p *ngIf="fileSizeFormatted.length > 0 && fileSizeFormatted != null"><strong>File Size:</strong> {{ fileSizeFormatted }}</p>
+        </div>
+        <button mat-icon-button class="remove-btn" type="button" (click)="removeFile()">
+          <img src="cross.png" alt="">
+        </button>
+      </div>
   </div>
 </mat-dialog-content>
 <mat-dialog-actions>

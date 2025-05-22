@@ -12,6 +12,8 @@ import { ToastrService } from 'ngx-toastr';
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
+import { NgxSpinnerModule, NgxSpinnerService } from 'ngx-spinner';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-emer-index',
@@ -26,10 +28,12 @@ export class EmerIndexComponent extends TablePaginationSettingsConfig {
   isRefresh: boolean = false;
   userType;
   constructor(
+     private spinner: NgxSpinnerService,
     private apiService: ApiService,
     private authService: AuthService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService
+    private toastr: ToastrService,private downloadService:DownloadService,
+    private EncryptionService: EncryptionService
   ) {
     super();
     this.userType = this.authService.getRoleType();
@@ -99,11 +103,14 @@ export class EmerIndexComponent extends TablePaginationSettingsConfig {
          this.downloadService.download(download)
      }
   getAllIndex() {
+     this.spinner.show();
     this.apiService
       .getWithHeaders('emer/index/' + this.wingId)
-      .subscribe((res) => {
+      .subscribe(async (res) => {
         if (res) {
-          this.emerIndexList = res;
+           this.emerIndexList = await this.EncryptionService.decryptResponseList(res);
+          this.spinner.hide();
+          // this.emerIndexList = res;
         }
       });
   }

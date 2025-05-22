@@ -171,7 +171,6 @@ export class AttributeComponent {
       .getWithHeaders('attribute/category' + wingId)
       .subscribe((res) => {
         if (res) {
-          debugger
           this.categoryList = res;
           this.dataSource.data = this.categoryList;
           this.dataSource.paginator = this.paginator;
@@ -197,7 +196,6 @@ export class AttributeComponent {
         ...item,
         wingId: this.wingId
       }));
-      debugger
       this.paginatorLength = this.subCategoryList.length
           this.dataSource1.data = this.subCategoryList;
           this.dataSource1.paginator = this.paginator;

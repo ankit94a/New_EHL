@@ -1,3 +1,4 @@
+
 import { Component } from '@angular/core';
 import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
 import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
@@ -16,6 +17,7 @@ import { AddOilComponentComponent } from './add-oil-component/add-oil-component.
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-oil',
@@ -29,11 +31,12 @@ export class OilComponent extends TablePaginationSettingsConfig {
   filterModel: Policy = new Policy();
   isRefresh: boolean = false;
   userType;
+
   constructor(
     private authService: AuthService,
     private apiService: ApiService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService, private downloadService: DownloadService
+    private toastr: ToastrService, private downloadService: DownloadService , private EncryptionService : EncryptionService,
   ) {
     super();
     this.userType = this.authService.getRoleType();
@@ -67,9 +70,9 @@ export class OilComponent extends TablePaginationSettingsConfig {
   getPolicyByWing() {
     this.apiService
       .postWithHeader('policy/type/', this.filterModel)
-      .subscribe((res) => {
+      .subscribe(async(res) => {
         if (res) {
-          this.ispl = res;
+          this.ispl = await this.EncryptionService.decryptResponseList(res);;
         }
       });
   }

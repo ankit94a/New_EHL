@@ -15,11 +15,26 @@ import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 export class WingListComponent {
   wingList:Wing[]=[];
   roleType;
+  isFolderOpen = false;
+  masterSheetItems = [
+  { name: 'EMER List', icon: 'assets/emer.png', link: '/emer-list' },
+  { name: 'Report', icon: 'assets/report.png', link: '/report' },
+  { name: 'Analytics', icon: 'assets/analytics.png', link: '/analytics' },
+];
   constructor(private apiService:ApiService,private authService:AuthService,private router: Router){
     this.getWingList();
     this.roleType = this.authService.getRoleType();
   }
 
+  toggleFolder() {
+  this.isFolderOpen = !this.isFolderOpen;
+}
+
+navigateTo(link: string, event: MouseEvent) {
+  event.stopPropagation(); // prevent toggling when clicking on item
+  // Use Angular router to navigate
+  this.router.navigate([link]);
+}
   getWingList(){
     this.apiService.getWithHeaders('attribute/wing').subscribe(res =>{
       if(res){

@@ -13,6 +13,7 @@ import { AuthService } from 'projects/shared/src/service/auth.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-tech-manuals',
@@ -30,7 +31,7 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
   isRefresh:boolean=false;
   clonedPolicy:Policy[]=[];
   userType;
-  constructor(private dialogService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService,private toastr: ToastrService){
+  constructor(private EncryptionService:EncryptionService,private dialogService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService,private toastr: ToastrService){
     super();
     this.userType = this.authService.getRoleType()
     this.tablePaginationSettings.enableAction = true;
@@ -101,9 +102,9 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
 
   }
   getPolicyByWing(){
-    this.apiService.getWithHeaders('policy/wing/'+this.filterModel.wingId).subscribe(res =>{
+    this.apiService.getWithHeaders('policy/wing/'+this.filterModel.wingId).subscribe(async(res) =>{
       if(res){
-        this.policyList=res;
+        this.policyList= await this.EncryptionService.decryptResponseList(res);
         this.clonedPolicy = [...this.policyList]
       }
     })

@@ -1,3 +1,4 @@
+import { EncryptionService } from './../../../../../shared/src/service/encryption.service';
 import { Component } from '@angular/core';
 import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
 import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
@@ -28,13 +29,13 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
   filterModel: PolicyFilterModel = new PolicyFilterModel();
   isRefresh: boolean = false;
   userType;
-  isOfficerLoggedIn:boolean =false;
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private dailogService: BISMatDialogService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService
+    private toastr: ToastrService,private downloadService:DownloadService,
+    private EncryptionService :EncryptionService,
   ) {
     super();
     this.userType = this.authService.getRoleType();
@@ -43,7 +44,6 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     if (this.userType == '1') {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
-      this.isOfficerLoggedIn = true;
     }
 
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
@@ -56,9 +56,9 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
   getAllContract() {
     this.apiService
       .postWithHeader('policy/type', this.filterModel)
-      .subscribe((res) => {
+      .subscribe(async(res) => {
         if (res) {
-          this.epContractList = res;
+          this.epContractList = await this.EncryptionService.decryptResponseList(res)
         }
       });
   }
@@ -72,6 +72,7 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     download.fileType = DownloadFileType.Policy;
     this.downloadService.download(download)
   }
+
    edit(row){
       row.isEdit = true;
       this.dialogService.open(EpContractAddComponent,row)

@@ -1,3 +1,4 @@
+import { EncryptionService } from './../../../../shared/src/service/encryption.service';
 import { Component } from '@angular/core';
 import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
 import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
@@ -25,7 +26,7 @@ export class DefectReportComponent extends TablePaginationSettingsConfig{
   filterModel:Policy = new Policy();
   isRefresh:boolean=false;
   userType;
-  constructor(private authService:AuthService,private apiService:ApiService,private dialogService:BISMatDialogService,private toastr: ToastrService,private downloadService:DownloadService){
+  constructor(private authService:AuthService,private apiService:ApiService,private dialogService:BISMatDialogService,private toastr: ToastrService,private downloadService:DownloadService, private EncryptionService: EncryptionService){
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
@@ -56,9 +57,9 @@ export class DefectReportComponent extends TablePaginationSettingsConfig{
     this.downloadService.download(download)
   }
   getPolicyByWing(){
-    this.apiService.postWithHeader('policy/type/',this.filterModel).subscribe(res =>{
+    this.apiService.postWithHeader('policy/type/',this.filterModel).subscribe(async(res )=>{
       if(res){
-        this.defectReports=res;
+        this.defectReports = await this.EncryptionService.decryptResponseList(res);;;
       }
     })
   }

@@ -68,9 +68,9 @@ namespace EHL.Business.Implements
                     }
                     string uniqueFileName = $"{Guid.NewGuid()}{Path.GetExtension(policy.PolicyFile.FileName)}";
                     string fullFilePath = Path.Combine(uploadsFolder, policy.PolicyFile.FileName);
-                    // Generate a unique file name using GUID + original extension
+					// Generate a unique file name using GUID + original extension
 
-
+					policy.FilePath = policy.PolicyFile.FileName;
                     using (var fileStream = new FileStream(fullFilePath, FileMode.Create, FileAccess.Write, FileShare.None))
                     {
                         await policy.PolicyFile.CopyToAsync(fileStream);

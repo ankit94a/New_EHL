@@ -16,6 +16,7 @@ import { IsplAddComponent } from './ispl-add/ispl-add.component';
 import { DownloadModel } from 'projects/shared/src/models/download.model';
 import { DownloadFileType } from 'projects/shared/src/models/enum.model';
 import { DownloadService } from 'projects/shared/src/service/download.service';
+import { EncryptionService } from 'projects/shared/src/service/encryption.service';
 
 @Component({
   selector: 'app-ispl',
@@ -33,7 +34,9 @@ export class IsplComponent extends TablePaginationSettingsConfig {
     private authService: AuthService,
     private apiService: ApiService,
     private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService
+    private toastr: ToastrService,
+    private downloadService: DownloadService,
+    private EncryptionService: EncryptionService
   ) {
     super();
     this.userType = this.authService.getRoleType();
@@ -58,19 +61,19 @@ export class IsplComponent extends TablePaginationSettingsConfig {
       }
     });
   }
- getFileId($event) {
+  getFileId($event) {
     var download = new DownloadModel();
     download.filePath = $event.filePath;
     download.name = $event.fileName;
     download.fileType = DownloadFileType.Policy;
-    this.downloadService.download(download)
+    this.downloadService.download(download);
   }
   getPolicyByWing() {
     this.apiService
       .postWithHeader('policy/type/', this.filterModel)
-      .subscribe((res) => {
+      .subscribe(async (res) => {
         if (res) {
-          this.ispl = res;
+          this.ispl = await this.EncryptionService.decryptResponseList(res);
         }
       });
   }

@@ -45,7 +45,6 @@ export class EqptComponent {
     }
   }
   bindDataToForm(attrData) {
-    debugger;
     (this.eqpt.id = attrData.id),
       (this.eqpt.categoryId = attrData.categoryId),
       (this.eqpt.wingId = attrData.wingId),
@@ -93,10 +92,9 @@ export class EqptComponent {
     this.createForm();
   }
   save() {
-    // console.log(this.eqpt, this.apiUrl)
-    debugger;
+
     this.apiService.postWithHeader(this.apiUrl, this.eqpt).subscribe((res) => {
-      debugger;
+
       if (res) {
         this.toastr.success('Eqpt added successfully', 'success');
         this.dailogRef.close(true);

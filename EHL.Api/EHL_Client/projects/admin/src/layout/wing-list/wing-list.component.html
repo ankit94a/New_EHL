@@ -1,21 +1,21 @@
 <mat-card>
   <mat-card-content>
-      <!-- <div class="card-container"> -->
-        <div class="row">
-          <ng-container *ngFor="let wing of wingList; let i = index">
-            <div class="col-md-4 custom py-2">
-              <div class="card">
-                <img [src]="wing.imageUrl" alt="Card Image">
-                <div class="card-content">
-                  <h3>{{ wing.name }}</h3>
-                  <p>{{ wing.description }}</p>
-                  <button (click)="setWingData(wing)">View</button>
-                </div>
-              </div>
-
+    <!-- <div class="card-container"> -->
+    <div class="row">
+      <ng-container *ngFor="let wing of wingList; let i = index">
+        <div class="col-md-4 custom py-2">
+          <div class="card">
+            <img [src]="wing.imageUrl" alt="Card Image">
+            <div class="card-content">
+              <h3>{{ wing.name }}</h3>
+              <p>{{ wing.description }}</p>
+              <button (click)="setWingData(wing)">View</button>
             </div>
+          </div>
 
-            <div class="col-md-4 py-2" *ngIf="i === wingList.length - 1">
+        </div>
+
+        <!-- <div class="col-md-4 py-2" *ngIf="i === wingList.length - 1">
               <div class="card">
                 <img src="mastersheet.png" alt="Master Sheet" class="contain-img">
                 <div class="card-content">
@@ -25,10 +25,18 @@
                 </div>
               </div>
 
+            </div> -->
+
+        <div class="card" *ngIf="i === wingList.length - 1">
+          <div class="folder-grid">
+            <div class="folder-item" *ngFor="let item of masterSheetItems" (click)="navigateTo(item.link, $event)">
+              <img [src]="item.icon" alt="{{ item.name }}" />
+              <span>{{ item.name }}</span>
             </div>
-          </ng-container>
+          </div>
         </div>
-      <!-- </div> -->
+      </ng-container>
+    </div>
+    <!-- </div> -->
   </mat-card-content>
 </mat-card>
-

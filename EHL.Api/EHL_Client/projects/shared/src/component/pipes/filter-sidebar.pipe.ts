@@ -8,7 +8,7 @@ export class FilterSidebarPipe implements PipeTransform {
 
   transform(menus: any[], roleType: string): any[] {
     if (!menus) return [];
-debugger
+
     // const restrictedForRole2 = [
     //   'Dashboard', 'Confidential', 'Contracts', 'Home Page', 'Attribute', 'Eqpt Appreciation'
     // ];
