@@ -45,5 +45,33 @@ namespace EHL.DB.Implements
 				throw;
 			}
 		}
-	}
+        public UserDetails GetUserByEmail(string userName)
+        {
+            try
+            {
+                string query = string.Format("select * from userdetails where username=@username");
+                var result = connection.Query<UserDetails>(query, new { username = userName }).FirstOrDefault();
+                return result;
+            }
+            catch (Exception ex)
+            {
+                EHLLogger.Error(ex, "Class=UserDB,method=GetUserByEmail");
+                throw;
+            }
+        }
+        public bool UpdatePassword(long Id, string Password)
+        {
+            try
+            {
+                string query = string.Format("update userdetails set password=@password where id=@id");
+                var result = connection.Query<UserDetails>(query, new { password = Password, id = Id }).FirstOrDefault();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                EHLLogger.Error(ex, "Class=UserDB,method=UpdatePassword");
+                throw;
+            }
+        }
+    }
 }

@@ -34,8 +34,9 @@
 }
 
 .card-content h3 {
-  font-size: 1.4em;
+  font-size: 1.8em;
   color: #333;
+  font-weight: 800;
   margin: 0 0 10px 0;
 }
 
@@ -117,14 +118,19 @@
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.3s;
+  height: 360px;
+  justify-content: center;
 }
-
+.folder-item span {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
 .folder-item:hover {
   background-color: #e2e2e2;
 }
 
 .folder-item img {
-  width: 40px;
-  height: 40px;
+  width: 60px;
+  height: 60px;
   margin-bottom: 5px;
 }

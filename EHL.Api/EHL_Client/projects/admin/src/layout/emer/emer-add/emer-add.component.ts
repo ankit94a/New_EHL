@@ -299,7 +299,7 @@ export class EmerAddComponent {
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
             this.toastr.success('Form submitted successfully', 'Success');
-            this.dialogRef.close(true);
+            // this.dialogRef.close(true);
           },
           error: (err) => {
             this.toastr.error('Error submitting form', 'Error');
@@ -313,16 +313,23 @@ export class EmerAddComponent {
     // add new emer
     else {
       if (this.emerForm.valid) {
-        const wing =
-          this.wing.find(
-            (item) => item.id == this.emerForm.get('wingId')?.value
-          )?.name || '';
+        const wing = this.wing.find((item) => item.id == this.emerForm.get('wingId')?.value)?.name || '';
+        const category = this.categoryList.find((item) => item.id == this.emerForm.get('categoryId')?.value)?.name || '';
+        const subCategory = this.subCategoryList.find((item) => item.id == this.emerForm.get('subCategoryId')?.value)?.name || '';
+
+        formData.append('wing', wing);
+        formData.append('category', category);
+        formData.append('subCategory', subCategory);
         formData.append('wingId', this.emerForm.get('wingId')?.value);
         formData.append('categoryId', this.emerForm.get('categoryId')?.value);
-        formData.append(
-          'subCategoryId',
-          this.emerForm.get('subCategoryId')?.value
-        );
+        formData.append('subCategoryId', this.emerForm.get('subCategoryId')?.value);
+        formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
+        formData.append('subject', this.emerForm.get('subject')?.value);
+        formData.append('subFunction', this.emerForm.get('subFunction')?.value);
+        formData.append('subFunctionCategory', this.emerForm.get('subFunctionCategory')?.value);
+        formData.append('subFunctionType', this.emerForm.get('subFunctionType')?.value);
+        formData.append('eqpt', this.emerForm.get('eqpt')?.value);
+        formData.append('remarks', this.emerForm.get('remarks')?.value);
         formData.append('id', '0');
         formData.append('emerFile', this.emerForm.get('emerFile')?.value);
 
@@ -344,16 +351,16 @@ export class EmerAddComponent {
           eqpt: this.emerForm.get('eqpt')?.value,
           remarks: this.emerForm.get('remarks')?.value,
         };
-        const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
+        // const encrypted = await this.EncryptionService.encryptObjectValues(
+        //   rawObject
+        // );
+        // Object.entries(encrypted).forEach(([key, value]) =>
+        //   formData.append(key, String(value))
+        // );
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
             this.toastr.success('Form submitted successfully', 'Success');
-            this.dialogRef.close(true);
+            // this.dialogRef.close(true);
           },
           error: (err) => {
             this.toastr.error('Error submitting form', 'Error');

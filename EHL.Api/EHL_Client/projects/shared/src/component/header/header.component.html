@@ -12,6 +12,9 @@
 
 
         </span>
+          <span class="inactivity-timer">
+   {{ timer$() | timer}} <!-- use a pipe if needed -->
+</span>
         <!-- <app-language style="height: 30px;display: inherit;"></app-language> -->
         <i class="fa-solid fa-user" (click)="openDialog()"></i>
 

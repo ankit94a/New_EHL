@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SharedComponent } from './shared.component';
+import { RoleOfMagAddComponent } from './role-of-mag-add.component';
 
-describe('SharedComponent', () => {
-  let component: SharedComponent;
-  let fixture: ComponentFixture<SharedComponent>;
+describe('RoleOfMagAddComponent', () => {
+  let component: RoleOfMagAddComponent;
+  let fixture: ComponentFixture<RoleOfMagAddComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedComponent]
+      imports: [RoleOfMagAddComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SharedComponent);
+    fixture = TestBed.createComponent(RoleOfMagAddComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

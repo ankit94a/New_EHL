@@ -104,5 +104,11 @@ namespace EHL.Business.Implements
 		{
 			return _policyDB.GetAdvisioriesByWing(wingId, type);
 		}
-	}
+        public List<Policy> GetPoliciesAndAdvisiories()
+		{
+			return _policyDB.GetPoliciesAndAdvisiories();
+
+        }
+
+    }
 }

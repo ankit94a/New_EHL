@@ -53,7 +53,8 @@ export class EmerListComponent extends TablePaginationSettingsConfig {
       .getWithHeaders('emer/wing/' + this.filterModel.wingId)
       .subscribe(async (res) => {
         if (res) {
-          this.emerList = await this.EncryptionService.decryptResponseList(res);
+          // this.emerList = await this.EncryptionService.decryptResponseList(res);
+          this.emerList = res;
           this.spinner.hide();
         }
       });

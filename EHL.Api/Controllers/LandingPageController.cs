@@ -36,5 +36,12 @@ namespace EHL.Api.Controllers
 		{
 			return Ok(_landingPageManager.AddLandingProfile(profile));	
 		}
-	}
+
+        //[Authorization(RoleType.Admin)]
+        [HttpPost, Route("deativate")]
+        public IActionResult Deactivate([FromBody] DeactivateModel model)
+        {
+            return Ok(_landingPageManager.Deactivate(model));
+        }
+    }
 }

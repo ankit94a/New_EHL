@@ -8,3 +8,8 @@ export class BaseModel {
   isDeleted:boolean;
   isEdit:boolean=false;
 }
+
+export class DeactivateModel {
+  id:number;
+  tableName:string;
+}

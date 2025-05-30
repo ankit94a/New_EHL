@@ -26,5 +26,19 @@ namespace EHL.Business.Implements
 		{
 			return _userDB.GetAllRolePermission(RoleId);
 		}
-	}
+        public UserDetails GetUserByEmail(string userName)
+        {
+            return _userDB.GetUserByEmail(userName);
+
+        }
+        public bool UpdatePassword(long id, string plainPassword)
+        {
+            if (string.IsNullOrWhiteSpace(plainPassword)) return false;
+
+
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(plainPassword, workFactor: 12);
+
+            return _userDB.UpdatePassword(id, hashedPassword);
+        }
+    }
 }

@@ -13,5 +13,7 @@ namespace EHL.DB.Interfaces
         public bool UpdatePolicy(Policy policy);
         public List<Policy> GetAllPolicyByWing(long wingId);
 		public List<Policy> GetAdvisioriesByWing(long wingId, string type);
-	}
+        public List<Policy> GetPoliciesAndAdvisiories();
+
+    }
 }

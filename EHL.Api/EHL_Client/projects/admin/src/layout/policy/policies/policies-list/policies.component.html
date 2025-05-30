@@ -2,7 +2,10 @@
   <!-- <mat-card-header>Policy List</mat-card-header> -->
   <mat-card-content>
     <div class="row">
-      <div class="col-md-10 ">In Service</div>
+      <div class="col-md-9">Policies & Advisiories</div>
+      <div class="col-md-1" align="end">
+        <a href="/wing"><img src="back-arrow.png" height="30px" width="30px" alt="Master Sheet"> Back</a>
+      </div>
       <div class="col-md-2" align="end">
         <button  class="btn btn-danger"  (click)="openDailog()" *ngIf="userType == '1'">+ Add Policy</button>
       </div>

@@ -53,29 +53,7 @@
     "permissionName": "TechnicalAoAI",
     "permissionAction": "ViewAll"
   },
-   {
-    "text": "Policies",
-    "icon": "fa-solid fa-file-contract",
-    "routerLink": "/policy",
-    "permissionName": "Policy Compendium",
-    "permissionAction": "ViewAll",
-    "children": [
-      {
-        "text": "In Service",
-        "icon":"fa-solid fa-file-contract",
-        "routerLink":"/policy",
-        "permissionAction":"ViewAll",
-        "permissionName": "Policy Compendium"
-      },
-      {
-        "text": "NGE",
-        "icon":"fa-solid fa-file-contract",
-        "routerLink": "/nge",
-        "permissionAction": "ViewAll",
-        "permissionName":"Policy Compendium"
-      }
-    ]
-  },
+ 
    {
     "text": "Contracts",
     "icon": "fa-solid fa-truck-fast",

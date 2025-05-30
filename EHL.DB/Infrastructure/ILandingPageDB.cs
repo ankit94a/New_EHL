@@ -13,5 +13,7 @@ namespace EHL.DB.Infrastructure
 		public List<News> GetAllNews();
 		public bool AddLandingProfile(LandingProfile profile);
 		public LandingProfile GetProfile();
-	}
+		public bool Deactivate(DeactivateModel item);
+
+    }
 }

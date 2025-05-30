@@ -66,6 +66,11 @@ export const routes: Routes = [
               // canActivate: [AuthGuard],
             },
             {
+              path: 'role-of-mag',
+              loadComponent: () => import('./roleofmag/role-of-mag-list/role-of-mag-list.component').then(m => m.RoleOfMagListComponent),
+              // canActivate: [AuthGuard],
+            },
+            {
               path: 'master-sheet',
               loadComponent: () => import('./master-sheet/master-sheet.component').then(m => m.MasterSheetComponent),
               // canActivate: [AuthGuard],

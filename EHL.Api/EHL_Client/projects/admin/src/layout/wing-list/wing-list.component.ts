@@ -17,9 +17,9 @@ export class WingListComponent {
   roleType;
   isFolderOpen = false;
   masterSheetItems = [
-  { name: 'EMER List', icon: 'assets/emer.png', link: '/emer-list' },
-  { name: 'Report', icon: 'assets/report.png', link: '/report' },
-  { name: 'Analytics', icon: 'assets/analytics.png', link: '/analytics' },
+  { name: 'Policies & Advisiories', icon: 'policies.svg', link: '/policy' },
+  { name: 'Role of MAG', icon: 'roleofmag.svg', link: '/role-of-mag' },
+  { name: 'MasterSheet', icon: 'mastersheet.png', link: '/master-sheet' },
 ];
   constructor(private apiService:ApiService,private authService:AuthService,private router: Router){
     this.getWingList();

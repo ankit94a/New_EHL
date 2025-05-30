@@ -27,7 +27,7 @@
 
             </div> -->
 
-        <div class="card" *ngIf="i === wingList.length - 1">
+        <div class="card col-md-4" *ngIf="i === wingList.length - 1">
           <div class="folder-grid">
             <div class="folder-item" *ngFor="let item of masterSheetItems" (click)="navigateTo(item.link, $event)">
               <img [src]="item.icon" alt="{{ item.name }}" />

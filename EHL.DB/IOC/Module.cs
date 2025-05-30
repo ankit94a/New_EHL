@@ -21,7 +21,8 @@ namespace EHL.DB.IOC
 				{typeof(IEmerDB), typeof(EmerDB) },
 				{typeof(IPolicyDB), typeof(PolicyDB) },
 				{typeof(IFileDB), typeof(FileDB) },
-                {typeof(ItechnicalAoAiDB), typeof(TechnicalAoAiDB) }
+                {typeof(ItechnicalAoAiDB), typeof(TechnicalAoAiDB) },
+                {typeof(IRoleOfMagDb), typeof(RoleOfMagDb) }
             };
 			return dic;
 		}

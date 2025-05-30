@@ -65,5 +65,11 @@ namespace EHL.Api.Controllers
 		{
 			return Ok(_policyManger.GetAdvisioriesByWing(policy.WingId, policy.Type));
 		}
-	}
+
+		[HttpGet,Route("policies")]
+        public IActionResult GetPoliciesAndAdvisiories()
+        {
+            return Ok(_policyManger.GetPoliciesAndAdvisiories());
+        }
+    }
 }

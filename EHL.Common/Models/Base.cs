@@ -17,4 +17,9 @@ namespace EHL.Common.Models
 		public bool IsActive { get; set; }
 	}
 
+	public class DeactivateModel
+	{
+		public long Id { get; set; }
+		public string TableName { get; set; }
+	}
 }

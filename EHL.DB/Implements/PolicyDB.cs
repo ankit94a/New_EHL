@@ -68,7 +68,22 @@ namespace EHL.DB.Implements
 
 
 		}
-		public List<Policy> GetAdvisioriesByWing(long wingId, string Type)
+
+        public List<Policy> GetPoliciesAndAdvisiories()
+        {
+            try
+            {
+                string query = string.Format(@"select * from policy where type in ('Policy Compendium', 'Advisories') and isactive = 1");
+                return connection.Query<Policy>(query).ToList();
+            }
+            catch (Exception ex)
+            {
+                EHLLogger.Error(ex, "Class=PolicyDB,method=GetPoliciesAndAdvisiories");
+                throw;
+            }
+
+        }
+        public List<Policy> GetAdvisioriesByWing(long wingId, string Type)
 		{
 			try
 			{

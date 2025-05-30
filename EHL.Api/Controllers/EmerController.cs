@@ -23,9 +23,9 @@ namespace EHL.Api.Controllers
 		[HttpGet, Route("wing/{wingId}")]
 		public IActionResult GetAllEmer(long wingId)
 		{
-			var sessUser = new SessionManager(_httpContextAccessor);
-			var userId = sessUser.UserId;
-			var roleType = sessUser.RoleType;
+			//var sessUser = new SessionManager(_httpContextAccessor);
+			//var userId = sessUser.UserId;
+			//var roleType = sessUser.RoleType;
 			
 			return Ok(_emmerManager.GetAllEmer(wingId));
 		}
@@ -45,11 +45,11 @@ namespace EHL.Api.Controllers
 		{
 			return Ok(_emmerManager.GetLatestTwoPoliciesPerType());
 		}
-		[Authorization(RoleType.Admin)]
+		//[Authorization(RoleType.Admin)]
 		[HttpPost]
 		public async Task<IActionResult> AddEmer([FromForm] EmerModel emerModel)
 		{
-			emerModel.CreatedBy = HttpContext.GetUserId();
+			emerModel.CreatedBy = 2;
 			emerModel.CreatedOn = DateTime.Now;
 			emerModel.IsActive = true;
 			emerModel.IsDeleted = false;

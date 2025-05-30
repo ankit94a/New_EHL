@@ -35,3 +35,16 @@ export class EmerIndex extends BaseModel {
   fileName:string;
   filePath:string;
 }
+
+
+export class RoleOfMag extends BaseModel {
+  name: string;
+  wing: string;
+  wingId: number;
+  nameOfOfficer: string;
+  appointment: string;
+  militaryNo: string;
+  mobile: string;
+  civilNo: string;
+  eqptDealing: string;
+}

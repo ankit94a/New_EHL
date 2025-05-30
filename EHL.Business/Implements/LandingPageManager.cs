@@ -43,5 +43,10 @@ namespace EHL.Business.Implements
 		{
 			return _landingPageDb.GetProfile();
 		}
-	}
+        public bool Deactivate(DeactivateModel item)
+		{
+			return _landingPageDb.Deactivate(item);
+		}
+
+    }
 }

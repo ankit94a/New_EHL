@@ -29,7 +29,7 @@ export class LayoutComponent {
   constructor(private router:Router,private dialogService:BISMatDialogService) {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
-        this.sideBarOpen = !(event.url === '/wing' || event.url === '/master-sheet');
+        this.sideBarOpen = !(event.url === '/wing' || event.url === '/master-sheet' || event.url === '/policy' || event.url === '/role-of-mag');
       }
     });
 

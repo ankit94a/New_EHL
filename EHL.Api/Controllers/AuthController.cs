@@ -1,67 +1,97 @@
 ﻿using EHL.Api.Authorization;
 using EHL.Business.Interfaces;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using InSync.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace EHL.Api.Controllers
 {
-	[Route("api/[controller]")]
-	public class AuthController : ControllerBase
-	{
-		private readonly IUserManager _userManager;
-		readonly IJwtManager _jwtManager;
-		private IHttpContextAccessor _httpContextAccessor;
-		public AuthController(IUserManager userManager, IJwtManager jwtManager, IHttpContextAccessor httpContextAccessor)
-		{
-			_userManager = userManager;
-			_jwtManager = jwtManager;
-			_httpContextAccessor = httpContextAccessor;
-		}
+    [Route("api/[controller]")]
+    public class AuthController : ControllerBase
+    {
+        private readonly IUserManager _userManager;
+        readonly IJwtManager _jwtManager;
+        private readonly LoginAttemptService _loginAttemptService;
 
-		[HttpPost, Route("login")]
-		public bool DoLogin([FromBody] Login login)
-		{
-			IActionResult response = Unauthorized();
-			var user = _userManager.GetUserByEmailPassword(login.UserName, login.Password);
-			if (user != null)
-			{
-				var jwtToken = _jwtManager.GenerateJwtToken(user);
-				var sessUser = new SessionManager(_httpContextAccessor)
-				{
-					UserId = user.Id,
-					UserName = user.Name,
-					RoleId = user.RoleId.ToString(),
-					RoleType = user.RoleType.ToString(),
-					Access_Token = jwtToken
-				};
-				var _ = _httpContextAccessor.HttpContext.Session.Id;
-				return true;
-			}
-			return false;
-		}
+        public AuthController(IUserManager userManager, IJwtManager jwtManager, LoginAttemptService loginAttemptService)
+        {
+            _userManager = userManager;
+            _jwtManager = jwtManager;
+            _loginAttemptService = loginAttemptService;
+        }
 
-		[HttpGet, Route("rolepermission")]
-		public IActionResult GetRolePermission()
-		{
-			var roleId = HttpContext.GetRoleId();
-			return Ok(_userManager.GetAllRolePermission(roleId));
-		}
-		[HttpGet, Route("role/type")]
-		public IActionResult GetRole()
-		{
-			var sessUser = new SessionManager(_httpContextAccessor);
-			var roleType = sessUser.RoleType;
-			return Ok(roleType);
-		}
+        [HttpPost, Route("login")]
+        public IActionResult DoLogin([FromBody] Login login)
+        {
+            var ip = HttpContext.Connection.RemoteIpAddress?.ToString();
+            if (_loginAttemptService.IsBlocked(ip))
+            {
+                return StatusCode(429, new
+                {
+                    ErrorCode = "TOO_MANY_ATTEMPTS",
+                    ErrorMessage = "Too many failed login attempts. Please try again after 15 minutes."
+                });
+            }
 
-		[HttpGet, Route("logout")]
-		public IActionResult UserLogout()
-		{
-			var sessUser = new SessionManager(_httpContextAccessor);
-			var result = sessUser.Logout();
-			return Ok(new { message = result });
-		}
+            var user = _userManager.GetUserByEmail(login.UserName);
+            if (user != null)
+            {
+                _loginAttemptService.ResetAttempts(ip);
 
-	}
+                bool isPasswordCorrect = BCrypt.Net.BCrypt.Verify(login.Password, user.Password);
+                if (isPasswordCorrect)
+                {
+                    var jwtToken = _jwtManager.GenerateJwtToken(user);
+                    var model = new
+                    {
+                        userName = user.Name,
+                        roleType = user.RoleType,
+                        roleId = user.RoleId
+                    };
+                    return Ok(new { token = jwtToken, user = model });
+                }
+                else
+                {
+                    return Unauthorized(new { message = "Invalid password" });
+                }
+
+            }
+            else
+            {
+                _loginAttemptService.RecordFailedAttempt(ip);
+                return Unauthorized(new { message = "Invalid username or password." });
+            }
+        }
+
+
+        [HttpGet, Route("rolepermission")]
+        public IActionResult GetRolePermission()
+        {
+            var roleId = HttpContext.GetRoleId();
+            return Ok(_userManager.GetAllRolePermission(roleId));
+        }
+
+        [HttpPost, Route("forget-password")]
+        public IActionResult ForgetPassword([FromBody] Login request)
+        {
+            var user = _userManager.GetUserByEmail(request.UserName);
+            if (user == null)
+                return NotFound(new { message = "User not found" });
+
+            _userManager.UpdatePassword(user.Id, request.Password);
+
+            return Ok(new { message = "Password reset link sent to your email." });
+        }
+
+        [HttpPost, Route("logout")]
+        public IActionResult Logout()
+        {
+
+            return Ok(new { StatusCode = 200, message = "Logged out successfully." });
+        }
+
+    }
 }

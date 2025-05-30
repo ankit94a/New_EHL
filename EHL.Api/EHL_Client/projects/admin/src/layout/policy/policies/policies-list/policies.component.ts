@@ -67,7 +67,7 @@ export class PoliciesComponent extends TablePaginationSettingsConfig {
     }
   getPolicyByWing() {
     this.apiService
-      .postWithHeader('policy/type/', this.filterModel)
+      .getWithHeaders('policy/policies')
       .subscribe(async(res) => {
         if (res) {
           this.defectReports = await this.EncryptionService.decryptResponseList(res);

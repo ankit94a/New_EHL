@@ -1,0 +1,109 @@
+<h4 mat-dialog-title>Add Role of MAG</h4>
+<form [formGroup]="roleOfMag" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-label>Wing</mat-label>
+          <mat-select formControlName="wingId">
+            <mat-option *ngFor="let wing of wingList" [value]="wing.id">{{ wing.name }}</mat-option>
+          </mat-select>
+          <mat-error *ngIf="roleOfMag.get('wingId')?.touched && roleOfMag.get('wingId')?.hasError('required')">
+            Wing is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4">
+        <mat-form-field class="w-100">
+          <mat-label>Name of MAG & Location</mat-label>
+          <input formControlName="name"  type="text" matInput placeholder="Name of MAG & Location" required />
+          <mat-error *ngIf="roleOfMag.get('name')?.touched && roleOfMag.get('name')?.invalid">
+            Name of MAG & Location is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4">
+        <mat-form-field class="w-100">
+          <mat-label>Name of Officer</mat-label>
+          <input formControlName="nameOfOfficer" appAlphanumericOnly type="text" matInput placeholder="Name Of Officer" required />
+          <mat-error *ngIf="roleOfMag.get('nameOfOfficer')?.touched && roleOfMag.get('nameOfOfficer')?.invalid">
+            Name Of Officer is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field class="w-100">
+          <mat-label>Appointment</mat-label>
+          <input formControlName="appointment" appAlphanumericOnly type="text" matInput placeholder="Appointment" required />
+          <mat-error *ngIf="roleOfMag.get('appointment')?.touched && roleOfMag.get('appointment')?.invalid">
+            Appointment is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field class="w-100">
+          <mat-label>Eqpt Dealing</mat-label>
+          <input formControlName="eqptDealing" type="text" matInput placeholder="Eqpt Dealing" required />
+          <mat-error *ngIf="roleOfMag.get('eqptDealing')?.touched && roleOfMag.get('eqptDealing')?.invalid">
+            Eqpt Dealing is required
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-4">
+        <mat-form-field class="w-100">
+          <mat-label>Military No</mat-label>
+          <input formControlName="militaryNo" type="text" matInput maxlength="12" placeholder="Military No" (keypress)="allowOnlyNumbers($event)" required />
+          <mat-error *ngIf="roleOfMag.get('militaryNo')?.hasError('required')">
+            Military No is required
+          </mat-error>
+          <mat-error *ngIf="roleOfMag.get('militaryNo')?.hasError('pattern')">
+    Military number must be exactly 12 digits
+  </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-4">
+<mat-form-field class="w-100">
+  <mat-label>Mobile</mat-label>
+  <input formControlName="mobile" type="text" matInput maxlength="10" placeholder="Mobile" (keypress)="allowOnlyNumbers($event)" required />
+  <mat-error *ngIf="roleOfMag.get('mobile')?.hasError('required')">
+    Mobile is required
+  </mat-error>
+  <mat-error *ngIf="roleOfMag.get('mobile')?.hasError('pattern')">
+    Mobile number must be exactly 10 digits
+  </mat-error>
+</mat-form-field>
+</div>
+      
+
+
+      <div class="col-md-4">
+        <mat-form-field class="w-100">
+          <mat-label>Civil No</mat-label>
+          <input formControlName="civilNo" appAlphanumericOnly type="text" maxlength="12" matInput placeholder="Civil No" (keypress)="allowOnlyNumbers($event)" required />
+          <mat-error *ngIf="roleOfMag.get('civilNo')?.hasError('required')">
+            Civil No is required
+          </mat-error>
+          <mat-error *ngIf="roleOfMag.get('civilNo')?.hasError('pattern')">
+    Civil No number must be exactly 12 digits
+  </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button type="button" class="btn btn-sm btn-danger" (click)="reset()">Reset</button>
+    <button type="button" class="btn btn-sm btn-warning" (click)="close()">Close</button>
+    <button type="submit" class="btn btn-sm btn-primary">Save</button>
+  </mat-dialog-actions>
+</form>

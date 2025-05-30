@@ -77,7 +77,20 @@ namespace EHL.DB.Implements
 			}
 			
 		}
+        public bool Deactivate(DeactivateModel model)
+        {
+            try
+            {
+                string query = $"UPDATE {model.TableName} SET isactive = 0 WHERE id = @Id";
+                var result = connection.Execute(query, new { model.Id });
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                EHLLogger.Error(ex, $"Deactivate method error for table = {model.TableName}, method is in LandingPageDB.Deactivate");
+                throw;
+            }
+        }
 
-
-	}
+    }
 }

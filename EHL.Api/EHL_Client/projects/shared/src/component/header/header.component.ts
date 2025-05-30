@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, effect, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { SharedLibraryModule } from '../../shared-library.module';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
@@ -6,26 +6,55 @@ import { LanguageComponent } from '../language/language.component';
 import { UserProfileComponent } from 'projects/admin/src/layout/user-profile/user-profile.component';
 import { BISMatDialogService } from '../../service/insync-mat-dialog.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ApiService } from '../../service/api.service';
+import { UserIdleService } from '../../service/user-idol.service';
+import { TimerPipe } from '../pipes/timer.pipe';
 
 @Component({
   selector: 'app-header',
   standalone:true,
-  imports:[SharedLibraryModule,RouterModule],
+  imports:[SharedLibraryModule,RouterModule,TimerPipe],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.css']
+  styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
-  wing$: Observable<string | null>;
+  wing$: Observable<string | null>; private userIdleService = inject(UserIdleService); // ✅ inject the service here
+  timer$ = signal(15 * 60); // 15 minutes countdown
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
-  constructor(private authService:AuthService,private dialogService:BISMatDialogService,private apiService:ApiService) {
+  constructor(private authService:AuthService,private dialogService:BISMatDialogService,) {
     this.wing$ = this.authService.wing$;
+    this.setupUserIdleTracking();
   }
 
   ngOnInit(): void {
 
   }
+   setupUserIdleTracking() {
+    // Reset on any activity
+    this.userIdleService.onUserActivity(() => {
+      this.timer$.set(15 * 60); // reset timer to 15 min
+    });
+
+    // Countdown logic
+    effect(() => {
+      const interval = setInterval(() => {
+        const current = this.timer$();
+        if (current > 0) {
+          this.timer$.set(current - 1);
+        } else {
+          clearInterval(interval);
+          this.logout(); // when timer hits 0
+        }
+      }, 1000);
+    });
+  }
+
+  logout() {
+    // Call logout API and redirect to login
+    console.log('User is logged out due to inactivity');
+  }
+
+
 
   toggleSideBar() {
     this.toggleSideBarForMe.emit();
@@ -40,14 +69,8 @@ export class HeaderComponent implements OnInit {
   }
 
   onLoggedout() {
-    // this.authService.clear()
-    // this.authService.clearWing();
-    this.apiService.getWithHeaders('auth/logout').subscribe(res =>{
-      debugger
-      if(res){
-        this.authService.clear()
-      }
-    })
+    this.authService.clear()
+    this.authService.clearWing();
   }
   openDialog(){
     this.dialogService.open(UserProfileComponent,null,'75vw','75vh')

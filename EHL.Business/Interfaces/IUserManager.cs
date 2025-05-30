@@ -11,5 +11,8 @@ namespace EHL.Business.Interfaces
 	{
 		public UserDetails GetUserByEmailPassword(string userName, string password);
 		public List<RolePermission> GetAllRolePermission(long RoleId);
-	}
+		public bool UpdatePassword(long id, string plainPassword);
+		public UserDetails GetUserByEmail(string userName);
+
+    }
 }
