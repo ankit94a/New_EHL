@@ -3,7 +3,7 @@
       <div class="contents">
         <div fxShow="true">
             <button *ngIf="wing$ | async as wing" mat-icon-button (click)="toggleSideBar()">
-                <i class="fa-solid fa-bars"></i>
+               <img src="bars.svg" alt="bars" >
             </button>
         </div>
         <span class="example-spacer"><div *ngIf="wing$ | async as wing">
@@ -12,15 +12,13 @@
 
 
         </span>
-          <span class="inactivity-timer">
+          <span class="inactivity-timer mx-2">
    {{ timer$() | timer}} <!-- use a pipe if needed -->
 </span>
-        <!-- <app-language style="height: 30px;display: inherit;"></app-language> -->
-        <i class="fa-solid fa-user" (click)="openDialog()"></i>
 
-        <button mat-button  (click)="onLoggedout()">
-          <i class="fa fa-sign-out btn-white px-2" aria-hidden="true"></i>
-         <span class="btn-white"> Sign out</span>
+        <button mat-button class="inactivity-timer" (click)="onLoggedout()">
+          <img src="sign-out.svg" width="25px"  alt="sign-out">
+         <span > Sign out</span>
       </button>
       </div>
     </mat-toolbar-row>

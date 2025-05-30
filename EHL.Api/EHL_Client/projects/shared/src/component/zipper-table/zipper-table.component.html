@@ -73,9 +73,9 @@
         <ng-container *ngIf="tablePaginationSettings.enableAction" matColumnDef="action">
             <mat-header-cell *matHeaderCellDef style="margin-top:-1%;">
                 <div class="column-header-content">
-                    <button class="btn btn-link" type="button"
+                    <button class="btn btn-link" type="button" matTooltip="filter"
                         *ngIf="tablePaginationSettings.enableColumn;else actionTemplate" #menuTrigger="matMenuTrigger"
-                        [matMenuTriggerFor]="mainMenuButton">  <i class="fa-solid fa-filter" matTooltip="Add More Columns"></i></button>
+                        [matMenuTriggerFor]="mainMenuButton"> <img src="filter.svg" alt="filter" width="25px"></button>
 
 
                     <ng-template #actionTemplate>Action</ng-template>
@@ -96,28 +96,12 @@
                 </div>
             </mat-header-cell>
             <mat-cell *matCellDef="let element;let i = index;">
-                <button mat-icon-button color="primary" *ngIf="element!=null && tablePaginationSettings.enableAdd"
-                    type="button" (click)="addObj(element)" matTooltip="add"> <mat-icon>add</mat-icon>
-                </button>
-                <button mat-icon-button color="basic" *ngIf="element!=null && tablePaginationSettings.enableDownload"
-                    type="button" (click)="downloadFile(i,element)" matTooltip="download"> <mat-icon>download</mat-icon>
-                </button>
-                <button mat-icon-button color="accent" *ngIf="element!=null && tablePaginationSettings.enableUpload"
-                    type="button" (click)="uploadFile(element)" matTooltip="upload"> <mat-icon>upload</mat-icon>
-                </button>
-                <button mat-icon-button color="primary" *ngIf="element!=null && tablePaginationSettings.enableView"
-                    type="button" (click)="viewObj(element)" matTooltip="view"> <i class="fa-solid fa-eye"></i>
-                </button>
                 <button mat-icon-button color="accent" *ngIf="element!=null && tablePaginationSettings.enableEdit"
-                    type="button" (click)="editObj(element)" matTooltip="edit"> <i class="fa-solid fa-pen-to-square"></i></button>
+                    type="button" (click)="editObj(element)" matTooltip="edit"><img src="edit.svg" width="30px" alt="edit"></button>
 
                 <button mat-icon-button color="warn" *ngIf="element!=null && tablePaginationSettings.enableDelete"
                     type="button" (click)="deleteObj(i,element)" matTooltip="delete">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
-                <button mat-icon-button color="basic"
-                    *ngIf="element!=null && tablePaginationSettings.enablemarkAsDelivered" type="button"
-                    (click)="markAsDeliveredObj(element)" matTooltip="delivered"> <mat-icon>local_shipping</mat-icon>
+                    <img src="delete.svg" alt="delete" width="35px">
                 </button>
             </mat-cell>
         </ng-container>

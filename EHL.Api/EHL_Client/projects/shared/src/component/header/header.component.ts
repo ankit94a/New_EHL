@@ -3,7 +3,6 @@ import { SharedLibraryModule } from '../../shared-library.module';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { LanguageComponent } from '../language/language.component';
-import { UserProfileComponent } from 'projects/admin/src/layout/user-profile/user-profile.component';
 import { BISMatDialogService } from '../../service/insync-mat-dialog.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserIdleService } from '../../service/user-idol.service';
@@ -72,8 +71,5 @@ export class HeaderComponent implements OnInit {
       }
     })
 
-  }
-  openDialog() {
-    this.dialogService.open(UserProfileComponent, null, '75vw', '75vh')
   }
 }

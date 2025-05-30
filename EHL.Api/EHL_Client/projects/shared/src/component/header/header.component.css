@@ -49,11 +49,13 @@
   border: 2px solid #cce0ff;
   transition: background-color 0.3s ease, color 0.3s ease;
   font-size: 17px;
-  margin-right: 15px;
 }
 
 .inactivity-timer:hover {
   background-color: #e0ecff;
   color: #001f4d;
   cursor: pointer;
+}
+.white-bar{
+  color:#fff
 }

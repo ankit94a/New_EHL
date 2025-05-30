@@ -15,16 +15,7 @@ const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: Http
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes),
-        provideToastr(),importProvidersFrom(
-          TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: httpLoaderFactory,
-              deps: [HttpClient],
-            },
-          })
-      ),
-        { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
+        provideToastr(),
         provideAnimationsAsync(),
         importProvidersFrom(MatNativeDateModule),
         importProvidersFrom(HttpClientModule),

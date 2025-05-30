@@ -5,7 +5,7 @@
 <span *ngFor="let menu of sideBarMenus | filterSidebar:roleType">
   <a mat-list-item (click)="addExpandClass(menu.text)"
      [routerLink]="menu.routerLink" routerLinkActive="active">
-    <i class="{{menu.icon}}"></i>
+    <!-- <i class="{{menu.icon}}"></i> -->
     <span class="nav-caption mx-2">{{menu.text}}</span>
     <i *ngIf="menu.children?.length"
        class="fa fa-chevron-down menu-button px-2"
@@ -18,7 +18,7 @@
       class="submenu" [ngClass]="{'expanded': showMenu === menu.text}">
     <li *ngFor="let subMenu of menu.children" class="nav-item">
       <a mat-list-item [routerLink]="subMenu.routerLink" routerLinkActive="active">
-        <i class="{{subMenu.icon}}"></i>
+        <!-- <i class="{{subMenu.icon}}"></i> -->
         <span class="nav-caption mx-2">{{subMenu.text}}</span>
       </a>
     </li>

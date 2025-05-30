@@ -15,7 +15,7 @@
           required
         />
         <button mat-icon-button matSuffix type="button" disabled>
-          <i class="fa-solid fa-user"></i>
+         <img src="user.svg" alt="user">
         </button>
         <mat-error *ngIf="loginform.get('username')?.touched && loginform.get('username')?.invalid">
           Username is required
@@ -34,7 +34,7 @@
           required
         />
         <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button">
-          <i class="{{ showPassword ? 'fa-solid fa-unlock' : 'fa-solid fa-lock' }}"></i>
+         <img src="eye.svg" alt="show-password">
         </button>
         <mat-error *ngIf="loginform.get('password')?.touched && loginform.get('password')?.invalid">
           Password is required

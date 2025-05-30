@@ -48,11 +48,12 @@ navigateTo(link: string, event: MouseEvent) {
     })
   }
   setWingData(wing){
+    debugger
     this.authService.setWingDetails(wing);
     if(this.authService.isAuthenticated()){
-      this.router.navigate(['/emer']);
-    }else{
       this.router.navigate(['/dashboard']);
+    }else{
+      this.router.navigate(['/emer']);
     }
 
   }
