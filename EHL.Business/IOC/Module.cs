@@ -24,7 +24,8 @@ namespace EHL.Business.IOC
 				{typeof(IPolicyManger), typeof(PolicyManger) },
 				{typeof(IFileManager), typeof(FileManager) },
                 {typeof(ITechnicalAoAiManager), typeof(TechnicalAoAiManager) },
-                {typeof(IRoleOfMagManager), typeof(RoleOfMagManager) }
+                {typeof(IRoleOfMagManager), typeof(RoleOfMagManager) },
+                {typeof(IDashboardManager), typeof(DashboardManager) }
             };
 			return dic;
 		}

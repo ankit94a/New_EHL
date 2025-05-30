@@ -27,7 +27,7 @@ export class DashboardComponent {
   // todayInputs = 0;
   // last7DaysInputs = 1;
 
-  // wingId :string=''
+  wingId;
   // wing:Wing[]=[]
   // categoryList: Category[] = [];
   // subCategoryList: SubCategory[] = [];
@@ -45,13 +45,22 @@ export class DashboardComponent {
 
   constructor(private authService: AuthService, private apiService: ApiService,) {
     this.wing$ = this.authService.wing$;
-    // this.wingId= this.authService.getWingId()
+    this.wingId= parseInt( this.authService.getWingId())
     // this.getEmerCount()
     // this.getCategory(this.wingId)
     for (let i = 11; i >= 0; i--) {
   const date = new Date(this.currentDate.getFullYear(), this.currentDate.getMonth() - i);
   this.labels.push(date.toLocaleString('default', { month: 'short', year: 'numeric' }));
+
+  this.getCount();
 }
+  }
+  getCount(){
+    this.apiService.getWithHeaders('dashboard/emercount/'+this.wingId).subscribe(res =>{
+      if(res){
+        
+      }
+    })
   }
  public emerChartData = {
  
