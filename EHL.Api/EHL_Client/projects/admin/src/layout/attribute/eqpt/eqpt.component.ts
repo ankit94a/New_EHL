@@ -1,11 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import {
-  Category,
-  Eqpt,
-  SubCategory,
-  Wing,
-} from 'projects/shared/src/models/attribute.model';
+import {Category,Eqpt,SubCategory, Wing} from 'projects/shared/src/models/attribute.model';
 import { ApiService } from 'projects/shared/src/service/api.service';
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -51,7 +46,6 @@ export class EqptComponent {
       (this.eqpt.categoryId = attrData.categoryId),
       (this.eqpt.subCategoryId = attrData.subCategoryId),
       (this.eqpt.name = attrData.name);
-    // this.filterCategory(attrData.categoryId)
   }
   createForm() {
     (this.eqpt.id = 0),
@@ -92,9 +86,7 @@ export class EqptComponent {
     this.createForm();
   }
   save() {
-
     this.apiService.postWithHeader(this.apiUrl, this.eqpt).subscribe((res) => {
-
       if (res) {
         this.toastr.success('Eqpt added successfully', 'success');
         this.dailogRef.close(true);

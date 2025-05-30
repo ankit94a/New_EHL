@@ -1,13 +1,10 @@
 import { Component, Inject } from '@angular/core';
-// import { MatDialogRef } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { Wing } from 'projects/shared/src/models/attribute.model';
 import { ApiService } from 'projects/shared/src/service/api.service';
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-// import { SecureComponent } from 'projects/shared/src/component/secure/secure.component';
-import { EncryptionService } from 'projects/shared/src/service/encryption.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-wing',
@@ -26,8 +23,6 @@ export class WingComponent {
     private dialogRef: MatDialogRef<WingComponent>,
     private toastr: ToastrService,
     private dailogRef: MatDialogRef<WingComponent>,
-    // private SecureComponent: SecureComponent,
-    private EncryptionService:EncryptionService,
     private fb: FormBuilder
   ) {
     if (data != null) {
@@ -36,7 +31,6 @@ export class WingComponent {
 
       this.createForm();
     }
-    // attribute/wing/update
     this.apiUrl = this.wing.id > 0 ? 'attribute/wing/update' : 'attribute/wing';
   }
   bindDataToForm(attrData) {
@@ -57,15 +51,6 @@ export class WingComponent {
   }
 
   async save() {
-
-  //   const encryptedName = await this.EncryptionService.encrypt(this.wing.name);
-
-  // // Replace wing name with encrypted string before saving
-  // const encryptedWing = {
-  //   ...this.wing,
-  //   name: encryptedName
-  // };
-  // Replace wing name with encrypted data before saving
     this.apiSerive.postWithHeader(this.apiUrl, this.wing).subscribe((res) => {
       if (res) {
         this.toastr.success('Category added successfully', 'success');

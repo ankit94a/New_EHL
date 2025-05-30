@@ -19,8 +19,6 @@ export class CategoryComponent {
 
   constructor(@Inject(MAT_DIALOG_DATA) data: any,private apiSerive:ApiService,private toastr:ToastrService,private dailogRef:MatDialogRef<CategoryComponent>){
     this.getWing();
-
-
     if (data != null) {
       this.getWingById(data.wingId);
       this.bindDataToForm(data);

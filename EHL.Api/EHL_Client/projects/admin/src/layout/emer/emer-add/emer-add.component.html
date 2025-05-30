@@ -4,8 +4,8 @@
     <div class="row">
       <div class="col-md-4">
         <mat-form-field>
-          <mat-label>{{'EMERNumber' | translate}}</mat-label>
-          <input formControlName="emerNumber" appAlphanumericOnly type="text"  matInput placeholder="{{'EMERNumber' | translate}}"
+          <mat-label>EMERNumber</mat-label>
+          <input formControlName="emerNumber" appAlphanumericOnly type="text"  matInput placeholder="EMERNumber"
             required />
           <mat-error *ngIf="emerForm.get('emerNumber')?.touched && emerForm.get('emerNumber')?.invalid">
             EMER number is required
@@ -14,8 +14,8 @@
       </div>
       <div class="col-md-4">
         <mat-form-field>
-          <mat-label>{{'Subject' | translate}}</mat-label>
-          <input formControlName="subject" appAlphanumericOnly type="text" matInput placeholder="{{'Subject' | translate}}" required />
+          <mat-label>Subject</mat-label>
+          <input formControlName="subject" appAlphanumericOnly type="text" matInput placeholder="Subject" required />
           <mat-error *ngIf="emerForm.get('subject')?.touched && emerForm.get('subject')?.invalid">
             Subject is required
           </mat-error>
@@ -46,9 +46,6 @@
       </div>
     </div>
 
-    <!-- newly update -->
-
-    <!-- Row 1 -->
 <div class="row">
   <!-- When SubFunctionType exists -->
   <ng-container *ngIf="SubFunctionType.length > 0; else checkSubFunctionCategory">

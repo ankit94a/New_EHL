@@ -5,7 +5,7 @@ import { routes } from './app.routes';
 import { provideToastr } from 'ngx-toastr';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { HttpClient, HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
-import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
+// import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { authInterceptor } from 'projects/shared/src/service/auth-interceptor.service';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -20,7 +20,7 @@ export const appConfig: ApplicationConfig = {
         importProvidersFrom(MatNativeDateModule),
         importProvidersFrom(HttpClientModule),
         provideHttpClient(withInterceptors([authInterceptor])),
-        provideCharts(withDefaultRegisterables()),
+        // provideCharts(withDefaultRegisterables()),
         importProvidersFrom(NgxSpinnerModule)
 
   ]

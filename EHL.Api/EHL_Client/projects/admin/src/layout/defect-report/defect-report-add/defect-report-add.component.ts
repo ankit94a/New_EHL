@@ -104,11 +104,7 @@ export class DefectReportAddComponent {
   }
 
   getEqpt(subCategoryId) {
-    // let categoryId = this.policy.get('categoryId')?.value;
-
-    this.apiService
-      .getWithHeaders('attribute/eqpt' + this.categoryId + '/' + subCategoryId)
-      .subscribe((res) => {
+    this.apiService.getWithHeaders('attribute/eqpt' + this.categoryId + '/' + subCategoryId).subscribe((res) => {
         if (res) {
           this.eqptList = res;
         }

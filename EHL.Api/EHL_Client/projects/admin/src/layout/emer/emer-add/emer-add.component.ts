@@ -332,35 +332,10 @@ export class EmerAddComponent {
         formData.append('remarks', this.emerForm.get('remarks')?.value);
         formData.append('id', '0');
         formData.append('emerFile', this.emerForm.get('emerFile')?.value);
-
-        const rawObject = {
-          wing: wing,
-          category:
-            this.categoryList.find(
-              (item) => item.id == this.emerForm.get('categoryId')?.value
-            )?.name || '',
-          subCategory:
-            this.subCategoryList.find(
-              (item) => item.id == this.emerForm.get('subCategoryId')?.value
-            )?.name || '',
-          emerNumber: this.emerForm.get('emerNumber')?.value,
-          subject: this.emerForm.get('subject')?.value,
-          subFunction: this.emerForm.get('subFunction')?.value,
-          subFunctionCategory: this.emerForm.get('subFunctionCategory')?.value,
-          SubFunctionType: this.emerForm.get('subFunctionType')?.value,
-          eqpt: this.emerForm.get('eqpt')?.value,
-          remarks: this.emerForm.get('remarks')?.value,
-        };
-        // const encrypted = await this.EncryptionService.encryptObjectValues(
-        //   rawObject
-        // );
-        // Object.entries(encrypted).forEach(([key, value]) =>
-        //   formData.append(key, String(value))
-        // );
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
             this.toastr.success('Form submitted successfully', 'Success');
-            // this.dialogRef.close(true);
+            this.dialogRef.close(true);
           },
           error: (err) => {
             this.toastr.error('Error submitting form', 'Error');
@@ -373,19 +348,5 @@ export class EmerAddComponent {
         return;
       }
     }
-
-    // if (this.emerForm.valid || emerId > 0) {
-
-    //   let apiUrl = '';
-    //   if (emerId) {
-    //     formData.append('id', emerId);
-    //     formData.append('fileName', this.fileName);
-    //     formData.append('filePath', this.filePath);
-    //     apiUrl = 'emer/update';
-    //   } else {
-    //     apiUrl = 'emer';
-    //   }
-
-    // }
   }
 }

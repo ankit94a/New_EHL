@@ -56,7 +56,6 @@ export class SubCategoryComponent {
       (this.subCategory.name = '');
   }
   getWing() {
-
     this.apiService.getWithHeaders('attribute/wing').subscribe((res) => {
       if (res) {
         this.wing = res;
