@@ -14,7 +14,7 @@ import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 })
 export class WingListComponent {
   wingList:Wing[]=[];
-  roleType;
+  // roleType;
   isFolderOpen = false;
   masterSheetItems = [
   { name: 'Policies & Advisiories', icon: 'policies.svg', link: '/policy' },
@@ -23,7 +23,7 @@ export class WingListComponent {
 ];
   constructor(private apiService:ApiService,private authService:AuthService,private router: Router){
     this.getWingList();
-    this.roleType = this.authService.getRoleType();
+    // this.roleType = this.authService.getRoleType();
   }
 
   toggleFolder() {
@@ -49,7 +49,7 @@ navigateTo(link: string, event: MouseEvent) {
   }
   setWingData(wing){
     this.authService.setWingDetails(wing);
-    if(this.roleType == null ){
+    if(this.authService.isAuthenticated()){
       this.router.navigate(['/emer']);
     }else{
       this.router.navigate(['/dashboard']);

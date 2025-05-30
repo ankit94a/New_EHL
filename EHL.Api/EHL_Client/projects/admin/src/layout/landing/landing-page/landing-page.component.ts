@@ -36,13 +36,13 @@ export class LandingPageComponent {
 
   }
   ngOnInit() {
-    this.getAllNews();
+    // this.getAllNews();
     this.getProfile();
     this.getLatestPolicy();
     this.getLatestEmer();
-    this.ipService.getIpAddress().subscribe((res) => {
-      this.ipAddress = res.ip;
-    });
+    // this.ipService.getIpAddress().subscribe((res) => {
+    //   this.ipAddress = res.ip;
+    // });
   }
   getLatestEmer(){
     this.apiService.getWithHeaders('emer/latest/emer').subscribe(res => {

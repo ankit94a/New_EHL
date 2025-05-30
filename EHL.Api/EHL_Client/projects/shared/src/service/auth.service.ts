@@ -15,8 +15,7 @@ export class AuthService {
   constructor(private router:Router) { }
 
   isAuthenticated(): boolean {
-    const token = localStorage.getItem('EHL_TOKEN');
-    return token ? true : false;
+      return !!this.getToken();
   }
   setUserDetails(user){
     localStorage.setItem("EHL_RoleType",user.roleType);
@@ -24,11 +23,13 @@ export class AuthService {
     localStorage.setItem("EHL_RoleId",user.roleId);
   }
   setToken(token:string){
-    localStorage.setItem("EHL_TOKEN",token);
+    debugger
+    sessionStorage.setItem("EHL_TOKEN",token);
   }
 
+
   getToken(){
-    return localStorage.getItem("EHL_TOKEN");
+    return sessionStorage.getItem("EHL_TOKEN");
   }
   getUserName(){
     return localStorage.getItem("EHL_UserName");
@@ -37,6 +38,7 @@ export class AuthService {
     return localStorage.getItem("EHL_RoleId");
   }
   clear() {
+    sessionStorage.clear();
     this.navigateToLogin(this.router.routerState.snapshot.url);
 
   }

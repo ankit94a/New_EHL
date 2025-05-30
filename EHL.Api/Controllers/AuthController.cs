@@ -22,7 +22,6 @@ namespace EHL.Api.Controllers
             _jwtManager = jwtManager;
             _loginAttemptService = loginAttemptService;
         }
-
         [HttpPost, Route("login")]
         public IActionResult DoLogin([FromBody] Login login)
         {
@@ -45,13 +44,8 @@ namespace EHL.Api.Controllers
                 if (isPasswordCorrect)
                 {
                     var jwtToken = _jwtManager.GenerateJwtToken(user);
-                    var model = new
-                    {
-                        userName = user.Name,
-                        roleType = user.RoleType,
-                        roleId = user.RoleId
-                    };
-                    return Ok(new { token = jwtToken, user = model });
+
+                    return Ok(new { token = jwtToken });
                 }
                 else
                 {
@@ -67,12 +61,7 @@ namespace EHL.Api.Controllers
         }
 
 
-        [HttpGet, Route("rolepermission")]
-        public IActionResult GetRolePermission()
-        {
-            var roleId = HttpContext.GetRoleId();
-            return Ok(_userManager.GetAllRolePermission(roleId));
-        }
+       
 
         [HttpPost, Route("forget-password")]
         public IActionResult ForgetPassword([FromBody] Login request)
@@ -86,7 +75,7 @@ namespace EHL.Api.Controllers
             return Ok(new { message = "Password reset link sent to your email." });
         }
 
-        [HttpPost, Route("logout")]
+        [HttpGet, Route("logout")]
         public IActionResult Logout()
         {
 

@@ -20,6 +20,7 @@ export class FilterSidebarPipe implements PipeTransform {
     // }
 
     // If roleType is '3', apply limited restrictions
+    debugger
     if (roleType === null) {
       return this.filterMenus(menus, restrictedForRole3);
     }

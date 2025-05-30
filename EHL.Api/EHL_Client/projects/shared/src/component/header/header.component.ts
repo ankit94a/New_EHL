@@ -8,11 +8,12 @@ import { BISMatDialogService } from '../../service/insync-mat-dialog.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UserIdleService } from '../../service/user-idol.service';
 import { TimerPipe } from '../pipes/timer.pipe';
+import { ApiService } from '../../service/api.service';
 
 @Component({
   selector: 'app-header',
-  standalone:true,
-  imports:[SharedLibraryModule,RouterModule,TimerPipe],
+  standalone: true,
+  imports: [SharedLibraryModule, RouterModule, TimerPipe],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -21,7 +22,7 @@ export class HeaderComponent implements OnInit {
   timer$ = signal(15 * 60); // 15 minutes countdown
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
-  constructor(private authService:AuthService,private dialogService:BISMatDialogService,) {
+  constructor(private authService: AuthService, private dialogService: BISMatDialogService, private apiService: ApiService) {
     this.wing$ = this.authService.wing$;
     this.setupUserIdleTracking();
   }
@@ -29,7 +30,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
 
   }
-   setupUserIdleTracking() {
+  setupUserIdleTracking() {
     // Reset on any activity
     this.userIdleService.onUserActivity(() => {
       this.timer$.set(15 * 60); // reset timer to 15 min
@@ -43,17 +44,11 @@ export class HeaderComponent implements OnInit {
           this.timer$.set(current - 1);
         } else {
           clearInterval(interval);
-          this.logout(); // when timer hits 0
+          this.onLoggedout(); // when timer hits 0
         }
       }, 1000);
     });
   }
-
-  logout() {
-    // Call logout API and redirect to login
-    console.log('User is logged out due to inactivity');
-  }
-
 
 
   toggleSideBar() {
@@ -69,10 +64,16 @@ export class HeaderComponent implements OnInit {
   }
 
   onLoggedout() {
-    this.authService.clear()
-    this.authService.clearWing();
+    this.apiService.getWithHeaders('auth/logout').subscribe(res => {
+      debugger
+      if (res) {
+        this.authService.clear()
+        this.authService.clearWing();
+      }
+    })
+
   }
-  openDialog(){
-    this.dialogService.open(UserProfileComponent,null,'75vw','75vh')
+  openDialog() {
+    this.dialogService.open(UserProfileComponent, null, '75vw', '75vh')
   }
 }

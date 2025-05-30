@@ -37,10 +37,10 @@ namespace InSync.Api.Authorization
 				Subject = new ClaimsIdentity(new[]
 				{
 				new Claim(EHLConstant.UserId, user.Id.ToString()),
-				new Claim(EHLConstant.UserName, user.Name.ToString()),
-				new Claim(EHLConstant.RoleId, user.RoleId.ToString()),
+				//new Claim(EHLConstant.UserAgent, agent.ToString()),
 				 new Claim(EHLConstant.RoleType,user.RoleType.ToString()),
-				new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                  //new Claim(EHLConstant.IpAddress,ipAddress.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 			}),
 				Issuer = _jwtSettings.Issuer,
 				Audience = _jwtSettings.Audience,

@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using static EHL.Common.Enum.Enum;
 namespace EHL.Api.Controllers
 {
-	[Route("api/[controller]")]
+    //[Authorize]
+    [Route("api/[controller]")]
 	public class EmerController : ControllerBase
 	{
 		private readonly IEmerManager _emmerManager;

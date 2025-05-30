@@ -8,9 +8,9 @@ namespace EHL.Common.Helpers
 {
 	public static class EHLConstant
 	{
-		public const string RoleId = "roleid";
+		public const string IpAddress = "ipaddress";
 		public const string UserId = "userid";
-		public const string UserName = "username";
+		public const string UserAgent = "useragent";
 		public const string RoleType = "roletype";
 	}
 }

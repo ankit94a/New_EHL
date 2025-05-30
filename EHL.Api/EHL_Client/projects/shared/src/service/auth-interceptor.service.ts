@@ -6,7 +6,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (isExcluded) {
     return next(req);
   }
-  const authToken = localStorage.getItem('EHL_TOKEN');
+  const authToken = sessionStorage.getItem('EHL_TOKEN');
   if (authToken) {
     const clonedRequest = req.clone({
       setHeaders: {

@@ -1,20 +1,96 @@
-﻿
+
+//using BIS.Api.Extensions;
+//using BIS.API.Filters;
+//using BIS.API.IOC;
+//using EHL.Common.Helpers;
+//using InSync.Api.Extensions;
+//using Newtonsoft.Json;
+
+//namespace InSync.Api
+//{
+//    public class Startup
+//    {
+//        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+//        public Startup(IConfiguration configuration)
+//        {
+//            Configuration = configuration;
+//        }
+
+//        public IConfiguration Configuration { get; }
+
+//        // This method gets called by the runtime. Use this method to add services to the container.
+//        public void ConfigureServices(IServiceCollection services)
+//        {
+
+
+//            IoCConfiguration.Configuration(services);
+//            services.AddSingleton<LoginAttemptService>();
+//            services.AddSingleton(Configuration);
+//            services.AddCors(o => o.AddPolicy(MyAllowSpecificOrigins, builder =>
+//            {
+//                builder.AllowAnyOrigin()
+//                       .AllowAnyMethod()
+//                       .AllowAnyHeader();
+//            }));
+//            services.AddResponseCompression(options =>
+//            {
+//                options.EnableForHttps = true;
+//            });
+
+//            services.AddControllers();
+//            JwtTokenConfig.AddJwtTokenAuthentication(services, Configuration);
+//            services.AddSwaggerConfiguration();
+
+//            services.AddMvc(options =>
+//            {
+//                options.Filters.Add(typeof(ValidateModelFilter));
+//            }).AddDataAnnotationsLocalization();
+
+//        }
+
+//        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+//        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+//        {
+//            if (env.IsDevelopment())
+//            {
+//                app.UseDeveloperExceptionPage();
+//                app.UseSwaggerSetup();
+
+//            }
+
+//            app.UseCors(MyAllowSpecificOrigins);
+
+//            app.UseRouting();
+//            app.UseAuthentication();
+//            app.UseHttpsRedirection();
+//            app.UseAuthorization();
+//            //app.UseMiddleware<ErrorHandlerMiddleware>();
+//            app.UseResponseCompression();
+//            app.UseResponseCaching();
+//            app.UseEndpoints(endpoints =>
+//            {
+//                endpoints.MapControllers();
+//            });
+//        }
+//    }
+//}
+
+
+
+
 
 using System;
 using Newtonsoft.Json;
 using BIS.API.Filters;
 using BIS.API.IOC;
-using EHL.DB;
-using BIS.API.Extensions.BIS.Api.Extensions;
-using EHL.Business.Interfaces;
-using EHL.Business.Implements;
-using EHL.DB.Infrastructure;
-using EHL.DB.Implements;
+
 using BIS.Api.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using System.Net;
 using EHL.Common.Helpers;
+using InSync.Api.Extensions;
 
 
 
@@ -43,8 +119,7 @@ namespace EHL.Api
                     // https://ehlweb.jayceetechsoftwares.com
                     builder.WithOrigins("http://localhost:4200")
                            .AllowAnyMethod()
-                           .AllowAnyHeader()
-                           .AllowCredentials();
+                           .AllowAnyHeader();
                 });
             });
             services.AddResponseCompression(options =>
