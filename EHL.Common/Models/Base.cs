@@ -21,5 +21,7 @@ namespace EHL.Common.Models
 	{
 		public long Id { get; set; }
 		public string TableName { get; set; }
+
+		public string EmerNumber { get; set; }
 	}
 }

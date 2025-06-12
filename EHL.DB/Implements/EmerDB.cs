@@ -98,10 +98,7 @@ namespace EHL.DB.Implements
 		{
 			try
 			{
-				if (emer.CreatedOn == default)
-					emer.CreatedOn = DateTime.Now;
-
-				string query = @"insert into emer (emernumber, subject, subfunction, category, subcategory, categoryid, subcategoryid, eqpt, remarks, fileid, createdby, createdon, isactive,wing,wingid,subfunctioncategory,subfunctiontype,filename,filepath) values  (@emernumber, @subject, @subfunction, @category, @subcategory, @categoryid, @subcategoryid, @eqpt, @remarks, @fileid, @createdby, @createdon, @isactive,@wing,@wingid,@subfunctioncategory,@subfunctiontype,@filename,@filepath)";
+				string query = @"insert into emer (emernumber, subject, subfunction, category, subcategory, categoryid, subcategoryid, eqpt, remarks, createdby, createdon, isactive,wing,wingid,subfunctioncategory,subfunctiontype,filename,filepath) values  (@emernumber, @subject, @subfunction, @category, @subcategory, @categoryid, @subcategoryid, @eqpt, @remarks, @createdby, @createdon, @isactive,@wing,@wingid,@subfunctioncategory,@subfunctiontype,@filename,@filepath)";
 				var result = connection.Execute(query, emer);
 				return result > 0;
 			}
@@ -112,6 +109,20 @@ namespace EHL.DB.Implements
 			}
 		}
 
+        public bool AddMasterSheet(EmerModel emer)
+        {
+            try
+            {
+                string query = @"insert into mastersheet (emernumber, subfunction, category, categoryid, eqpt, createdby, createdon, isactive,wing,wingid) values  (@emernumber, @subfunction, @category, @categoryid, @eqpt, @createdby, @createdon, @isactive,@wing,@wingid)";
+                var result = connection.Execute(query, emer);
+                return result > 0;
+            }
+            catch (Exception ex)
+            {
+                EHLLogger.Error(ex, "Class=EmerDB,method=AddMasterSheet");
+                throw;
+            }
+        }
         public bool AddEmerIndex(EmerIndex emer)
         {
             try
@@ -134,7 +145,7 @@ namespace EHL.DB.Implements
         {
             try
             {
-               string query = @"UPDATE emerIndex SET emernumber = @EmerNumber,subject = @Subject,category = @Category,categoryid = @CategoryId,filename = @FileName,filepath=@FilePath WHERE id = @Id";
+               string query = @"UPDATE emerIndex SET emernumber = @EmerNumber,subject = @Subject,category = @Category,categoryid = @CategoryId,filename = @FileName,filepath=@FilePath,updatedby=@updatedby,updatedon=@updatedon WHERE id = @Id";
                 var result = await connection.ExecuteAsync(query, emer);
                 return result > 0;
             }
@@ -144,36 +155,6 @@ namespace EHL.DB.Implements
 				throw ;
             }
         }
-        public bool DeactiveEmerIndex(long Id)
-        {
-            try
-            {
-                string query = @"UPDATE emerindex SET isactive = 0 WHERE id = @Id";
-                var result = connection.Execute(query, new { Id });
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-				EHLLogger.Error(ex, "Class=EmerDB,method=DeactiveEmerIndex");
-				throw;
-            }
-        }
-
-        public bool DeactivateEmer(long Id)
-        {
-            try
-            {
-                string query = @"UPDATE emer SET isactive = 0 WHERE id = @Id";
-                var result = connection.Execute(query, new { Id });
-                return result > 0;
-            }
-            catch (Exception ex)
-            {
-				EHLLogger.Error(ex, "Class=EmerDB,method=DeactivateEmer");
-				throw;
-            }
-        }
-
         public async Task<bool> UpdateEmer(EmerModel emer)
         {
             try
@@ -191,43 +172,5 @@ namespace EHL.DB.Implements
 				throw;
             }
         }
-
-        public long AddFile(Documents document)
-		{
-			try
-			{
-				if (document.Document == null || document.Document.Length == 0)
-				{
-					throw new ArgumentException("Document content cannot be empty.");
-				}
-
-				string query = @"INSERT INTO documents (document, filetype, name, size, createdby, updatedby, createdon, isactive, isdeleted) VALUES (@document, @filetype, @name, @size, @createdby, @updatedby, @createdon, @isactive, @isdeleted); SELECT CAST(SCOPE_IDENTITY() AS BIGINT);";
-
-				// Use Dapper to execute the query and insert the file data into the database
-				var parameters = new
-				{
-					document.Document,        // Store the file content as VARBINARY
-					document.FileType,        // File extension (e.g., pdf, docx)
-					document.Name,            // File name
-					document.Size,            // File size in bytes
-					document.CreatedBy,       // Created by user
-					document.UpdatedBy,       // Updated by user
-					CreatedOn = DateTime.Now, // Created on timestamp
-					IsActive = true,          // Active flag
-					IsDeleted = false         // Deleted flag
-				};
-
-				// Execute the query and get the inserted ID
-				var id = connection.ExecuteScalar<long>(query, parameters);
-				return id;
-			}
-			catch (Exception ex)
-			{
-				EHLLogger.Error(ex, "Class=EmerDB,method=AddFile");
-				throw;
-			}
-		}
-
-
 	}
 }

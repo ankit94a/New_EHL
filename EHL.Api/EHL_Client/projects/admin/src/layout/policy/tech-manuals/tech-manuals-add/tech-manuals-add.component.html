@@ -22,11 +22,6 @@
         <mat-option [value]="'Technical Manuals'">Technical Manuals</mat-option>
         <mat-option [value]="'Advisories'">Advisories</mat-option>
         <mat-option [value]="'Misc'">Misc</mat-option>
-        <!-- <mat-option [value]="'Oil and Lubs'">Oil and Lubs</mat-option>
-            <mat-option [value]="'Mrls Dist'">Mrls Dist</mat-option>
-            <mat-option [value]="'Policy NGE'">Policy NGE</mat-option>
-            <mat-option [value]="'Eqpt Appreciation'">Eqpt Appreciation</mat-option>
-            <mat-option [value]="'SMTE / STE'">SMTE / STE</mat-option> -->
       </mat-select>
       <mat-error *ngIf="policy.get('type')?.touched && policy.get('type')?.hasError('required')">
         Policy Letter & Misc Type is required

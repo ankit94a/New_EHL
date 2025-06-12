@@ -69,9 +69,17 @@ namespace EHL.Business.Implements
 		{
 			return _attributeDb.UpdateEqpt(eqpt);
 		}
-        public bool DeleteEmer(DeleteEmer data)
+        public bool DeleteDynamic(DeactivateModel data)
         {
-            return _attributeDb.DeleteEmer(data);
+			if(data.TableName == "emer")
+			{
+				var MastersheetModel = new DeactivateModel();
+				var mastersheet = _attributeDb.GetMasterSheetByEmerNumber(data.EmerNumber);
+				MastersheetModel.Id = mastersheet.Id;
+				MastersheetModel.TableName = "mastersheet";
+				_attributeDb.DeleteDynamic(MastersheetModel);
+			}
+            return _attributeDb.DeleteDynamic(data);
         }
     }
 }

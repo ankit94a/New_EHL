@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EHL.DB.Implements
 {
@@ -211,7 +212,7 @@ namespace EHL.DB.Implements
 				throw;
 			}		
 		}
-        public bool DeleteEmer(DeleteEmer data)
+        public bool DeleteDynamic(DeactivateModel data)
         {
 			try
 			{
@@ -223,6 +224,19 @@ namespace EHL.DB.Implements
 				EHLLogger.Error(ex, $"Class=AttributeDB,Delete from ,table = {data.TableName}");
 				throw;
 			}
+        }
+        public EmerModel GetMasterSheetByEmerNumber(string EmerNumber)
+		{
+            try
+            {
+                string query = "SELECT * FROM mastersheet WHERE emernumber = @emernumber";
+                return connection.QueryFirstOrDefault<EmerModel>(query, new { emernumber = EmerNumber });
+            }
+            catch (Exception ex)
+            {
+                EHLLogger.Error(ex, $"Class=AttributeDB,GetEmerById from ,table = emer");
+                throw;
+            }
         }
 
     }

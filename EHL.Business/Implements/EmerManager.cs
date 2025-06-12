@@ -1,4 +1,5 @@
 ﻿using EHL.Business.Interfaces;
+using EHL.Common.Helpers;
 using EHL.Common.Models;
 using EHL.DB.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -61,12 +62,16 @@ namespace EHL.Business.Implements
 					}
 				}
 
-				return _emerDb.AddEmer(emer);
+                if (_emerDb.AddEmer(emer))
+                {
+                    return _emerDb.AddMasterSheet(emer);
+                };
+                return false;
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"Error: {ex.Message}");
-				throw new Exception("Error while adding the EmerModel data.", ex);
+                EHLLogger.Error(ex, "Class=EmerManager,method=AddEmer Error while adding the EmerModel data");
+                throw new Exception("Error while adding the EmerModel data.", ex);
 			}
 		}
 
@@ -98,20 +103,10 @@ namespace EHL.Business.Implements
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
-                throw new Exception("Error while adding the EmerModel data.", ex);
+                EHLLogger.Error(ex, "Class=EmerManager,method=AddEmerIndex Error while adding the EmerModel data");
+                throw new Exception("Error while adding the EmerModelIndex data.", ex);
             }
         }
-
-        // Helper function to convert IFormFile to byte array
-        private byte[] ConvertToByteArray(IFormFile file)
-		{
-			using (var memoryStream = new MemoryStream())
-			{
-				file.CopyTo(memoryStream);
-				return memoryStream.ToArray();
-			}
-		}
 
         public async Task<bool> UpdateEmerIndex(EmerIndex emer)
         {
@@ -141,7 +136,7 @@ namespace EHL.Business.Implements
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                EHLLogger.Error(ex, "Class=EmerManager,method=UpdateEmerIndex");
                 throw new Exception("Error while adding the EmerModel data.", ex);
             }
             
@@ -176,18 +171,9 @@ namespace EHL.Business.Implements
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                EHLLogger.Error(ex, "Class=EmerManager,method=UpdateEmer Error while adding the EmerModel data");
                 throw new Exception("Error while updating EmerModel data.", ex);
             }
-        }
-
-        public bool DeactivateEmer(long Id)
-		{
-			return _emerDb.DeactivateEmer(Id);
-		}
-        public bool DeactiveEmerIndex(long Id)
-        {
-            return _emerDb.DeactiveEmerIndex(Id);
         }
     }
 }

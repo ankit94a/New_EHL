@@ -1,20 +1,19 @@
-<div class="layout">
+
   <div class="row">
     <div class="main">
       <div class="col-md-1">
         <button mat-button class="btn mat-raised-button" (click)="openDialog()">
-    <span>Admin Login</span>
-  </button>
+          <span>Admin Login</span>
+        </button>
       </div>
-    <div class="col-md-10 no-space">
-      <div class="header">EQUIPMENT HELPLINE</div>
+      <div class="col-md-10 no-space">
+        <div class="header">EQUIPMENT HELPLINE</div>
+      </div>
+      <div class="btn_class">
+        <a href="/wing" mat-button> User Login</a>
+      </div>
     </div>
-    <div class="btn_class">
-  <a href="/wing" mat-button> User Login</a>
-
-</div>
   </div>
-</div>
   <div class="banner">
     <img src="/header-img.jpeg" alt="banner" width="110%" class="banner-img" />
   </div>
@@ -35,33 +34,13 @@
     </div>
     <!-- Bootstrap Carousel -->
     <div class="col-md-6 py-2">
-      <div
-        id="autoCarousel"
-        class="carousel slide box"
-        data-bs-ride="carousel"
-        data-bs-interval="3000"
-      >
+      <div id="autoCarousel" class="carousel slide box" data-bs-ride="carousel" data-bs-interval="3000">
         <!-- Indicators -->
         <div class="carousel-indicators">
-          <button
-            type="button"
-            data-bs-target="#autoCarousel"
-            data-bs-slide-to="0"
-            class="active"
-            aria-label="Slide 1"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#autoCarousel"
-            data-bs-slide-to="1"
-            aria-label="Slide 2"
-          ></button>
-          <button
-            type="button"
-            data-bs-target="#autoCarousel"
-            data-bs-slide-to="2"
-            aria-label="Slide 3"
-          ></button>
+          <button type="button" data-bs-target="#autoCarousel" data-bs-slide-to="0" class="active"
+            aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#autoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+          <button type="button" data-bs-target="#autoCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
         </div>
 
         <!-- Carousel Images -->
@@ -90,21 +69,11 @@
         </div>
 
         <!-- Controls -->
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#autoCarousel"
-          data-bs-slide="prev"
-        >
+        <button class="carousel-control-prev" type="button" data-bs-target="#autoCarousel" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#autoCarousel"
-          data-bs-slide="next"
-        >
+        <button class="carousel-control-next" type="button" data-bs-target="#autoCarousel" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
@@ -119,7 +88,7 @@
         <div class="news-content-vertical">
           <ul class="news-list scroll-vertical">
             <li *ngFor="let item of latestEmer" (click)="getFileId(item,'emer')">
-              {{ item.emerNumber }}  -  {{ item.subject }} <span *ngIf="item.status" class="badge">New</span>
+              {{ item.emerNumber }} - {{ item.subject }} <span *ngIf="item.status" class="badge">New</span>
             </li>
           </ul>
         </div>
@@ -137,19 +106,19 @@
           <div class="emi-content1">
             <img src="/eme-logo3.png" alt="eme-logo" class="section-1" />
             <div>
-            <p class="pra">
-              The battle worthiness of the Army is dependent on its equipment
-              state. Hence, a need was felt to empower both the users and the
-              maintenance agency to address equipment-related issues effectively
-              and instantaneously.
-            </p>
-            <p class="pra">
-              Thus, there was a need for the creation of a digital knowledge
-              database and repository which facilitates knowledge management for
-              the Indian Army via a web-based application, hosted on Army
-              intranet.
-            </p>
-          </div>
+              <p class="pra">
+                The battle worthiness of the Army is dependent on its equipment
+                state. Hence, a need was felt to empower both the users and the
+                maintenance agency to address equipment-related issues effectively
+                and instantaneously.
+              </p>
+              <p class="pra">
+                Thus, there was a need for the creation of a digital knowledge
+                database and repository which facilitates knowledge management for
+                the Indian Army via a web-based application, hosted on Army
+                intranet.
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -168,12 +137,7 @@
         </div>
       </div>
     </div>
-
-
   </div>
-
-  <br />
-  <br />
   <br />
   <div class="row background landing-footer">
     <div class="col-md-5 center">
@@ -194,10 +158,6 @@
 
     <div class="col-md-4 center">
       <div class="title">VETTED BY ACG 01 FEB 2025</div>
-      <div>
-        Lorem Ipsum is simply dummy text of the printing and typesetting
-        industry.
-      </div>
     </div>
     <div class="col-md-3 center">
       <div class="title">Right to Information</div>
@@ -205,4 +165,3 @@
       <div>Equipment Help Line</div>
     </div>
   </div>
-</div>

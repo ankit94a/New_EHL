@@ -33,15 +33,7 @@ export class EpContractAddComponent {
   categoryId: number;
   apiUrl: string = '';
   alertMessage: string = '';
-  constructor(
-    private authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) data,
-    private dialogRef: MatDialogRef<EpContractAddComponent>,
-    private apiService: ApiService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private EncryptionService : EncryptionService
-  ) {
+  constructor(private authService: AuthService,@Inject(MAT_DIALOG_DATA) data,private dialogRef: MatDialogRef<EpContractAddComponent>,private apiService: ApiService,private fb: FormBuilder,private toastr: ToastrService) {
     this.wingId = parseInt(this.authService.getWingId());
     this.getWings();
     if (data != null) {
@@ -52,6 +44,7 @@ export class EpContractAddComponent {
       this.createForm();
     }
   }
+
   bindDataToForm(policyData) {
     this.categoryId = policyData.categoryId;
     this.getSubCategory(policyData.categoryId, false);
@@ -79,7 +72,6 @@ export class EpContractAddComponent {
 
   createForm() {
     this.policy = this.fb.group({
-
       type: [{ value: 'EP Contract', disabled: true }, [Validators.required]],
       wingId: [{ value: this.wingId, disabled: true }, [Validators.required]],
       categoryId: ['', [Validators.required]],
@@ -91,15 +83,14 @@ export class EpContractAddComponent {
       remarks: [''],
     });
   }
+
   getSubCategory(categoryId, isUserInput: boolean = true) {
     if (isUserInput) {
       this.policy.patchValue({ subCategoryId: null });
       this.policy.patchValue({ eqpt: null });
     }
-    this.apiService
-      .getWithHeaders('attribute/subcategory' + categoryId)
-      .subscribe((res) => {
-        if (res) {
+    this.apiService.getWithHeaders('attribute/subcategory' + categoryId).subscribe((res) => {
+      if (res) {
           this.subCategoryList = res;
           if (isUserInput) this.eqptList = [];
         }
@@ -107,199 +98,48 @@ export class EpContractAddComponent {
   }
 
   getEqpt(subCategoryId) {
-    // let categoryId = this.policy.get('categoryId')?.value;
-
-    this.apiService
-      .getWithHeaders('attribute/eqpt' + this.categoryId + '/' + subCategoryId)
-      .subscribe((res) => {
-        if (res) {
+    this.apiService.getWithHeaders('attribute/eqpt' + this.categoryId + '/' + subCategoryId).subscribe((res) => {
+      if (res) {
           this.eqptList = res;
         }
       });
   }
-    async save() {
-    const formData = new FormData();
-    var wing = this.wingList.find(
-      (item) => item.id == this.policy.get('wingId')?.value
-    ).name;
-    formData.append('wing', wing);
-    const policyId = this.policy.get('id')?.value
-      ? this.policy.get('id')?.value
-      : 0;
 
-
-    //edit
-    if (policyId > 0) {
-      const fileInput = this.policy.get('policyFile')?.value;
-      if (fileInput) {
-        formData.append('policyFile', fileInput, fileInput.name);
-      } else {
-        if (this.fileName != '' && this.fileName != null) {
-          formData.append('fileName', this.fileName);
-          formData.append('filePath', this.filePath);
-        } else {
-          return (this.alertMessage = 'File is required');
-        }
-      }
-      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(
-        this.policy,
-        'policyFile'
-      );
-
-      if (isValid) {
-        formData.append('id', policyId);
-
-        formData.append(
-          'subCategoryId',
-          this.policy.get('subCategoryId')?.value
-        );
-        formData.append('type', 'EP Contract');
-        formData.append('wingId', this.policy.get('wingId')?.value);
-        formData.append('categoryId', this.policy.get('categoryId')?.value);
-        formData.append('policyFile', this.policy.get('policyFile')?.value);
-
-       const rawObject = {
-          eqpt: this.policy.get('eqpt')?.value,
-          category: this.categoryList.find(
-            (x) => x.id == this.policy.get('categoryId')?.value
-          )?.name,
-          subCategory: this.subCategoryList.find(
-            (x) => x.id == this.policy.get('subCategoryId')?.value
-          )?.name,
-          remarks: this.policy.get('remarks')?.value,
-          wing: this.wingList.find(
-            (w) => w.id == this.policy.get('wingId')?.value
-          )?.name,
-        };
-        const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
-
-        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
-          next: (res) => {
-            this.toastr.success('EP Contract submitted successfully', 'Success');
-            this.dialogRef.close(true);
-          },
-          error: (err) => {
-            this.toastr.error('Error submitting EP Contract', 'Error');
-          },
-        });
-      } else {
-        this.policy.markAllAsTouched();
-        return;
-      }
-    }
-    //add
-    else {
-      formData.append('type', 'EP Contract');
-      formData.append('wingId', this.policy.get('wingId')?.value);
-      formData.append(
-        'id',
-        this.policy.get('id')?.value ? this.policy.get('id')?.value : '0'
-      );
-
-      if (this.policy.valid) {
-
-        formData.append('categoryId', this.policy.get('categoryId')?.value);
-        formData.append(
-          'subCategoryId',
-          this.policy.get('subCategoryId')?.value
-        );
-        formData.append('policyFile', this.policy.get('policyFile')?.value);
-
-        const rawObject = {
-          eqpt: this.policy.get('eqpt')?.value,
-          category: this.categoryList.find(
-            (x) => x.id == this.policy.get('categoryId')?.value
-          )?.name,
-          subCategory: this.subCategoryList.find(
-            (x) => x.id == this.policy.get('subCategoryId')?.value
-          )?.name,
-          remarks: this.policy.get('remarks')?.value,
-          wing: this.wingList.find(
-            (w) => w.id == this.policy.get('wingId')?.value
-          )?.name,
-        };
-        const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
-
-        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
-          next: (res) => {
-            this.toastr.success('EP Contract submitted successfully', 'Success');
-            this.dialogRef.close(true);
-          },
-          error: (err) => {
-            this.toastr.error('Error submitting EP Contract', 'Error');
-          },
-        });
-      } else {
-        const fileInput = this.policy.get('policyFile')?.value;
-        if (!fileInput) this.alertMessage = 'File is required';
-        this.policy.markAllAsTouched();
-        return;
-      }
-    }
-  }
   // save() {
   //   const formData = new FormData();
-  //   var wing = this.wingList.find(
-  //     (item) => item.id == this.policy.get('wingId')?.value
-  //   ).name;
+  //   var wing = this.wingList.find((item) => item.id == this.policy.get('wingId')?.value).name;
   //   formData.append('wing', wing);
-  //   const policyId = this.policy.get('id')?.value?this.policy.get('id')?.value:0;
-  //   //edit ep contract
-  //   if (policyId > 0) {
+  //   const policyId = this.policy.get('id')?.value ? this.policy.get('id')?.value : 0;
 
-  //   const fileInput = this.policy.get('policyFile')?.value;
-  //   if (fileInput) {
-  //     formData.append('policyFile', fileInput, fileInput.name);
-  //   } else {
-  //     if (this.fileName != '' && this.fileName != null) {
-  //       formData.append('fileName', this.fileName);
-  //       formData.append('filePath', this.filePath);
+  //   if (policyId > 0) {
+  //     const fileInput = this.policy.get('policyFile')?.value;
+  //     if (fileInput) {
+  //       formData.append('policyFile', fileInput, fileInput.name);
   //     } else {
-  //       return (this.alertMessage = 'File is required');
+  //       if (this.fileName != '' && this.fileName != null) {
+  //         formData.append('fileName', this.fileName);
+  //         formData.append('filePath', this.filePath);
+  //       } else {
+  //         return (this.alertMessage = 'File is required');
+  //       }
   //     }
-  //   }
-  //   var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(
-  //     this.policy,
-  //     'policyFile'
-  //   );
+  //     var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.policy,'policyFile');
   //     if (isValid) {
-  //       formData.append('id', policyId);
-  //       formData.append('wing', wing);
-  //       var category = this.categoryList.find(
-  //         (item) => item.id == this.policy.get('categoryId')?.value
-  //       ).name;
-  //       var subCategory = this.subCategoryList.find(
-  //         (item) => item.id == this.policy.get('subCategoryId')?.value
-  //       )?.name;
+  //        formData.append('id', policyId);
+  //       var category = this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value).name;
+  //       var subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name;
   //       formData.append('category', category);
   //       formData.append('subCategory', subCategory);
   //       formData.append('eqpt', this.policy.get('eqpt')?.value);
-  //       formData.append(
-  //         'subCategoryId',
-  //         this.policy.get('subCategoryId')?.value
-  //       );
-  //       formData.append('type', 'EP Contract');
   //       formData.append('wingId', this.policy.get('wingId')?.value);
   //       formData.append('categoryId', this.policy.get('categoryId')?.value);
+  //       formData.append('subCategoryId',this.policy.get('subCategoryId')?.value)
   //       formData.append('policyFile', this.policy.get('policyFile')?.value);
   //       formData.append('remarks', this.policy.get('remarks')?.value);
 
   //       this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
   //         next: (res) => {
-  //           this.toastr.success(
-  //             'EP Contract submitted successfully',
-  //             'Success'
-  //           );
+  //           this.toastr.success('EP Contract submitted successfully', 'Success');
   //           this.dialogRef.close(true);
   //         },
   //         error: (err) => {
@@ -311,27 +151,24 @@ export class EpContractAddComponent {
   //       return;
   //     }
   //   }
-  //   //add ep contract
+  //   //add
   //   else {
-  //     debugger
+  //     formData.append('type', 'EP Contract');
+  //     formData.append('wingId', this.policy.get('wingId')?.value);
+  //     formData.append(
+  //       'id',
+  //       this.policy.get('id')?.value ? this.policy.get('id')?.value : '0'
+  //     );
+
   //     if (this.policy.valid) {
-  //       const category =
-  //         this.categoryList.find(
-  //           (item) => item.id == this.policy.get('categoryId')?.value
-  //         )?.name || '';
-  //       const subCategory =
-  //         this.subCategoryList.find(
-  //           (item) => item.id == this.policy.get('subCategoryId')?.value
-  //         )?.name || '';
+  //       const category =this.categoryList.find((item) => item.id == this.policy.get('categoryId')?.value)?.name || '';
+  //       const subCategory = this.subCategoryList.find((item) => item.id == this.policy.get('subCategoryId')?.value)?.name || '';
   //       formData.append('type', 'EP Contract');
   //       formData.append('wingId', this.policy.get('wingId')?.value);
   //       formData.append('id', policyId);
   //       formData.append('category', category);
   //       formData.append('categoryId', this.policy.get('categoryId')?.value);
-  //       formData.append(
-  //         'subCategoryId',
-  //         this.policy.get('subCategoryId')?.value
-  //       );
+  //       formData.append('subCategoryId',this.policy.get('subCategoryId')?.value);
   //       formData.append('subCategory', subCategory);
   //       formData.append('eqpt', this.policy.get('eqpt')?.value);
   //       formData.append('policyFile', this.policy.get('policyFile')?.value);
@@ -339,11 +176,7 @@ export class EpContractAddComponent {
 
   //       this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
   //         next: (res) => {
-  //           this.toastr.success(
-  //             'EP Contract submitted successfully',
-  //             'Success'
-  //           );
-
+  //           this.toastr.success('EP Contract submitted successfully', 'Success');
   //           this.dialogRef.close(true);
   //         },
   //         error: (err) => {
@@ -358,6 +191,118 @@ export class EpContractAddComponent {
   //     }
   //   }
   // }
+  save() {
+    const formData = new FormData();
+    var wing = this.wingList.find(
+      (item) => item.id == this.policy.get('wingId')?.value
+    ).name;
+    formData.append('wing', wing);
+    const policyId = this.policy.get('id')?.value?this.policy.get('id')?.value:0;
+    //edit ep contract
+    if (policyId > 0) {
+
+    const fileInput = this.policy.get('policyFile')?.value;
+    if (fileInput) {
+      formData.append('policyFile', fileInput, fileInput.name);
+    } else {
+      if (this.fileName != '' && this.fileName != null) {
+        formData.append('fileName', this.fileName);
+        formData.append('filePath', this.filePath);
+      } else {
+        return (this.alertMessage = 'File is required');
+      }
+    }
+    var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(
+      this.policy,
+      'policyFile'
+    );
+      if (isValid) {
+        formData.append('id', policyId);
+        formData.append('wing', wing);
+        var category = this.categoryList.find(
+          (item) => item.id == this.policy.get('categoryId')?.value
+        ).name;
+        var subCategory = this.subCategoryList.find(
+          (item) => item.id == this.policy.get('subCategoryId')?.value
+        )?.name;
+        formData.append('category', category);
+        formData.append('subCategory', subCategory);
+        formData.append('eqpt', this.policy.get('eqpt')?.value);
+        formData.append(
+          'subCategoryId',
+          this.policy.get('subCategoryId')?.value
+        );
+        formData.append('type', 'EP Contract');
+        formData.append('wingId', this.policy.get('wingId')?.value);
+        formData.append('categoryId', this.policy.get('categoryId')?.value);
+        formData.append('policyFile', this.policy.get('policyFile')?.value);
+        formData.append('remarks', this.policy.get('remarks')?.value);
+
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success(
+              'EP Contract submitted successfully',
+              'Success'
+            );
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting EP Contract', 'Error');
+          },
+        });
+      } else {
+        this.policy.markAllAsTouched();
+        return;
+      }
+    }
+    //add ep contract
+    else {
+      debugger
+      if (this.policy.valid) {
+        const category =
+          this.categoryList.find(
+            (item) => item.id == this.policy.get('categoryId')?.value
+          )?.name || '';
+        const subCategory =
+          this.subCategoryList.find(
+            (item) => item.id == this.policy.get('subCategoryId')?.value
+          )?.name || '';
+        formData.append('type', 'EP Contract');
+        formData.append('wingId', this.policy.get('wingId')?.value);
+        formData.append('id', policyId);
+        formData.append('category', category);
+        formData.append('categoryId', this.policy.get('categoryId')?.value);
+        formData.append(
+          'subCategoryId',
+          this.policy.get('subCategoryId')?.value
+        );
+        formData.append('subCategory', subCategory);
+        formData.append('eqpt', this.policy.get('eqpt')?.value);
+        formData.append('policyFile', this.policy.get('policyFile')?.value);
+        formData.append('remarks', this.policy.get('remarks')?.value);
+
+        this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
+          next: (res) => {
+            this.toastr.success(
+              'EP Contract submitted successfully',
+              'Success'
+            );
+
+            this.dialogRef.close(true);
+          },
+          error: (err) => {
+            this.toastr.error('Error submitting EP Contract', 'Error');
+          },
+        });
+      } else {
+        const fileInput = this.policy.get('policyFile')?.value;
+        if (!fileInput) this.alertMessage = 'File is required';
+        this.policy.markAllAsTouched();
+        return;
+      }
+    }
+  }
+
   getWings() {
     this.apiService.getWithHeaders('attribute/wing').subscribe((res) => {
       if (res) {
@@ -366,15 +311,15 @@ export class EpContractAddComponent {
       }
     });
   }
+
   getCategory(wingId) {
-    this.apiService
-      .getWithHeaders('attribute/category' + wingId)
-      .subscribe((res) => {
-        if (res) {
+    this.apiService.getWithHeaders('attribute/category' + wingId).subscribe((res) => {
+      if (res) {
           this.categoryList = res;
         }
       });
   }
+
   getReadableFileSize(size: number): string {
     if (size < 1024) return `${size} bytes`;
     else if (size < 1048576) return `${(size / 1024).toFixed(2)} KB`;
@@ -387,7 +332,6 @@ export class EpContractAddComponent {
       const file = input.files[0];
       const allowedTypes = [
         'application/pdf',
-        'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -403,29 +347,26 @@ export class EpContractAddComponent {
         this.fileName = null;
         this.fileSizeFormatted = null;
         this.alertMessage =
-          'Invalid file type! Only PDF, Word, and Excel files are allowed.';
+          'Invalid file type! Only PDF and Excel files are allowed.';
       }
     }
   }
 
   close() {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
+
   reset() {
     this.createForm();
     this.fileName = '';
     this.fileSizeFormatted = '';
   }
+
   removeFile(): void {
     this.fileName = null;
     this.fileSizeFormatted = null;
-    this.policy.patchValue({
-      policyFile: null,
-    });
-    // Clear the file input as well
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    this.policy.patchValue({policyFile: null});
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }

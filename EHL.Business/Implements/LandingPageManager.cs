@@ -17,32 +17,6 @@ namespace EHL.Business.Implements
 		{
 			_landingPageDb = landingPageDb;
 		}
-
-		public bool AddNew(News news)
-		{
-			news.Status = NewStatus.New;
-			news.CreatedBy = 3;
-			news.CreatedOn = DateTime.UtcNow;
-			news.IsActive = true;
-			news.IsDeleted = false;
-			return _landingPageDb.AddNew(news);
-		}
-		public List<News> GetAllNews()
-		{
-			return _landingPageDb.GetAllNews();
-		}
-		public bool AddLandingProfile(LandingProfile profile)
-		{
-			profile.CreatedBy = 3;
-			profile.CreatedOn = DateTime.UtcNow;
-			profile.IsActive = true;
-			profile.IsDeleted = false;
-			return _landingPageDb.AddLandingProfile(profile);
-		}
-		public LandingProfile GetProfile()
-		{
-			return _landingPageDb.GetProfile();
-		}
         public bool Deactivate(DeactivateModel item)
 		{
 			return _landingPageDb.Deactivate(item);

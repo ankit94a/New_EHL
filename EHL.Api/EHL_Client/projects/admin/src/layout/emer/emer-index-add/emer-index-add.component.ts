@@ -26,36 +26,29 @@ export class EmerIndexAddComponent {
   categoryList: Category[] = [];
   alertMessage: string = '';
   apiUrl: string = '';
-  constructor(
-    @Inject(MAT_DIALOG_DATA) data,
-    private authService: AuthService,
-    private apiService: ApiService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private dialogRef: MatDialogRef<EmerIndexAddComponent>,
-    private EncryptionService: EncryptionService
-  ) {
+  constructor(@Inject(MAT_DIALOG_DATA) data,private authService: AuthService,private apiService: ApiService,private fb: FormBuilder,
+    private toastr: ToastrService,private dialogRef: MatDialogRef<EmerIndexAddComponent>) {
     this.wingId = parseInt(this.authService.getWingId());
     this.getWing();
-    // this.createForm();
     if (data) {
       this.bindDataToForm(data.data);
     } else {
       this.createForm();
     }
   }
+
   getWing() {
     this.apiService.getWithHeaders('attribute/wing').subscribe((res) => {
       if (res) {
         this.wing = res;
         this.wingName =
-          this.wing.find((item) => item.id == this.wingId)?.name || '';
+        this.wing.find((item) => item.id == this.wingId)?.name || '';
         this.getCategory(this.wingId);
       }
     });
   }
-  bindDataToForm(form) {
 
+  bindDataToForm(form) {
     this.getCategory(form.wingId);
     this.fileName = form.fileName;
     this.fileSizeFormatted = '';
@@ -71,6 +64,7 @@ export class EmerIndexAddComponent {
       emerFile: [form.emerFile, [Validators.required]],
     });
   }
+
   createForm() {
     this.emerForm = this.fb.group({
       emerNumber: ['', [Validators.required]],
@@ -81,20 +75,13 @@ export class EmerIndexAddComponent {
       emerFile: [null, [Validators.required]],
     });
   }
-  // getCategory() {
-  //   this.apiService.getWithHeaders('attribute/category' + this.wingId).subscribe((res) => {
-  //       if (res) {
-  //         this.categoryList = res;
-  //       }
-  //     });
-  // }
+
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input?.files?.length) {
       const file = input.files[0];
       const allowedTypes = [
         'application/pdf',
-        'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -108,53 +95,51 @@ export class EmerIndexAddComponent {
         this.fileName = null;
         this.fileSizeFormatted = null;
         this.alertMessage =
-          'Invalid file type! Only PDF, Word, and Excel files are allowed.';
+          'Invalid file type! Only PDF and Excel files are allowed.';
       }
     }
   }
+
   getReadableFileSize(size: number): string {
     if (size < 1024) return `${size} bytes`;
     else if (size < 1048576) return `${(size / 1024).toFixed(2)} KB`;
     else return `${(size / 1048576).toFixed(2)} MB`;
   }
+
   removeFile(): void {
     this.fileName = null;
     this.fileSizeFormatted = null;
-    this.emerForm.patchValue({
-      emerFile: null,
-    });
-    // Clear the file input as well
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    this.emerForm.patchValue({emerFile: null,});
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }
   }
+
   getCategory(wingId) {
-    this.apiService
-      .getWithHeaders('attribute/category' + wingId)
-      .subscribe((res) => {
-        if (res) {
+    this.apiService.getWithHeaders('attribute/category' + wingId).subscribe((res) => {
+      if (res) {
           this.categoryList = res;
         }
       });
   }
+
   close() {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
+
   reset() {
     this.createForm();
     this.fileName = '';
     this.fileSizeFormatted = '';
   }
+  
   async save() {
     const formData = new FormData();
     const emerId = this.emerForm.get('id')?.value;
     const wingId = this.emerForm.get('wingId')?.value;
     const categoryId = this.emerForm.get('categoryId')?.value;
-
-    //index edit
+    const category = this.categoryList.find((item) => item.id == categoryId)?.name || '';
 
     if (emerId > 0) {
       this.apiUrl = 'emer/index/update';
@@ -173,19 +158,12 @@ export class EmerIndexAddComponent {
       var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.emerForm, 'emerFile')
       if(isValid){
       formData.append('id', emerId);
+      formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
       formData.append('wingId', wingId);
       formData.append('categoryId', categoryId);
-        const rawObject={
-          category: this.categoryList.find((item) => item.id == categoryId)?.name || '',
-          emerNumber: this.emerForm.get('emerNumber')?.value,
-          subject: this.emerForm.get('subject')?.value,
-        }
-          const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
+      formData.append('category', category);
+      formData.append('subject', this.emerForm.get('subject')?.value);
+      formData.append('wing', this.wingName);
 
       this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
         next: (res) => {
@@ -214,22 +192,12 @@ export class EmerIndexAddComponent {
       }
       if (this.emerForm.valid) {
 
-      formData.append('id', '0');
-      formData.append('wingId', wingId);
-      formData.append('categoryId', categoryId);
-
-        const rawObject={
-          wing: this.wingName,
-          category: this.categoryList.find((item) => item.id == categoryId)?.name || '',
-          emerNumber: this.emerForm.get('emerNumber')?.value,
-          subject: this.emerForm.get('subject')?.value,
-        }
-          const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
+        formData.append('emerNumber', this.emerForm.get('emerNumber')?.value);
+        formData.append('wingId', wingId);
+        formData.append('categoryId', categoryId);
+        formData.append('category', category);
+        formData.append('subject', this.emerForm.get('subject')?.value);
+        formData.append('wing', this.wingName);
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {

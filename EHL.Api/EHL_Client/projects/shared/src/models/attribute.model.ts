@@ -18,4 +18,5 @@ export class Eqpt extends SubCategory{
 export class DeleteModel {
   Id:number;
   TableName:string;
+  EmerNumber:string;
 }

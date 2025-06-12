@@ -37,16 +37,6 @@
                                     <mat-datepicker #startDate></mat-datepicker>
                                 </mat-form-field>
                             </div>
-                            <!-- <div *ngSwitchCase="'dropdown'">
-                                <mat-form-field>
-                                    <mat-select placeholder="{{'Select'}}" #filterName name="filterName"
-                                        (selectionChange)="applyInsyncFilter($event,column.name,column.type)">
-                                        <mat-option *ngFor="let item of column?.dropDownList"
-                                            value={{item.key}}>{{item.value}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div> -->
                             <div *ngSwitchDefault>
                                 <mat-form-field class="example-form-field">
                                     <input matInput type="text" placeholder="Search"
@@ -58,10 +48,7 @@
                 </mat-header-cell>
                 <mat-cell *matCellDef="let element">
                     <div [ngSwitch]="column.valueType">
-                        <div *ngSwitchCase="'custom'">
-                            <!-- <custom-view-component [column]="column" [element]="element"></custom-view-component> -->
-                        </div>
-                        <a *ngSwitchCase="'link'" class="btn btn-link" (click)="sendFileRow(element)">{{getValues(element,column) }}</a>
+                        <a *ngSwitchCase="'link'" class="btn-link" (click)="sendFileRow(element)">{{getValues(element,column) }}</a>
                         <div *ngSwitchCase="'html'" [innerHtml]="getValues(element,column)"></div>
                         <div *ngSwitchDefault >{{getValues(element,column) }}</div>
                     </div>
@@ -69,15 +56,12 @@
                 </mat-cell>
             </ng-template>
         </ng-container>
-
         <ng-container *ngIf="tablePaginationSettings.enableAction" matColumnDef="action">
             <mat-header-cell *matHeaderCellDef style="margin-top:-1%;">
                 <div class="column-header-content">
                     <button class="btn btn-link" type="button" matTooltip="filter"
                         *ngIf="tablePaginationSettings.enableColumn;else actionTemplate" #menuTrigger="matMenuTrigger"
                         [matMenuTriggerFor]="mainMenuButton"> <img src="filter.svg" alt="filter" width="25px"></button>
-
-
                     <ng-template #actionTemplate>Action</ng-template>
                     <br>
                     <mat-menu #mainMenuButton="matMenu">
@@ -109,7 +93,6 @@
         <mat-header-row *matHeaderRowDef="getVisibleColumns(); sticky: true"></mat-header-row>
         <mat-row *matRowDef="let row; columns: getVisibleColumns();"
             [ngClass]="{'highlight': selectedRowIndex == row.position}"
-            [ngClass]="isRowBackgroundColor ? {'blue': row.status == 1, 'green': row.status == 3, 'orange': row.status == 2,'red': row.status == 4 } : {}"
             (click)="enableCheckbox==false && allowMultiSelect==false ? highlight(row) : false ;">
         </mat-row>
     </mat-table>
@@ -119,6 +102,4 @@
             [showFirstLastButtons]="tablePaginationSettings.showFirstLastButtons">
         </mat-paginator>
     </ng-container>
-    <!-- <h1 [libGetRowBackgroundColor]="isRowBackgroundColor ? 'approved' : null"></h1> -->
-
 </section>

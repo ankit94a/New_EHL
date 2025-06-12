@@ -2,7 +2,7 @@
 <form [formGroup]="TechnicalAoAi" (ngSubmit)="save()">
 <mat-dialog-content>
   <div class="row">
-  <div class="col-md-3">
+  <div class="col-md-4">
     <mat-form-field appearance="fill">
       <mat-label>TechnicalAoAi Type</mat-label>
       <mat-select formControlName="type" panelClass="custom-dropdown" placeholder="TechnicalAoAi type">
@@ -18,7 +18,7 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="col-md-5 p-1">
+  <div class="col-md-4">
     <mat-form-field>
       <mat-label>Subject</mat-label>
       <input matInput appAlphanumericOnly formControlName="subject" placeholder="Add Subject" required >
@@ -27,7 +27,7 @@
       </mat-error>
     </mat-form-field>
   </div>
-  <div class="col-md-4 p-1">
+  <div class="col-md-4">
     <mat-form-field>
       <mat-label>Reference</mat-label>
       <input matInput appAlphanumericOnly formControlName="reference" placeholder="Add Reference" require >

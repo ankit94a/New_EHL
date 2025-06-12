@@ -38,7 +38,7 @@ namespace EHL.DB.Implements
 			try
 			{
 				policy.FileName = policy.PolicyFile.FileName;
-				string query = string.Format(@"insert into policy (type,wingid,categoryid,wing,category,subcategory,subcategoryid,eqpt,filename,remarks,filepath) values (@type,@wingid,@categoryid,@wing,@category,@subcategory,@subcategoryid,@eqpt,@fileName,@remarks,@filepath)");
+				string query = string.Format(@"insert into policy (type,wingid,categoryid,wing,category,subcategory,subcategoryid,eqpt,filename,remarks,filepath,createdby,createdon,isactive,isdeleted) values (@type,@wingid,@categoryid,@wing,@category,@subcategory,@subcategoryid,@eqpt,@fileName,@remarks,@filepath,@createdby,@createdon,@isactive,@isdeleted)");
 				return connection.Execute(query, policy) > 0;
 			}
 			catch (Exception ex)

@@ -124,9 +124,9 @@ namespace EHL.Api.Controllers
 		}
 		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("delete")]
-		public IActionResult DeleteEmer([FromBody] DeleteEmer data)
+		public IActionResult DeleteDynamic([FromBody] DeactivateModel data)
 		{
-            return Ok(_attributeManager.DeleteEmer(data));
+            return Ok(_attributeManager.DeleteDynamic(data));
         }
 		
 

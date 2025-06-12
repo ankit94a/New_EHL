@@ -2,10 +2,7 @@ import { EncryptionService } from './../../../../../shared/src/service/encryptio
 import { Component } from '@angular/core';
 import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
 import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
-import {
-  Policy,
-  PolicyFilterModel,
-} from 'projects/shared/src/models/policy&misc.model';
+import {Policy,PolicyFilterModel,} from 'projects/shared/src/models/policy&misc.model';
 import { ApiService } from 'projects/shared/src/service/api.service';
 import { AuthService } from 'projects/shared/src/service/auth.service';
 import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
@@ -30,15 +27,9 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
   filterModel: PolicyFilterModel = new PolicyFilterModel();
   isRefresh: boolean = false;
   userType;
-    isOfficerLoggedIn:boolean=false;
-  constructor(
-    private apiService: ApiService,
-    private authService: AuthService,
-    private dailogService: BISMatDialogService,
-    private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService,
-    private EncryptionService :EncryptionService,
-  ) {
+  isOfficerLoggedIn:boolean=false;
+  clonedPolicy:Policy[] = [];
+  constructor(private apiService: ApiService,private authService: AuthService,private dailogService: BISMatDialogService,private dialogService: BISMatDialogService,private toastr: ToastrService,private downloadService:DownloadService) {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
@@ -48,27 +39,37 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
       this.tablePaginationSettings.enableDelete = true;
       this.isOfficerLoggedIn = true;
     }
-
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
     this.filterModel.wingId = parseInt(this.authService.getWingId());
     this.filterModel.type = 'Ep Contract';
     this.getAllContract();
   }
-  filterPolicy(type) {}
+
+  filterPolicy(type){
+    if(type == null)
+      return this.epContractList = [...this.clonedPolicy]
+      this.epContractList = this.clonedPolicy.filter(item => item.type == type);
+  }
+
   getAllContract() {
-    this.apiService
-      .postWithHeader('policy/type', this.filterModel)
-      .subscribe(async(res) => {
-        if (res) {
-          this.epContractList = await this.EncryptionService.decryptResponseList(res)
+    this.apiService.postWithHeader('policy/type', this.filterModel).subscribe(async(res) => {
+      if (res) {
+          this.epContractList = res;
+          this.clonedPolicy = [...this.epContractList]
         }
       });
   }
+
   openDailog() {
-    this.dailogService.open(EpContractAddComponent, null);
+    this.dailogService.open(EpContractAddComponent, null).then(res =>{
+      if(res){
+        this.getAllContract();
+      }
+    });
   }
-   getFileId($event) {
+
+  getFileId($event) {
     var download = new DownloadModel();
     download.filePath = $event.filePath;
     download.name = $event.fileName;
@@ -76,29 +77,28 @@ export class EpContractListComponent extends TablePaginationSettingsConfig {
     this.downloadService.download(download)
   }
 
-   edit(row){
-      row.isEdit = true;
-      this.dialogService.open(EpContractAddComponent,row)
-    }
+  edit(row){
+    row.isEdit = true;
+    this.dialogService.open(EpContractAddComponent,row).then(res =>{
+      if(res){
+        this.getAllContract();
+      }
+    })
+  }
+
   delete(row) {
     let deleteEpContract: DeleteModel = new DeleteModel();
     deleteEpContract.Id = row.item.id;
     deleteEpContract.TableName = 'Policy';
-
-    this.dialogService
-      .confirmDialog('Are you sure you want to delete this Ep-Contract?')
-      .subscribe((res) => {
-        if (res) {
-          this.apiService
-            .postWithHeader(`attribute/delete`, deleteEpContract)
-            .subscribe({
+    this.dialogService.confirmDialog('Are you sure you want to delete this Ep-Contract?').subscribe((res) => {
+      if (res) {
+          this.apiService.postWithHeader(`attribute/delete`, deleteEpContract).subscribe({
               next: (res) => {
                 this.toastr.success('Deleted Successfully', 'Success');
                 this.getAllContract();
               },
               error: (err) => {
                 this.toastr.error('Failed to Delete', 'Error');
-                console.error(err);
               },
             });
         }

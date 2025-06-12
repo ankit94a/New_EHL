@@ -14,30 +14,8 @@ namespace EHL.Api.Controllers
 		{
 			_landingPageManager = landingPageManager;
 		}
-		[Authorization(RoleType.Admin)]
-		[HttpPost, Route("news")]
-		public IActionResult AddNews([FromBody] News news)
-		{
-			return Ok(_landingPageManager.AddNew(news));
-		}
-		[HttpGet, Route("news")]
-		public IActionResult GetAllNews()
-		{
-			return Ok(_landingPageManager.GetAllNews());
-		}
-		[HttpGet, Route("profile")]
-		public IActionResult GetProfile()
-		{
-			return Ok(_landingPageManager.GetProfile());
-		}
-		[Authorization(RoleType.Admin)]
-		[HttpPost, Route("profile")]
-		public IActionResult AddProfile([FromBody] LandingProfile profile)
-		{
-			return Ok(_landingPageManager.AddLandingProfile(profile));	
-		}
-
-        //[Authorization(RoleType.Admin)]
+		
+        [Authorization(RoleType.Admin)]
         [HttpPost, Route("deativate")]
         public IActionResult Deactivate([FromBody] DeactivateModel model)
         {

@@ -1,22 +1,17 @@
-import { AfterViewInit, Component } from '@angular/core';
+import {  Component } from '@angular/core';
 import { SharedLibraryModule } from '../../../shared/src/shared-library.module';
-import { ActivatedRoute, NavigationEnd, Router, RouterModule } from '@angular/router';
+import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { HeaderComponent } from '../../../shared/src/component/header/header.component';
 import { SidebarComponent } from '../../../shared/src/component/sidebar/sidebar.component';
-import { FooterComponent } from '../../../shared/src/component/footer/footer.component';
 import { ChatBotComponent } from 'projects/shared/src/component/chat-bot/chat-bot.component';
 import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
-// import { SharedLibraryModule } from '../../../sharedlibrary/src/shared-library.module';
-// import { RouterModule } from '@angular/router';
-// import { HeaderComponent } from '../../../sharedlibrary/src/component/header/header.component';
-// import { SidebarComponent } from '../../../sharedlibrary/src/component/sidebar/sidebar.component';
-// import { FooterComponent } from 'projects/sharedlibrary/src/component/footer/footer.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [SharedLibraryModule, RouterModule, HeaderComponent, SidebarComponent],
+  imports: [SharedLibraryModule, RouterModule, HeaderComponent, SidebarComponent,NgxSpinnerModule],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.scss'
 })
@@ -24,7 +19,6 @@ export class LayoutComponent {
 
   sideBarOpen = true;
   isSideBarLoaded: boolean = false;
-  typeSelected;
   isMinimized: boolean = false;
   position = { x: 1500, y: 650 };
   isDragging = false;
@@ -38,7 +32,6 @@ export class LayoutComponent {
       }
     });
     this.setDynamicPosition();
-    this.typeSelected = 'ball-fussion';
   }
   setDynamicPosition() {
     const offsetX = 170;

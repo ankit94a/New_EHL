@@ -28,13 +28,7 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
   isRefresh: boolean = false;
   userType;
   isOfficerLoggedIn:boolean=false;
-  constructor(
-    private authService: AuthService,
-    private apiService: ApiService,
-    private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService,
-    private EncryptionService: EncryptionService
-  ) {
+  constructor(private authService: AuthService,private apiService: ApiService,private dialogService: BISMatDialogService,private toastr: ToastrService,private downloadService:DownloadService) {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
@@ -46,16 +40,13 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
-    // this.filterModel.type = 'TechnicalAoAi Compendium'
     this.getTechnicalAoAi();
   }
+
   openDailog() {
-    this.dialogService
-      .open(AddTechnicalAoAiComponent, null, '50vw')
-      .then((res) => {
-        if (res) {
+    this.dialogService.open(AddTechnicalAoAiComponent, null, '50vw').then((res) => {
+      if (res) {
           this.getTechnicalAoAi();
-          this.toastr.success('Added Successfully', 'Success');
         }
       });
   }
@@ -63,10 +54,11 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
   getTechnicalAoAi() {
     this.apiService.getWithHeaders('TechnicalAoAi').subscribe(async (res) => {
       if (res) {
-        this.TechnicalAoAi = await this.EncryptionService.decryptResponseList(res);
+        this.TechnicalAoAi = res;
       }
     });
   }
+
  getFileId($event) {
     var download = new DownloadModel();
     download.filePath = $event.filePath;
@@ -74,35 +66,29 @@ export class TechincalAoAiComponent extends TablePaginationSettingsConfig {
     download.fileType = DownloadFileType.TechnicalAoAi;
     this.downloadService.download(download)
   }
+
   edit(row) {
     row.isEdit = true;
     this.dialogService.open(AddTechnicalAoAiComponent, row).then((res) => {
       if (res) {
         this.getTechnicalAoAi();
-
       }
     });
   }
+
   delete(row) {
     let deleteTechnicalAoAi: DeleteModel = new DeleteModel();
     deleteTechnicalAoAi.Id = row.item.id;
     deleteTechnicalAoAi.TableName = 'TechnicalAoAi';
-
-    this.dialogService
-      .confirmDialog('Are you sure to delete TechnicalAoAi?')
-      .subscribe((res) => {
+    this.dialogService.confirmDialog('Are you sure to delete TechnicalAoAi?').subscribe((res) => {
         if (res) {
-          this.apiService
-            .postWithHeader(`attribute/delete`, deleteTechnicalAoAi)
-            .subscribe({
+          this.apiService.postWithHeader(`attribute/delete`, deleteTechnicalAoAi).subscribe({
               next: (res) => {
                 this.getTechnicalAoAi();
                 this.toastr.success('Deleted Successfully', 'Success');
-                // this.dailogRef?.close(true);
               },
               error: (err) => {
                 this.toastr.error('Failed to Delete', 'Error');
-                console.error(err);
               },
             });
         }

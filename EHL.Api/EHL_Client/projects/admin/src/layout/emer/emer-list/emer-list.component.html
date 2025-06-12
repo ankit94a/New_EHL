@@ -10,15 +10,8 @@
 
   </mat-card-title>
   <mat-card-content>
-    <!-- <ngx-spinner
-  bdColor="rgba(0,0,0,0.7)"
-  size="medium"
-  color="#fff"
-  type="ball-spin-clockwise">
-</ngx-spinner> -->
-<ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
     <app-table *ngIf="emerList.length > 0" [rowData]="emerList" [tablePaginationSettings]="tablePaginationSettings"
-      [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true" [tableMaxHeight]="'80vh'"
+      [enableCheckbox]="true" [isRowBackgroundColor]="true" [isRefresh]="isRefresh" [allowMultiSelect]="true" [tableMaxHeight]="'83vh'"
       (edit)="edit($event)" (delete)="del($event)" [sqColumnDefinition]="columns" (getFileId)="getFileId($event)"
       >
     </app-table>

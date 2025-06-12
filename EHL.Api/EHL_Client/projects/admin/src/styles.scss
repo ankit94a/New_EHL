@@ -5,7 +5,6 @@
 html,
 body {
 	margin: 0;
-	// font-family: "Open Sans", sans-serif !important;
 	font-weight: 400;
 	height: 100% !important;
 }
@@ -26,6 +25,7 @@ body {
 .blur-background{
   background: linear-gradient(rgba(156, 171, 180, 0.5));
 }
+
 .mat-content {
     max-height: calc(100vh - 165px);
     overflow-y: auto;
@@ -413,8 +413,12 @@ mat-header-row,
 		margin:0px !important;
 	  }
 
+	  mat-card{
+  min-height: 89vh;
+}
+
     .pdf-container {
-  height: 78vh; /* full viewport height */
+ height: 90vh;
   width: 100%;
   margin: 0;
   padding: 0;

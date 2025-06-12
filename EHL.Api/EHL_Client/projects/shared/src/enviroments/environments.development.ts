@@ -8,4 +8,6 @@ export const environment = {
   // production: false,
   // apiUrl:'https://ehlapi.jayceetechsoftwares.com/api/',
   // baseUrl:'https://ehlapi.jayceetechsoftwares.com/',
+  // apiUrl: 'https://localhost:8081/api/',
+  // baseUrl:'https://localhost:8081/',
 };

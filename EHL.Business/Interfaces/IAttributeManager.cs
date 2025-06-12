@@ -22,6 +22,6 @@ namespace EHL.Business.Interfaces
 		public bool AddEqpt(Eqpt eqpt);
 		public List<Eqpt> GetEqpt(long categoryId, long subCategoryId);
 		public bool UpdateEqpt(Eqpt eqpt);
-        public bool DeleteEmer(DeleteEmer data);
+        public bool DeleteDynamic(DeactivateModel data);
     }
 }

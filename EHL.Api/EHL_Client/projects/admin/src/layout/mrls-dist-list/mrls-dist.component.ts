@@ -2,14 +2,10 @@ import { EncryptionService } from './../../../../shared/src/service/encryption.s
 import { Component } from '@angular/core';
 import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
 import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
-import {
-  Policy,
-  PolicyFilterModel,
-} from 'projects/shared/src/models/policy&misc.model';
+import {Policy} from 'projects/shared/src/models/policy&misc.model';
 import { ApiService } from 'projects/shared/src/service/api.service';
 import { AuthService } from 'projects/shared/src/service/auth.service';
 import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
-// import { DefectReportAddComponent } from './defect-report-add/defect-report-add.component';
 import { BISMatDialogService } from 'projects/shared/src/service/insync-mat-dialog.service';
 import { ToastrService } from 'ngx-toastr';
 import { DeleteModel } from 'projects/shared/src/models/attribute.model';
@@ -30,13 +26,7 @@ export class MrlsDistComponent extends TablePaginationSettingsConfig {
   filterModel: Policy = new Policy();
   isRefresh: boolean = false;
   userType;
-  constructor(
-    private authService: AuthService,
-    private apiService: ApiService,
-    private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService,
-    private EncryptionService :EncryptionService,
-  ) {
+  constructor(private authService: AuthService,private apiService: ApiService,private dialogService: BISMatDialogService,private toastr: ToastrService,private downloadService:DownloadService) {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
@@ -44,7 +34,6 @@ export class MrlsDistComponent extends TablePaginationSettingsConfig {
       this.tablePaginationSettings.enableEdit = true;
       this.tablePaginationSettings.enableDelete = true;
     }
-
     this.tablePaginationSettings.enableColumn = true;
     this.tablePaginationSettings.pageSizeOptions = [50, 100];
     this.tablePaginationSettings.showFirstLastButtons = false;
@@ -52,6 +41,7 @@ export class MrlsDistComponent extends TablePaginationSettingsConfig {
     this.filterModel.type = 'Mrls Dist';
     this.getPolicyByWing();
   }
+
   openDailog() {
     this.dialogService.open(AddMrlsDistComponent, null, '50vw').then((res) => {
       if (res) {
@@ -59,22 +49,23 @@ export class MrlsDistComponent extends TablePaginationSettingsConfig {
       }
     });
   }
+
   getFileId($event) {
-      var download = new DownloadModel();
-      download.filePath = $event.filePath;
-      download.name = $event.fileName;
-      download.fileType = DownloadFileType.Policy;
-      this.downloadService.download(download)
-    }
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.Policy;
+    this.downloadService.download(download)
+  }
+
   getPolicyByWing() {
-    this.apiService
-      .postWithHeader('policy/type/', this.filterModel)
-      .subscribe(async(res) => {
-        if (res) {
-          this.ispl = await this.EncryptionService.decryptResponseList(res);;
+    this.apiService.postWithHeader('policy/type/', this.filterModel).subscribe(res => {
+      if (res) {
+          this.ispl = res;
         }
       });
   }
+
   edit(row) {
     row.isEdit = true;
     this.dialogService.open(AddMrlsDistComponent, row).then((res) => {
@@ -83,18 +74,14 @@ export class MrlsDistComponent extends TablePaginationSettingsConfig {
       }
     });
   }
+
   delete(row) {
     let isplModel: DeleteModel = new DeleteModel();
     isplModel.Id = row.item.id;
     isplModel.TableName = 'policy';
-
-    this.dialogService
-      .confirmDialog('Are you sure you want to delete this ISPL?')
-      .subscribe((res) => {
+    this.dialogService.confirmDialog('Are you sure you want to delete this MRLS?').subscribe((res) => {
         if (res) {
-          this.apiService
-            .postWithHeader(`attribute/delete`, isplModel)
-            .subscribe({
+          this.apiService.postWithHeader(`attribute/delete`, isplModel).subscribe({
               next: (res) => {
                 this.getPolicyByWing();
                 this.toastr.success('Deleted Successfully', 'Success');

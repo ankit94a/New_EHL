@@ -64,7 +64,6 @@ export class HeaderComponent implements OnInit {
 
   onLoggedout() {
     this.apiService.getWithHeaders('auth/logout').subscribe(res => {
-      debugger
       if (res) {
         this.authService.clear()
         this.authService.clearWing();

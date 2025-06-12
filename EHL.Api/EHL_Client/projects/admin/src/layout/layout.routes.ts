@@ -11,16 +11,11 @@ export const routes: Routes = [
       children:[
             {
               path: '',
-              redirectTo: 'dashboard',
+              redirectTo: 'emer',
               pathMatch:'full'
 
-            },
+            },          
             {
-              path: 'dashboard',
-              loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
-              canActivate: [AuthGuard],
-            },
-                       {
               path: 'attribute',
               loadComponent: () => import('./attribute/attribute.component').then(m => m.AttributeComponent),
               canActivate: [AuthGuard],

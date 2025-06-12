@@ -41,7 +41,6 @@ export class LoginComponent {
     next: (res) => {
     
       if (res) {
-          debugger
         this.authService.setRoleType('1');
         this.authService.setToken(res.token);
         this.dialog.closeAll();

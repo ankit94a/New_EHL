@@ -2,7 +2,6 @@
 
 $red:#f44336;
 $background-color:rgb(139, 0, 0);
-// $box-header: linear-gradient(60deg, rgb(139, 0, 0),rgb(255, 99, 71));
 .main{
   width: 100%;
   box-shadow: none;
@@ -27,15 +26,6 @@ $background-color:rgb(139, 0, 0);
     flex-wrap: wrap;
 }
 
-
-a[mat-button] {
-  white-space: nowrap;
-  // color: white !important;
-  text-transform: none;
-  font-weight: 500;
-}
-
-
 .btn {
   border: none;
   padding: 10px;
@@ -51,7 +41,6 @@ a[mat-button] {
 .custom-span {
   display: inline-flex;
   align-items: center;
-  // gap: 8px; /* spacing between icon and text */
 }
 
 .box {
@@ -70,9 +59,9 @@ a[mat-button] {
   border-color: rgba(0, 0, 0, 0.125);
   border-image: initial;
   border-radius: 0.75rem;
-  overflow: hidden; /* Prevent overflow */
+  overflow: hidden; 
   width: 100%;
-  max-height: 350px; /* Allow height to adjust dynamically */
+  max-height: 350px; 
 }
 
 .carousel-inner {
@@ -81,15 +70,15 @@ a[mat-button] {
 }
 
 .carousel-item img {
-  width: 100%; /* Ensures the image takes full width */
-  height: 100%; /* Forces the image to take full height */
-  object-fit: cover; /* Ensures images properly fit without stretching */
-  border-radius: 0.75rem; /* Optional: Match box border radius */
+  width: 100%; 
+  height: 100%; 
+  object-fit: cover; 
+  border-radius: 0.75rem; 
 }
-// banner
+
 .banner-img {
   width: 100%;
-  max-height: 600px; /* Adjust height for large screens */
+  max-height: 600px;
   object-fit: cover;
   display: block;
 }
@@ -118,7 +107,7 @@ a[mat-button] {
 
 .card-content img {
   max-height: fit-content;
-  object-fit: cover; /* Crop image to fit */
+  object-fit: cover; 
   min-height: 250px;
   max-height: 300px;
   padding: 10px;
@@ -137,8 +126,6 @@ a[mat-button] {
   text-align: center;
 }
 
-
-/* Latest News Box */
 .news-box {
   background: #f8f9fa;
   border-radius: 10px;
@@ -147,7 +134,6 @@ a[mat-button] {
   padding: 15px;
 }
 
-/* Header Styling */
 .news-header {
   background: button.$box-header;
   // color: white;
@@ -159,9 +145,7 @@ a[mat-button] {
   border-radius: 5px 5px 0 0;
 }
 
-/* News List */
 .news-content {
-  // max-height: 200px;
   overflow-y: auto;
 }
 
@@ -184,7 +168,6 @@ a[mat-button] {
   border-bottom: none;
 }
 
-/* New Badge */
 .badge {
   background: #dc3545;
   color: white;
@@ -195,7 +178,6 @@ a[mat-button] {
   text-transform: uppercase;
 }
 
-// emi-misson article section
 .emi-header-article {
   background: $background-color;
   color: white;
@@ -203,7 +185,6 @@ a[mat-button] {
   font-weight: bold;
   padding: 10px;
   text-align: center;
-  // border-radius: 5px;
 }
 .emi-content-article {
   display: flex;
@@ -220,7 +201,6 @@ a[mat-button] {
   font-weight: bold;
   padding: 10px;
   text-align: center;
-  // border-radius: 5px;
 }
 
 .emi-content {
@@ -229,15 +209,13 @@ a[mat-button] {
   height:41vh;
 }
 
-// /* Image Styling */
 .emi-content1 img {
-  // height: 300px;
   width: 30%;
   object-fit: cover;
 }
 .emi-content1{
   display: flex;
-  flex-direction: row; /* Default: mobile */
+  flex-direction: row; 
   object-fit: cover;
 
 }
@@ -291,11 +269,11 @@ a[mat-button] {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 10px; /* Adds space between sections */
+    margin-bottom: 10px;
   }
 
   .section-1{
-    width: 30%; /* Stacks images on smaller screens */
+    width: 30%;
     flex:1;
     object-fit: cover;
   }
@@ -313,12 +291,10 @@ a[mat-button] {
 }
 .background{
   background-color: $background-color;
-  // color: #fff;
   color: rgb(243, 241, 222);
   text-transform: uppercase;
 }
 
-/* Title Styling */
 .contact-title {
   font-weight: bold;
   font-size: 18px;
@@ -326,7 +302,6 @@ a[mat-button] {
   color: #2c3e50;
 }
 
-/* Contact Numbers Styling */
 .contact-list h6 {
   margin: 6px 0;
   font-size: 17px;
@@ -334,7 +309,6 @@ a[mat-button] {
   color: #444;
 }
 
-/* Responsive Styling */
 @media (max-width: 768px) {
   .emi-content2 {
     border-left: none;
@@ -344,7 +318,6 @@ a[mat-button] {
   }
 }
 
-/* Footer Styling */
 .landing-footer{
   padding: 20px;
 }
@@ -433,5 +406,5 @@ a[mat-button] {
   color: black;
   background-color: #fff;
   text-transform: none;
-  font-weight: 600;
+  font-weight: 500;
 }

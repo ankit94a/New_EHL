@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { TablePaginationSettingsConfig } from 'projects/shared/src/component/zipper-table/table-settings.model';
 import { ZipperTableComponent } from 'projects/shared/src/component/zipper-table/zipper-table.component';
 import { MasterSheetModel } from 'projects/shared/src/models/emer.model';
@@ -9,7 +10,7 @@ import { SharedLibraryModule } from 'projects/shared/src/shared-library.module';
 @Component({
   selector: 'app-master-sheet',
   standalone: true,
-  imports: [SharedLibraryModule,ZipperTableComponent],
+  imports: [SharedLibraryModule,ZipperTableComponent,RouterModule],
   templateUrl: './master-sheet.component.html',
   styleUrl: './master-sheet.component.scss'
 })

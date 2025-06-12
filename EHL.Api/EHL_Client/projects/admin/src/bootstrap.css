@@ -3318,6 +3318,7 @@ textarea.form-control-lg {
   --bs-btn-box-shadow: 0 0 0 #000;
   --bs-btn-focus-shadow-rgb: 49, 132, 253;
   text-decoration: underline;
+  cursor: pointer;
 }
 .btn-link:focus-visible {
   color: var(--bs-btn-color);

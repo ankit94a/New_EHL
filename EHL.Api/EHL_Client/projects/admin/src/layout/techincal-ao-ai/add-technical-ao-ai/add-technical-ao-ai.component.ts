@@ -22,15 +22,7 @@ export class AddTechnicalAoAiComponent {
   apiUrl: string | '';
   filePath: string = '';
   alertMessage: string = '';
-  constructor(
-    private authService: AuthService,
-    @Inject(MAT_DIALOG_DATA) data,
-    private dialogRef: MatDialogRef<AddTechnicalAoAiComponent>,
-    private apiService: ApiService,
-    private fb: FormBuilder,
-    private toastr: ToastrService,
-    private EncryptionService: EncryptionService
-  ) {
+  constructor(@Inject(MAT_DIALOG_DATA) data,private dialogRef: MatDialogRef<AddTechnicalAoAiComponent>,private apiService: ApiService,private fb: FormBuilder,private toastr: ToastrService) {
     if (data != null) {
       this.apiUrl = 'TechnicalAoAi/update';
       this.bindDataToForm(data);
@@ -39,6 +31,7 @@ export class AddTechnicalAoAiComponent {
       this.createForm();
     }
   }
+
   bindDataToForm(TechnicalAoAiData) {
     this.TechnicalAoAi = this.fb.group({
       id: [TechnicalAoAiData.id],
@@ -51,6 +44,7 @@ export class AddTechnicalAoAiComponent {
     this.fileSizeFormatted = '';
     this.filePath = TechnicalAoAiData.filePath;
   }
+
   createForm() {
     this.TechnicalAoAi = this.fb.group({
       type: ['', [Validators.required]],
@@ -60,9 +54,8 @@ export class AddTechnicalAoAiComponent {
     });
   }
 
-  async save() {
+  save() {
     const formData = new FormData();
-
     const TechnicalAoAiId = this.TechnicalAoAi.get('id')?.value;
     //edit
     if (TechnicalAoAiId > 0) {
@@ -77,31 +70,16 @@ export class AddTechnicalAoAiComponent {
           return (this.alertMessage = 'File is required');
         }
       }
-      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(
-        this.TechnicalAoAi,
-        'TechnicalAoAiFile'
-      );
+      var isValid = this.apiService.checkRequiredFieldsExceptEmerFile(this.TechnicalAoAi,'TechnicalAoAiFile');
       if (isValid) {
-        formData.append('id', TechnicalAoAiId);
-        // Append the file to FormData
-        const rawObject = {
-          type: this.TechnicalAoAi.get('type')?.value,
-          subject: this.TechnicalAoAi.get('subject')?.value,
-          reference: this.TechnicalAoAi.get('reference')?.value,
-        };
-        const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
+        formData.append('id',TechnicalAoAiId);
+        formData.append('type', this.TechnicalAoAi.get('type')?.value);
+        formData.append('subject', this.TechnicalAoAi.get('subject')?.value);
+        formData.append('reference', this.TechnicalAoAi.get('reference')?.value);
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success(
-              'TechnicalAoAi submitted successfully',
-              'Success'
-            );
+            this.toastr.success('TechnicalAoAi submitted successfully','Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
@@ -116,29 +94,15 @@ export class AddTechnicalAoAiComponent {
     //add
     else {
       if (this.TechnicalAoAi.valid) {
-        formData.append('id', '0');
-        formData.append(
-          'TechnicalAoAiFile',
-          this.TechnicalAoAi.get('TechnicalAoAiFile')?.value
-        );
-        const rawObject = {
-          type: this.TechnicalAoAi.get('type')?.value,
-          subject: this.TechnicalAoAi.get('subject')?.value,
-          reference: this.TechnicalAoAi.get('reference')?.value,
-        };
-        const encrypted = await this.EncryptionService.encryptObjectValues(
-          rawObject
-        );
-        Object.entries(encrypted).forEach(([key, value]) =>
-          formData.append(key, String(value))
-        );
+        formData.append('id', '0' );
+        formData.append('type', this.TechnicalAoAi.get('type')?.value);
+        formData.append('subject', this.TechnicalAoAi.get('subject')?.value);
+        formData.append('reference', this.TechnicalAoAi.get('reference')?.value);
+        formData.append('TechnicalAoAiFile', this.TechnicalAoAi.get('TechnicalAoAiFile')?.value);
 
         this.apiService.postWithHeader(this.apiUrl, formData).subscribe({
           next: (res) => {
-            this.toastr.success(
-              'TechnicalAoAi submitted successfully',
-              'Success'
-            );
+            this.toastr.success('TechnicalAoAi submitted successfully','Success');
             this.dialogRef.close(true);
           },
           error: (err) => {
@@ -166,7 +130,6 @@ export class AddTechnicalAoAiComponent {
       const file = input.files[0];
       const allowedTypes = [
         'application/pdf',
-        'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel',
         'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
@@ -181,30 +144,28 @@ export class AddTechnicalAoAiComponent {
         this.fileName = null;
         this.fileSizeFormatted = null;
         alert(
-          'Invalid file type! Only PDF, Word, and Excel files are allowed.'
+          'Invalid file type! Only PDF and Excel files are allowed.'
         );
       }
     }
   }
 
   close() {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
+
   reset() {
     this.createForm();
     this.fileName = '';
     this.fileSizeFormatted = '';
   }
+
   removeFile(): void {
     this.fileName = null;
     this.fileSizeFormatted = null;
-    this.TechnicalAoAi.patchValue({
-      policyFile: null,
-    });
+    this.TechnicalAoAi.patchValue({policyFile: null,});
     // Clear the file input as well
-    const fileInput = document.querySelector(
-      'input[type="file"]'
-    ) as HTMLInputElement;
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
     if (fileInput) {
       fileInput.value = '';
     }

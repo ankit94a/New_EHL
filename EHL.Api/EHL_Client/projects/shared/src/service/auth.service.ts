@@ -17,26 +17,14 @@ export class AuthService {
   isAuthenticated(): boolean {
       return !!this.getToken();
   }
-  setUserDetails(user){
-    localStorage.setItem("EHL_RoleType",user.roleType);
-    localStorage.setItem("EHL_UserName",user.userName);
-    localStorage.setItem("EHL_RoleId",user.roleId);
-  }
+
   setToken(token:string){
-    debugger
     sessionStorage.setItem("EHL_TOKEN",token);
   }
-
-
   getToken(){
     return sessionStorage.getItem("EHL_TOKEN");
   }
-  getUserName(){
-    return localStorage.getItem("EHL_UserName");
-  }
-  getRoleId(){
-    return localStorage.getItem("EHL_RoleId");
-  }
+
   clear() {
     sessionStorage.clear();
     this.navigateToLogin(this.router.routerState.snapshot.url);
@@ -63,8 +51,6 @@ export class AuthService {
   }
   clearWing() {
     this.wingSubject.next(null);
-    localStorage.removeItem("Wing_Name");
-    localStorage.removeItem("Wing_Id");
   }
 
 }

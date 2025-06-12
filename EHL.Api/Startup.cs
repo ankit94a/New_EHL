@@ -148,8 +148,8 @@ namespace EHL.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
                 app.UseSwaggerSetup();
 
@@ -160,7 +160,7 @@ namespace EHL.Api
                     c.RoutePrefix = string.Empty;
                 });
 
-            }
+            //}
             app.Use(async (context, next) =>
             {
                 context.Response.Headers.Add("X-Content-Type-Options", "nosniff");

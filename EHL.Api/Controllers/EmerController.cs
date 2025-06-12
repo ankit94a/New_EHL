@@ -13,44 +13,24 @@ namespace EHL.Api.Controllers
 	public class EmerController : ControllerBase
 	{
 		private readonly IEmerManager _emmerManager;
-		private readonly IHttpContextAccessor _httpContextAccessor;
 
-		public EmerController(IEmerManager emmerManager, IHttpContextAccessor httpContextAccessor)
+		public EmerController(IEmerManager emmerManager)
 		{
 			_emmerManager = emmerManager;
-			_httpContextAccessor = httpContextAccessor;
 		}
 
 		[HttpGet, Route("wing/{wingId}")]
 		public IActionResult GetAllEmer(long wingId)
-		{
-			//var sessUser = new SessionManager(_httpContextAccessor);
-			//var userId = sessUser.UserId;
-			//var roleType = sessUser.RoleType;
-			
+		{			
 			return Ok(_emmerManager.GetAllEmer(wingId));
 		}
-		[HttpGet, Route("mastersheet")]
-		public IActionResult GetAllMasterSheet()
-		{
-			return Ok(_emmerManager.GetAllMasterSheet());
-		}
-		[HttpGet, Route("latest/emer")]
-		public IActionResult GetLatestEmer()
-		{
 
-			return Ok(_emmerManager.GetLatestEmer());
-		}
-		[HttpGet, Route("latest/policy")]
-		public IActionResult GetLatestTwoPoliciesPerType()
-		{
-			return Ok(_emmerManager.GetLatestTwoPoliciesPerType());
-		}
-		//[Authorization(RoleType.Admin)]
+
+		[Authorization(RoleType.Admin)]
 		[HttpPost]
 		public async Task<IActionResult> AddEmer([FromForm] EmerModel emerModel)
 		{
-			emerModel.CreatedBy = 2;
+			emerModel.CreatedBy = HttpContext.GetUserId();
 			emerModel.CreatedOn = DateTime.Now;
 			emerModel.IsActive = true;
 			emerModel.IsDeleted = false;
@@ -59,16 +39,14 @@ namespace EHL.Api.Controllers
 			{
 				using (var memoryStream = new MemoryStream())
 				{
-					await emerModel.EmerFile.CopyToAsync(memoryStream); // Use `await` for async file copying
-					emerModel.FileBytes = memoryStream.ToArray();  // Store file content as byte array
+					await emerModel.EmerFile.CopyToAsync(memoryStream); 
+					emerModel.FileBytes = memoryStream.ToArray();  
 				}
 			}
-
-			// Save to database asynchronously
-			var result = await _emmerManager.AddEmer(emerModel); // Ensure `AddEmerAsync` is an async method
-
+			var result = await _emmerManager.AddEmer(emerModel); 
 			return Ok(result);
 		}
+
 		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("update")]
 		public async Task<IActionResult> UpdateEmer([FromForm] EmerModel emerModel)
@@ -79,27 +57,13 @@ namespace EHL.Api.Controllers
 			emerModel.IsDeleted = false;
 			return Ok(await _emmerManager.UpdateEmer(emerModel));
 		}
-		[Authorization(RoleType.Admin)]
-		[HttpDelete, Route("{Id}")]
-		public IActionResult DeactivateEmer(long Id)
-		{
-			return Ok(_emmerManager.DeactivateEmer(Id));
-		}
-		[Authorization(RoleType.Admin)]
-		[HttpDelete]
-		public IActionResult Deactivate([FromBody] EmerModel emerModel)
-		{
-			emerModel.UpdatedBy = HttpContext.GetUserId();
-			emerModel.UpdatedOn = DateTime.Now;
-			emerModel.IsActive = false;
-			emerModel.IsDeleted = true;
-			return Ok(_emmerManager.DeactivateEmer(emerModel.Id));
-		}
+		
 		[HttpGet, Route("index/{wingId}")]
 		public IActionResult GetEmerIndex(int wingId)
 		{
 			return Ok(_emmerManager.GetEmerIndex(wingId));
 		}
+
 		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("index")]
 		public async Task<IActionResult> AddEmerIndex([FromForm] EmerIndex EmerIndex)
@@ -113,17 +77,14 @@ namespace EHL.Api.Controllers
 			{
 				using (var memoryStream = new MemoryStream())
 				{
-					await EmerIndex.EmerFile.CopyToAsync(memoryStream); // Use `await` for async file copying
-					EmerIndex.FileBytes = memoryStream.ToArray();  // Store file content as byte array
+					await EmerIndex.EmerFile.CopyToAsync(memoryStream);
+					EmerIndex.FileBytes = memoryStream.ToArray(); 
 				}
 			}
-
-			// Save to database asynchronously
-			var result = await _emmerManager.AddEmerIndex(EmerIndex); // Ensure `AddEmerAsync` is an async method
-
-
+			var result = await _emmerManager.AddEmerIndex(EmerIndex);
 			return Ok(result);
 		}
+
 		[Authorization(RoleType.Admin)]
 		[HttpPost, Route("index/update")]
 		public async Task<IActionResult> UpdateEmerIndex([FromForm] EmerIndex emerIndex)
@@ -132,11 +93,24 @@ namespace EHL.Api.Controllers
 			emerIndex.UpdatedOn = DateTime.Now;
 			return Ok(await _emmerManager.UpdateEmerIndex(emerIndex));
 		}
-		[Authorization(RoleType.Admin)]
-		[HttpDelete, Route("index")]
-		public IActionResult DeactiveEmerIndex(long Id)
+
+				[HttpGet, Route("mastersheet")]
+		public IActionResult GetAllMasterSheet()
 		{
-			return Ok(_emmerManager.DeactiveEmerIndex(Id));
+			return Ok(_emmerManager.GetAllMasterSheet());
+		}
+
+		[HttpGet, Route("latest/emer")]
+		public IActionResult GetLatestEmer()
+		{
+
+			return Ok(_emmerManager.GetLatestEmer());
+		}
+
+		[HttpGet, Route("latest/policy")]
+		public IActionResult GetLatestTwoPoliciesPerType()
+		{
+			return Ok(_emmerManager.GetLatestTwoPoliciesPerType());
 		}
 	}
 }

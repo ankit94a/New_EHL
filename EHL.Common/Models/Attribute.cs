@@ -24,8 +24,4 @@ namespace EHL.Common.Models
 	{
 		public int SubCategoryId { get; set; }
 	}
-    public class DeleteEmer : Base
-    {
-      public string TableName { get; set; }
-    }
 }

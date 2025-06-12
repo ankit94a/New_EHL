@@ -1,10 +1,7 @@
-// import { EnumBase } from "../../model/enum";
 
 export class TablePaginationSettingsConfig {
     tablePaginationSettings?: TablePaginationSettingsModel;
     constructor() {
-
-        // super();
         this.tablePaginationSettings = <TablePaginationSettingsModel>{};
         this.tablePaginationSettings.enablePagination = true;
         this.tablePaginationSettings.pageSize = 50;
@@ -18,11 +15,8 @@ export class TablePaginationSettingsConfig {
         this.tablePaginationSettings.enableEdit = false;
         this.tablePaginationSettings.enableColumn = false;
     }
-
-
 }
 export interface TablePaginationSettingsModel {
-
     enablePagination: boolean;
     pageSize: number;
     pageSizeOptions: number[];
@@ -33,14 +27,12 @@ export interface TablePaginationSettingsModel {
     enableAction: boolean;
     enableView: boolean;
     enableEdit: boolean;
-    //description show or hide coloumn
     enableColumn: boolean;
     enablemarkAsDelivered: boolean;
     enableAdd: boolean;
 }
 
 export  class ColumnSettingsModel {
-     
     icon?: string;
     name: string;
     displayName: string;
@@ -51,7 +43,5 @@ export  class ColumnSettingsModel {
    type?:string;
    sortDirection?:string;
    isSearchEnabled?:boolean=false
-//    dropDownList;
-   
 }
 

@@ -1,14 +1,11 @@
-import { Component, Input, AfterViewInit, ViewChild, OnInit, OnChanges, Output, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewChild, OnInit, OnChanges, Output, EventEmitter, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { SelectionModel } from '@angular/cdk/collections';
 import { ColumnSettingsModel, TablePaginationSettingsConfig, TablePaginationSettingsModel } from './table-settings.model';
 import { CommonModule, formatDate } from '@angular/common';
-import { CustomViewComponent } from './custom-view.component';
 import { SharedLibraryModule } from '../../shared-library.module';
-import { MAT_DATE_LOCALE } from '@angular/material/core';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { FormsModule } from '@angular/forms';
 
@@ -18,19 +15,9 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./zipper-table.component.scss'],
   imports:[MatPaginatorModule,SharedLibraryModule , NgSelectModule,FormsModule,CommonModule],
   standalone:true,
-  // providers: [
-  //       { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },
-
-  //         {
-  //           provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
-  //           useValue: { subscriptSizing: 'dynamic' },
-  //         },
-
-
-  //     ]
 })
 export class ZipperTableComponent extends TablePaginationSettingsConfig implements OnInit, OnChanges {
-  @Input() tableMaxHeight='680px';
+  @Input() tableMaxHeight='80vh';
   @Input() isRowBackgroundColor:boolean = false;
   selectedRowIndex = -1;
 
@@ -101,7 +88,6 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
 
   }
   ngAfterViewInit() {
-    // to put where you want the sort to be programmatically triggered, for example inside ngOnInit
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.setDynamicColumnWidths();
@@ -122,13 +108,12 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
         headerCell.style.width = `${maxWidth}px`;
       });
 
-      this.cdr.detectChanges(); // Trigger change detection to apply changes
+      this.cdr.detectChanges();
     });
   }
 
   ngOnChanges() {
     if (this.isRefresh) {
-
       this.dataSource._updateChangeSubscription();
 
     }
@@ -162,30 +147,16 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
   }
 
   refreshView() {
-
-
     this.dataSource = new MatTableDataSource(this.dataSource.data);
   }
 
 
   ngOnInit() {
-    // Condition to add selection column to the table
-    // if (this.enableCheckbox) {
-    //   this.columnNames.splice(0, 0, 'select');
-    //   this.sqColumnDefinition.splice(0, 0, {
-    //     'name': 'select',
-    //     'hide': false,
-    //     'displayName': '',
-    //     // dropDownList: undefined
-    //   });
-    // }
     this.selection = new SelectionModel<{}>(this.allowMultiSelect, []);
     this.dataSource = new MatTableDataSource(this.rowData);
-    // this.dataSource.data = new MatTableDataSource(this.rowData); // Set initial data
     this.dataSource.filterPredicate = (data: any, filter: string): boolean => {
-      const searchTerms = JSON.parse(filter); // Parse the filter string to get the filter criteria
+      const searchTerms = JSON.parse(filter);
       return searchTerms.every(([key, value]) => {
-        // Filter logic for different types of columns (e.g., text, date, dropdown, etc.)
         if (key && value) {
           if (data[key]) {
             return data[key].toString().toLowerCase().includes(value.toLowerCase());
@@ -198,7 +169,6 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
   }
 
   getVisibleColumns() {
-
     let columnNames = [];
     for (const column of this.sqColumnDefinition) {
       if (!column.hide)
@@ -207,16 +177,6 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
     if (this.tablePaginationSettings.enableAction) {
       columnNames.push("action");
     }
-    //Condition to add selection column to the table
-    // if (this.enableCheckbox) {
-
-    //   columnNames.splice(0, 0, 'select');
-    //   this.sqColumnDefinition.splice(0, 0, {
-    //     'name': 'select',
-    //     'hide':false,
-    //     'displayName': '#'
-    //   });
-    // }
     return columnNames;
   }
 
@@ -254,14 +214,12 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
   }
 
   applyFilter(filterValue: string) {
-
     filterValue = filterValue.trim();
     filterValue = filterValue.toLowerCase();
     this.dataSource.filter = filterValue;
   }
 
   async applyInsyncFilter(value: any, colName: any, type: any) {
-
     this.dataSource.data
     this.rowData
      if (type == "date") {
@@ -279,15 +237,11 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
   }
 
   resetFilters() {
-
     this.dataSource.filter = "";
-
     const dom: HTMLElement = this.elementRef.nativeElement;
     const elements = dom.querySelectorAll('.column-header-content');
     console.log(elements[0]);
     elements[0].setAttribute("value", "");
-
-
   }
 
   isSearchEnabled(column: ColumnSettingsModel) {
@@ -295,22 +249,18 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
   }
 
   customFilter() {
-
     let filterFunction = function (record: any, filter: string): boolean {
       const matchFilter = [];
       var map = new Map(JSON.parse(filter));
-
       for (let [key, value] of map) {
         const keyTyped = key as keyof typeof Object;
         if (value != "") {
           const customFilterAS = record[keyTyped] != null ? record[keyTyped].toLowerCase().includes(value.toString().toLowerCase()) : false;
-          // push boolean values into array
           matchFilter.push(customFilterAS);
         } else {
           matchFilter.push(true);
         }
       }
-
       return matchFilter.every(Boolean);
     }
     return filterFunction
@@ -323,7 +273,6 @@ export class ZipperTableComponent extends TablePaginationSettingsConfig implemen
     this.pageChanged.emit({ $event, searchKeyword });
   }
   getValues(element, column) {
-
     if (typeof column?.valuePrepareFunction === 'function') {
       return column.valuePrepareFunction(element);
     }

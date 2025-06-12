@@ -31,7 +31,7 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
   isRefresh:boolean=false;
   clonedPolicy:Policy[]=[];
   userType;
-  constructor(private EncryptionService:EncryptionService,private dialogService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService,private toastr: ToastrService){
+  constructor(private dialogService:BISMatDialogService,private apiService:ApiService,private downloadService:DownloadService,private authService:AuthService,private toastr: ToastrService){
     super();
     this.userType = this.authService.getRoleType()
     this.tablePaginationSettings.enableAction = true;
@@ -44,21 +44,17 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
     this.tablePaginationSettings.showFirstLastButtons = false;
     this.filterModel.wingId = parseInt(this.authService.getWingId())
     this.getPolicyByWing();
-
   }
+
   getFileId($event) {
-           var download = new DownloadModel();
-           download.filePath = $event.filePath;
-           download.name = $event.fileName;
-           download.fileType = DownloadFileType.Policy;
-           this.downloadService.download(download)
-       }
-
-  view(row){
-    row.isEdit = false;
-    this.dialogService.open(TechManualsAddComponent,row)
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.Policy;
+    this.downloadService.download(download)
   }
- edit(row){
+
+  edit(row){
     row.isEdit = true;
     this.dialogService.open(TechManualsAddComponent,row).then(res =>{
       if(res){
@@ -66,28 +62,26 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
       }
     })
   }
-  delete(row) {
 
+  delete(row) {
     let deleteTechManual: DeleteModel = new DeleteModel();
     deleteTechManual.Id = row.item.id;
     deleteTechManual.TableName = "Policy";
-
     this.dialogService.confirmDialog(`Are you sure you want to delete this ${row.item.type}?`).subscribe(res => {
       if (res) {
         this.apiService.postWithHeader(`attribute/delete`, deleteTechManual).subscribe({
           next: (res) => {
             this.getPolicyByWing();
             this.toastr.success('Deleted Successfully', 'Success');
-
           },
           error: (err) => {
             this.toastr.error('Failed to Delete', 'Error');
-            console.error(err);
           }
         });
       }
     });
   }
+
   openDailog(){
     this.dialogService.open(TechManualsAddComponent,null,'50vw').then(res =>{
       if(res){
@@ -95,16 +89,17 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
       }
     })
   }
+
   filterPolicy(type){
     if(type == null)
       return this.policyList = [...this.clonedPolicy]
       this.policyList = this.clonedPolicy.filter(item => item.type == type);
-
   }
+
   getPolicyByWing(){
     this.apiService.getWithHeaders('policy/wing/'+this.filterModel.wingId).subscribe(async(res) =>{
       if(res){
-        this.policyList= await this.EncryptionService.decryptResponseList(res);
+        this.policyList= res;
         this.clonedPolicy = [...this.policyList]
       }
     })
@@ -117,11 +112,13 @@ export class TechManualsComponent extends TablePaginationSettingsConfig{
       }
     })
   }
+
   getReadableFileSize(size: number): string {
     if (size < 1024) return `${size} bytes`;
     else if (size < 1048576) return `${(size / 1024).toFixed(2)} KB`;
     else return `${(size / 1048576).toFixed(2)} MB`;
   }
+
   columns = [
     {
       name: 'fileName', displayName: 'File Name', isSearchable: true,hide: false,valueType:'link',valuePrepareFunction:(row) =>{

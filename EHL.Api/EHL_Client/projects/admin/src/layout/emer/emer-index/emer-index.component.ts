@@ -27,14 +27,8 @@ export class EmerIndexComponent extends TablePaginationSettingsConfig {
   wingId: number;
   isRefresh: boolean = false;
   userType;
-  constructor(
-     private spinner: NgxSpinnerService,
-    private apiService: ApiService,
-    private authService: AuthService,
-    private dialogService: BISMatDialogService,
-    private toastr: ToastrService,private downloadService:DownloadService,
-    private EncryptionService: EncryptionService
-  ) {
+  constructor(private spinner: NgxSpinnerService,private apiService: ApiService,private authService: AuthService,private dialogService: BISMatDialogService,
+    private toastr: ToastrService,private downloadService:DownloadService) {
     super();
     this.userType = this.authService.getRoleType();
     this.tablePaginationSettings.enableAction = true;
@@ -48,12 +42,11 @@ export class EmerIndexComponent extends TablePaginationSettingsConfig {
     this.wingId = parseInt(this.authService.getWingId());
     this.getAllIndex();
   }
+
   edit(row) {
     row.isEdit = true;
-    this.dialogService
-      .open(EmerIndexAddComponent, { data: row })
-      .then((res) => {
-        if (res) {
+    this.dialogService.open(EmerIndexAddComponent, { data: row }).then((res) => {
+      if (res) {
           this.getAllIndex();
         }
       });
@@ -63,24 +56,15 @@ export class EmerIndexComponent extends TablePaginationSettingsConfig {
     let deleteEmerIndex: DeleteModel = new DeleteModel();
     deleteEmerIndex.Id = row.item.id;
     deleteEmerIndex.TableName = 'emerindex';
-
-    this.dialogService
-      .confirmDialog(
-        `Are you sure you want to delete EMER ${row.item.emerNumber}?`
-      )
-      .subscribe((res) => {
-        if (res) {
-          this.apiService
-            .postWithHeader(`attribute/delete`, deleteEmerIndex)
-            .subscribe({
+    this.dialogService.confirmDialog(`Are you sure you want to delete EMER Index ${row.item.emerNumber}?`).subscribe((res) => {
+      if (res) {
+          this.apiService.postWithHeader(`attribute/delete`, deleteEmerIndex).subscribe({
               next: (res) => {
-                //  this.emerIndexList= this.emerIndexList.splice(row.index, 1);
                 this.toastr.success('Deleted Successfully', 'Success');
                 this.getAllIndex();
               },
               error: (err) => {
                 this.toastr.error('Failed to Delete', 'Error');
-                console.error(err);
               },
             });
         }
@@ -90,30 +74,29 @@ export class EmerIndexComponent extends TablePaginationSettingsConfig {
   openDialog() {
     this.dialogService.open(EmerIndexAddComponent, null, '50vw').then((res) => {
       if (res) {
-        // this.isRefresh = true;
         this.getAllIndex();
       }
     });
   }
- getFileId($event) {
-         var download = new DownloadModel();
-         download.filePath = $event.filePath;
-         download.name = $event.fileName;
-         download.fileType = DownloadFileType.Index;
-         this.downloadService.download(download)
-     }
+
+  getFileId($event) {
+    var download = new DownloadModel();
+    download.filePath = $event.filePath;
+    download.name = $event.fileName;
+    download.fileType = DownloadFileType.Index;
+    this.downloadService.download(download)
+  }
+
   getAllIndex() {
-     this.spinner.show();
-    this.apiService
-      .getWithHeaders('emer/index/' + this.wingId)
-      .subscribe(async (res) => {
-        if (res) {
-           this.emerIndexList = await this.EncryptionService.decryptResponseList(res);
+    this.spinner.show();
+    this.apiService.getWithHeaders('emer/index/' + this.wingId).subscribe(async (res) => {
+      if (res) {
           this.spinner.hide();
-          // this.emerIndexList = res;
+          this.emerIndexList = res;
         }
       });
   }
+
   columns = [
     {
       name: 'fileName',

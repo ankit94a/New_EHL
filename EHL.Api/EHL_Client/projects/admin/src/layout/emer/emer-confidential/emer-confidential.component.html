@@ -5,13 +5,16 @@
     height="100%"
     style="border: none;"
   ></iframe>
+  <!-- <ngx-extended-pdf-viewer
+  [src]="'http://localhost:4200/confidential.pdf'"
+  useBrowserLocale="true"
+  height="100%"
+  style="width: 100%; display: block; border: none;">
+</ngx-extended-pdf-viewer> -->
+
 </div>
 
 <div class="pdf-container" *ngIf="!isOfficerLoggedIn">
   <lib-ecr-token></lib-ecr-token>
 </div>
-<!-- <pdf-viewer src="confidential.pdf"
-              [render-text]="true"
-              [original-size]="false"
 
-  ></pdf-viewer> -->

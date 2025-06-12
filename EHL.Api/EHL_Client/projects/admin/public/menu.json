@@ -1,12 +1,5 @@
 [
-  {
-    "text": "Dashboard",
-    "icon": "fa fa-dashboard",
-    "routerLink": "/dashboard",
-    "children": [],
-    "permissionName": "AdminDashboard",
-    "permissionAction": "ViewAll"
-  },
+  
   {
     "text": "EMER",
     "icon": "fa-solid fa-hammer",
